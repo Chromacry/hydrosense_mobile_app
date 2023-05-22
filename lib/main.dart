@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/src/screens/Home/home.dart';
+import 'package:flutter_app/src/screens/Layout/layout.dart';
 import 'package:flutter_app/src/screens/Login/login.dart';
 import 'package:flutter_app/src/types/user_auth_type.dart';
 import './src/constants/DesignContants.dart';
@@ -29,15 +29,10 @@ class App extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: DesignConstants.debugBanner,
       title: 'Flutter App Template',
-      // home: Scaffold(
-      //   bottomNavigationBar: BottomNavigation(),
-      // ),
-      initialRoute: '/Login',
+      initialRoute: Login.routeName,
       routes: {
-        '/Login': (context) => Login(context: context),
-        '/Home': (context) => Home(
-              context: context,
-            ),
+        Login.routeName: (context) => Login(context: context),
+        Layout.routeName: (context) => Layout(context: context),
       },
     );
   }

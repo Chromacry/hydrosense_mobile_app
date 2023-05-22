@@ -3,6 +3,7 @@ import 'package:flutter_app/src/constants/DesignContants.dart';
 import 'package:flutter_app/src/screens/Login/view/login_view.dart';
 
 class Login extends StatelessWidget {
+  static String routeName = '/Login';
   const Login({
     super.key,
     required this.context,

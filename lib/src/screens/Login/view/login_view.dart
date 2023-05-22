@@ -49,7 +49,7 @@ class LoginView extends StatelessWidget {
                 margin: const EdgeInsets.only(top: 200),
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/Home');
+                    Navigator.pushNamed(context, '/Layout');
                     // print('abc');
 
                   },

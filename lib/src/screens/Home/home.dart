@@ -3,6 +3,7 @@ import 'package:flutter_app/src/constants/DesignContants.dart';
 import 'package:flutter_app/src/screens/Home/view/home_view.dart';
 
 class Home extends StatelessWidget {
+  static String routeName = '/Home';
   const Home({
     super.key,
     required this.context,
@@ -11,14 +12,16 @@ class Home extends StatelessWidget {
   final BuildContext context;
   @override
   Widget build(context) {
-    return const Scaffold(
-      // appBar: AppBar(
-      //   title: const Center(child: Text('Login')),
-      //   backgroundColor: Colors.black87,
-      // ),
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
-      body: HomeView(),
-    );
+    return const HomeView();
+    // return const Scaffold(
+    //   // appBar: AppBar(
+    //   //   title: const Center(child: Text('Login')),
+    //   //   backgroundColor: Colors.black87,
+    //   // ),
+    //   resizeToAvoidBottomInset: false,
+    //   backgroundColor: Colors.white,
+    //   body: HomeView(),
+    //   // bottomNavigationBar: BottomNavigation(context: context),
+    // );
   }
 }

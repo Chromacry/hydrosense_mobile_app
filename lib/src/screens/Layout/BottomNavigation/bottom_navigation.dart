@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/src/screens/Home/home.dart';
+import 'package:flutter_app/src/screens/Login/login.dart';
 
-class BottomNavigation extends StatelessWidget {
-  BottomNavigation({super.key});
-  int currentIndex = 0;
+class BottomNavigation extends StatefulWidget {
+  final int currentIndex;
+  final Function(int) onTap;
+  const BottomNavigation(
+      {super.key,
+      required BuildContext context,
+      required this.currentIndex,
+      required this.onTap
+      });
 
-  void handleNavigation() {
-    
-  }
+  @override
+  State<BottomNavigation> createState() => _BottomNavigationState();
+}
 
+class _BottomNavigationState extends State<BottomNavigation> {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      currentIndex: currentIndex,
+      enableFeedback: true,
+      currentIndex: widget.currentIndex,
+      onTap: (index) => widget.onTap(index),
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
@@ -26,7 +37,6 @@ class BottomNavigation extends StatelessWidget {
           label: "Settings",
         ),
       ],
-      onTap: (value) => print(value),
     );
   }
 }
