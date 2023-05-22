@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/src/screens/Layout/layout.dart';
-import 'package:flutter_app/src/screens/Login/login.dart';
-import 'package:flutter_app/src/types/user_auth_type.dart';
+import 'package:hydrosense_mobile_app/src/screens/Layout/layout.dart';
+import 'package:hydrosense_mobile_app/src/screens/Login/login.dart';
+import 'package:hydrosense_mobile_app/src/types/user_auth_type.dart';
 import './src/constants/DesignContants.dart';
 
 void main() {

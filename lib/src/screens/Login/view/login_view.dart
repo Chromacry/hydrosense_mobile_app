@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/src/screens/Login/view/login_style.dart';
-import 'package:flutter_app/src/screens/Login/widgets/login_widgets.dart';
+import 'package:hydrosense_mobile_app/src/screens/Login/view/login_style.dart';
+import 'package:hydrosense_mobile_app/src/screens/Login/widgets/login_widgets.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});

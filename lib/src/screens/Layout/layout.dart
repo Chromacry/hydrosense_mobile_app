@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/src/screens/Home/home.dart';
-import 'package:flutter_app/src/screens/Layout/BottomNavigation/bottom_navigation.dart';
-import 'package:flutter_app/src/screens/Login/login.dart';
+import 'package:hydrosense_mobile_app/src/screens/Home/home.dart';
+import 'package:hydrosense_mobile_app/src/screens/Layout/BottomNavigation/bottom_navigation.dart';
+import 'package:hydrosense_mobile_app/src/screens/Login/login.dart';
 
 class Layout extends StatefulWidget {
   static String routeName = '/Layout';

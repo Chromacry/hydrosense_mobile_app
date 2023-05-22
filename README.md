@@ -1,4 +1,4 @@
-# Flutter App Template
+# HydroSense Water Usage Tracker Mobile App
 
 # pre-requirements
   - Android Studio with Emulator setup

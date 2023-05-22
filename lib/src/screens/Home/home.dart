@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/src/constants/DesignContants.dart';
-import 'package:flutter_app/src/screens/Home/view/home_view.dart';
+import 'package:hydrosense_mobile_app/src/constants/DesignContants.dart';
+import 'package:hydrosense_mobile_app/src/screens/Home/view/home_view.dart';
 
 class Home extends StatelessWidget {
   static String routeName = '/Home';

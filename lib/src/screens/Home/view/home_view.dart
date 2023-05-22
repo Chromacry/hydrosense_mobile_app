@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/src/screens/Login/view/login_style.dart';
+import 'package:hydrosense_mobile_app/src/screens/Login/view/login_style.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/src/screens/Home/home.dart';
-import 'package:flutter_app/src/screens/Login/login.dart';
+import 'package:hydrosense_mobile_app/src/screens/Home/home.dart';
+import 'package:hydrosense_mobile_app/src/screens/Login/login.dart';
 
 class BottomNavigation extends StatefulWidget {
   final int currentIndex;
@@ -9,8 +9,7 @@ class BottomNavigation extends StatefulWidget {
       {super.key,
       required BuildContext context,
       required this.currentIndex,
-      required this.onTap
-      });
+      required this.onTap});
 
   @override
   State<BottomNavigation> createState() => _BottomNavigationState();
