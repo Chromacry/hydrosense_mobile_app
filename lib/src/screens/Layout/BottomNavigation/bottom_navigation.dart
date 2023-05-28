@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hydrosense_mobile_app/src/screens/Home/home.dart';
+import 'package:hydrosense_mobile_app/src/screens/Dashboard/dashboard.dart';
 import 'package:hydrosense_mobile_app/src/screens/Login/login.dart';
 
 class BottomNavigation extends StatefulWidget {
