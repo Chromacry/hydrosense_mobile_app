@@ -18,7 +18,7 @@ class Login extends StatelessWidget {
       //   backgroundColor: Colors.black87,
       // ),
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
+      backgroundColor: Color(DesignConstants.COLOR_DARKBLUE_PRIMARY),
       body: LoginView(),
     );
   }
