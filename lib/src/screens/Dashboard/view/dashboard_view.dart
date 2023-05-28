@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hydrosense_mobile_app/src/constants/DesignContants.dart';
+import 'package:hydrosense_mobile_app/src/constants/design_constants.dart';
 import 'package:hydrosense_mobile_app/src/providers/users_db.dart';
 import 'package:hydrosense_mobile_app/src/screens/Dashboard/view/dashboard_style.dart';
+import 'package:hydrosense_mobile_app/src/screens/Dashboard/widgets/dashboard_widgets.dart';
 import 'package:hydrosense_mobile_app/src/screens/Login/view/login_style.dart';
 import 'package:provider/provider.dart';
 
@@ -13,17 +14,18 @@ class DashboardView extends StatelessWidget {
     UsersDB usersDBList = Provider.of<UsersDB>(context);
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.only(left: 20, right: 20),
         child: SingleChildScrollView(
           child: Column(
             children: [
               Container(
-                margin: LoginStyles.titleContainerMargin,
-                alignment: LoginStyles.titleAlign,
+                padding: DashboardStyles.titleContainerPadding,
+                margin: DashboardStyles.titleContainerMargin,
+                alignment: DashboardStyles.titleAlign,
                 child: const Text(
                   'Dashboard',
                   textAlign: TextAlign.left,
-                  style: LoginStyles.title,
+                  style: DashboardStyles.title,
                 ),
               ),
               //* Today's Overall Text
@@ -97,6 +99,29 @@ class DashboardView extends StatelessWidget {
                       Text('Estimated Cost', style: DashboardStyles.cardTextTitle)
                     ],
                       ),
+                      ),
+                    ),
+                    const SizedBox(height: 50),
+                    //* Average Water usage Text
+                    // Container(
+                    //   alignment: Alignment.topLeft,
+                    //   margin: DashboardStyles.overallContainerMargin,
+                    //   child: const Text(
+                    //     "Average water usage per month",
+                    //     textAlign: TextAlign.left,
+                    //     style: DashboardStyles.overallText,
+                    //   ),
+                    // ),
+                    //* Chart for average water usage
+                    DashboardWidgets.waterUsageBarChart(),
+                    //* Estimated Cost of water usage Text
+                    Container(
+                      alignment: Alignment.topLeft,
+                      margin: DashboardStyles.overallContainerMargin,
+                      child: const Text(
+                        "Estimated Cost of water usage",
+                        textAlign: TextAlign.left,
+                        style: DashboardStyles.overallText,
                       ),
                     ),
                   ],

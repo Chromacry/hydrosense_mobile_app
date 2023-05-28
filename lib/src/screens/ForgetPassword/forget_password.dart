@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hydrosense_mobile_app/src/constants/DesignContants.dart';
+import 'package:hydrosense_mobile_app/src/constants/design_constants.dart';
 import 'package:hydrosense_mobile_app/src/screens/ForgetPassword/view/forget_password_view.dart';
 
 class ForgetPassword extends StatelessWidget {

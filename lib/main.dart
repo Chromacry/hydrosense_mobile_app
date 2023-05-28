@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:hydrosense_mobile_app/src/screens/Layout/layout.dart';
 import 'package:hydrosense_mobile_app/src/screens/Login/login.dart';
 import 'package:hydrosense_mobile_app/src/types/user_auth_type.dart';
-import './src/constants/DesignContants.dart';
+import 'src/constants/design_constants.dart';
 
 void main() {
   runApp(const App());

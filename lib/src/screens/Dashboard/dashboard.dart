@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hydrosense_mobile_app/src/constants/DesignContants.dart';
+import 'package:hydrosense_mobile_app/src/constants/design_constants.dart';
 import 'package:hydrosense_mobile_app/src/screens/Dashboard/view/dashboard_view.dart';
 
-class Home extends StatelessWidget {
+class Dashboard extends StatelessWidget {
   static String routeName = '/Dashboard';
-  const Home({
+  const Dashboard({
     super.key,
     required this.context,
   });

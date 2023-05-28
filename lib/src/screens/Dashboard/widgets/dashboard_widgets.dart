@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hydrosense_mobile_app/src/screens/Dashboard/widgets/water_usage_barchart.dart';
 
-import 'InputTextBox.dart';
-
-class HomeWidgets {
-  static Widget inputTextBox(String textLabel) {
-    return InputTextBox(inputTextLabelValue: textLabel);
+class DashboardWidgets {
+  static Widget waterUsageBarChart() {
+    return WaterUsageBarChart();
   }
 }
