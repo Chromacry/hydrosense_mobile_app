@@ -6,13 +6,15 @@ class AppConfig {
     fontFamily: 'Roboto',
     inputDecorationTheme: const InputDecorationTheme(
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(width: 3, 
-        color: Colors.white,
+        borderSide: BorderSide(
+          width: 3,
+          color: Colors.white,
         ),
       ),
     ),
     colorScheme: ColorScheme.fromSwatch(
-      primarySwatch: const Color(DesignConstants.COLOR_DARKBLUE_PRIMARY) as MaterialColor,
+      primarySwatch:
+          const Color(DesignConstants.COLOR_DARKBLUE_PRIMARY) as MaterialColor,
       accentColor: Colors.white,
     ).copyWith(
       secondary: Colors.black,
