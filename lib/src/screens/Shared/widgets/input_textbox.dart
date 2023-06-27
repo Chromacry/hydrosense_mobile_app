@@ -2,26 +2,28 @@ import 'package:flutter/material.dart';
 
 class InputTextBox extends StatelessWidget {
   final String inputTextLabelValue;
+  final Color? allColorAttributes;
   final Function(String) onChanged;
   final bool obscureTextEnabled;
-  
+
   const InputTextBox({
     Key? key,
     required this.inputTextLabelValue,
+    this.allColorAttributes,
     required this.onChanged,
     required this.obscureTextEnabled,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return TextField(
-      cursorColor: Colors.white,
+      cursorColor: allColorAttributes ?? Colors.white,
       autocorrect: true,
       obscureText: obscureTextEnabled,
       decoration: InputDecoration(
         labelText: inputTextLabelValue,
-        focusColor: Colors.white,
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.white),
+        focusColor: allColorAttributes ?? Colors.white,
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: allColorAttributes ?? Colors.white),
         ),
         // border: const OutlineInputBorder(
         //   borderRadius: BorderRadius.all(
@@ -39,18 +41,18 @@ class InputTextBox extends StatelessWidget {
         //     color: Colors.white,
         //   ),
         // ),
-        labelStyle: const TextStyle(
-          color: Colors.white,
+        labelStyle: TextStyle(
+          color: allColorAttributes ?? Colors.white,
         ),
-        focusedBorder: const OutlineInputBorder(
+        focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
             width: 2,
-            color: Colors.white,
+            color: allColorAttributes ?? Colors.white,
           ),
         ),
       ),
-      style: const TextStyle(
-        color: Colors.white,
+      style: TextStyle(
+        color: allColorAttributes ?? Colors.white,
       ),
       onChanged: onChanged,
     );
