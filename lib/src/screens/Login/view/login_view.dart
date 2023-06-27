@@ -5,6 +5,7 @@ import 'package:hydrosense_mobile_app/src/screens/Layout/layout.dart';
 import 'package:hydrosense_mobile_app/src/screens/Login/view/login_style.dart';
 import 'package:hydrosense_mobile_app/src/screens/Login/widgets/login_widgets.dart';
 import 'package:hydrosense_mobile_app/src/screens/Shared/widgets/shared_widgets.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:provider/provider.dart';
 
 class LoginView extends StatelessWidget {
@@ -16,7 +17,12 @@ class LoginView extends StatelessWidget {
     String emailaddress = '';
 
     void loginHandler() {
-      Navigator.pushNamed(context, Layout.routeName);
+      PersistentNavBarNavigator.pushNewScreen(
+        context,
+        screen: Layout(),
+        withNavBar: false,
+        pageTransitionAnimation: PageTransitionAnimation.slideUp,
+      );
       //! Change the below method to check if the user exists instead
       usersDBList.addUser('defaultUsername', emailaddress, '12345678');
     }
@@ -72,7 +78,12 @@ class LoginView extends StatelessWidget {
                       fontSize: 18,
                       fontStyle: FontStyle.italic),
                 ),
-                onPressed: () => Navigator.pushNamed(context, ForgetPassword.routeName),
+                onPressed: () => PersistentNavBarNavigator.pushNewScreen(
+                  context,
+                  screen: ForgetPassword(),
+                  withNavBar: false,
+                  pageTransitionAnimation: PageTransitionAnimation.fade,
+                ),
               ),
             ),
             //* Submit Button
@@ -82,7 +93,8 @@ class LoginView extends StatelessWidget {
                   onPressed: loginHandler,
                   style: const ButtonStyle(
                     enableFeedback: true,
-                    backgroundColor: MaterialStatePropertyAll(Color(LoginStyles.buttonColor)),
+                    backgroundColor: MaterialStatePropertyAll(
+                        Color(LoginStyles.buttonColor)),
                     fixedSize: MaterialStatePropertyAll(LoginStyles.buttonSize),
                     textStyle: MaterialStatePropertyAll(LoginStyles.buttonText),
                   ),

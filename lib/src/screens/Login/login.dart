@@ -3,13 +3,8 @@ import 'package:hydrosense_mobile_app/src/constants/design_constants.dart';
 import 'package:hydrosense_mobile_app/src/screens/Login/view/login_view.dart';
 
 class Login extends StatelessWidget {
-  static String routeName = '/Login';
-  const Login({
-    super.key,
-    required this.context,
-  });
-
-  final BuildContext context;
+  static const String routeName = '/Login';
+  const Login({super.key});
   @override
   Widget build(context) {
     return const Scaffold(
