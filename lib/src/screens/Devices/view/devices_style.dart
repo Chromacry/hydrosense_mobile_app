@@ -12,35 +12,20 @@ class DevicesStyles {
     color: Colors.white,
   );
 
-  //* Today's Overall Text
-  static const overallText = TextStyle(
-    fontSize: 15,
-    fontWeight: FontWeight.bold,
-    color: Colors.white,
-  );
-  static const overallContainerPadding = EdgeInsets.only(bottom: 10, top: 20);
-  //* Overall Data Section
-  static const Color cardColor = Color(DesignConstants.COLOR_LIGHTBLUE_ACCENT);
-  static const EdgeInsets cardMargin = EdgeInsets.only(bottom: 10);
-  static const EdgeInsets cardPadding = EdgeInsets.all(15);
-  static const cardTextValue = TextStyle(
-    fontSize: 30,
-    fontWeight: FontWeight.w500,
-    color: Colors.black,
-  );
-  static const cardTextTitle = TextStyle(
-    fontSize: 15,
-    fontWeight: FontWeight.normal,
-    color: Colors.black,
-  );
-
-  //* Graph Titles
-  static const costUsageTitle = TextStyle(
-    fontSize: 18,
+  //* Devices Modal title 
+  static const addDeviceTitle = TextStyle(
+    fontSize: 20,
     fontWeight: FontWeight.w500,
     color: Colors.white,
   );
 
   //* Devices Box
   static const devicesBoxColor = DesignConstants.COLOR_DARKGRAY_SECONDARY;
+
+  //* Devices Modal sub title 
+  static const addDeviceSubTitle = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: Colors.white,
+  );
 }

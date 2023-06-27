@@ -3,12 +3,14 @@ import 'package:hydrosense_mobile_app/src/screens/Devices/widgets/device_button.
 
 class DevicesWidgets {
   static Widget deviceButton({
-    required String buttonText,
+    required String deviceNameText,
+    required String deviceLocationText,
     required Function() onTap,
     required IconData icon,
   }) =>
       DeviceButton(
-        buttonText: buttonText,
+        deviceNameText: deviceNameText,
+        deviceLocationText: deviceLocationText,
         onTap: onTap,
         icon: icon,
       );
