@@ -18,7 +18,7 @@ class DashboardStyles {
     fontWeight: FontWeight.bold,
     color: Colors.white,
   );
-  static const overallContainerMargin = EdgeInsets.only(bottom: 10, top: 20);
+  static const overallContainerPadding = EdgeInsets.only(bottom: 10, top: 20);
   //* Overall Data Section
   static const Color cardColor = Color(DesignConstants.COLOR_LIGHTBLUE_ACCENT);
   static const EdgeInsets cardMargin = EdgeInsets.only(bottom: 10);
@@ -32,5 +32,12 @@ class DashboardStyles {
     fontSize: 15,
     fontWeight: FontWeight.normal,
     color: Colors.black,
+  );
+
+  //* Graph Titles
+  static const costUsageTitle = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w500,
+    color: Colors.white,
   );
 }

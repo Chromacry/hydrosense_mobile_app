@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hydrosense_mobile_app/src/constants/design_constants.dart';
 import 'package:hydrosense_mobile_app/src/providers/users_db.dart';
 import 'package:hydrosense_mobile_app/src/screens/Dashboard/view/dashboard_style.dart';
 import 'package:hydrosense_mobile_app/src/screens/Dashboard/widgets/dashboard_widgets.dart';
-import 'package:hydrosense_mobile_app/src/screens/Login/view/login_style.dart';
 import 'package:provider/provider.dart';
 
 class DashboardView extends StatelessWidget {
@@ -17,7 +15,7 @@ class DashboardView extends StatelessWidget {
         padding: const EdgeInsets.only(left: 20, right: 20),
         child: SingleChildScrollView(
           child: Column(
-            children: [
+            children: <Widget>[
               Container(
                 padding: DashboardStyles.titleContainerPadding,
                 margin: DashboardStyles.titleContainerMargin,
@@ -31,7 +29,7 @@ class DashboardView extends StatelessWidget {
               //* Today's Overall Text
               Container(
                 alignment: Alignment.topLeft,
-                margin: DashboardStyles.overallContainerMargin ,
+                margin: DashboardStyles.overallContainerPadding,
                 child: const Text(
                   "Today's Overall",
                   textAlign: TextAlign.left,
@@ -42,7 +40,7 @@ class DashboardView extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: Column(
-                  children: [
+                  children: <Widget>[
                     //* Water Used
                     Container(
                       margin: DashboardStyles.cardMargin,
@@ -56,10 +54,12 @@ class DashboardView extends StatelessWidget {
                       child: Container(
                         padding: DashboardStyles.cardPadding,
                         child: Column(
-                          children: const [
-                        Text('0 litres',style: DashboardStyles.cardTextValue),
-                        Text('Water used',style: DashboardStyles.cardTextTitle)
-                        ],
+                          children: const <Widget>[
+                            Text('0 litres',
+                                style: DashboardStyles.cardTextValue),
+                            Text('Water used',
+                                style: DashboardStyles.cardTextTitle)
+                          ],
                         ),
                       ),
                     ),
@@ -75,11 +75,13 @@ class DashboardView extends StatelessWidget {
                       ),
                       child: Container(
                         padding: DashboardStyles.cardPadding,
-                        child:Column(children: const [
-                      Text('0 hr', style: DashboardStyles.cardTextValue),
-                      Text('Time Spent', style: DashboardStyles.cardTextTitle)
-                    ],
-                      ),
+                        child: Column(
+                          children: const [
+                            Text('0 hr', style: DashboardStyles.cardTextValue),
+                            Text('Time Spent',
+                                style: DashboardStyles.cardTextTitle)
+                          ],
+                        ),
                       ),
                     ),
                     //* Estimated Cost
@@ -94,36 +96,36 @@ class DashboardView extends StatelessWidget {
                       width: double.infinity,
                       child: Container(
                         padding: DashboardStyles.cardPadding,
-                        child:Column(children: const [
-                      Text('\$00.00', style: DashboardStyles.cardTextValue),
-                      Text('Estimated Cost', style: DashboardStyles.cardTextTitle)
-                    ],
-                      ),
+                        child: Column(
+                          children: const [
+                            Text('\$00.00',
+                                style: DashboardStyles.cardTextValue),
+                            Text('Estimated Cost',
+                                style: DashboardStyles.cardTextTitle)
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(height: 50),
-                    //* Average Water usage Text
-                    // Container(
-                    //   alignment: Alignment.topLeft,
-                    //   margin: DashboardStyles.overallContainerMargin,
-                    //   child: const Text(
-                    //     "Average water usage per month",
-                    //     textAlign: TextAlign.left,
-                    //     style: DashboardStyles.overallText,
-                    //   ),
-                    // ),
                     //* Chart for average water usage
                     DashboardWidgets.waterUsageBarChart(),
+                    const SizedBox(height: 50),
                     //* Estimated Cost of water usage Text
                     Container(
-                      alignment: Alignment.topLeft,
-                      margin: DashboardStyles.overallContainerMargin,
+                      alignment: Alignment.center,
+                      padding: DashboardStyles.overallContainerPadding,
                       child: const Text(
                         "Estimated Cost of water usage",
-                        textAlign: TextAlign.left,
-                        style: DashboardStyles.overallText,
+                        textAlign: TextAlign.center,
+                        style: DashboardStyles.costUsageTitle,
                       ),
                     ),
+                    //* Chart for estimated cost for water usage
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: DashboardWidgets.costUsageLineChart(),
+                    ),
+                    const SizedBox(height: 50),
                   ],
                 ),
               ),
