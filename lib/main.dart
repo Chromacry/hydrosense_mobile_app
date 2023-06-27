@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hydrosense_mobile_app/src/providers/users_db.dart';
-import 'package:hydrosense_mobile_app/src/screens/ForgetPassword/forget_password.dart';
 import 'package:provider/provider.dart';
-import 'package:hydrosense_mobile_app/src/screens/Layout/layout.dart';
 import 'package:hydrosense_mobile_app/src/screens/Login/login.dart';
-import 'package:hydrosense_mobile_app/src/types/user_auth_type.dart';
 import 'src/constants/design_constants.dart';
 
 void main() {
@@ -25,7 +23,7 @@ void main() {
 }
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  const App({Key? key});
   @override
   Widget build(BuildContext context) {
     //* Initialized data using provider
@@ -38,12 +36,7 @@ class App extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: DesignConstants.debugBanner,
         title: 'Flutter App Template',
-        initialRoute: Login.routeName,
-        routes: {
-          Login.routeName: (context) => Login(context: context),
-          Layout.routeName: (context) => Layout(context: context),
-          ForgetPassword.routeName:(context) => ForgetPassword(context: context),
-        },
+        home: Login(),
       ),
     );
   }

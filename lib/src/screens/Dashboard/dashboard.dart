@@ -6,13 +6,9 @@ class Dashboard extends StatelessWidget {
   static String routeName = '/Dashboard';
   const Dashboard({
     super.key,
-    required this.context,
   });
-
-  final BuildContext context;
   @override
   Widget build(context) {
-    // return const HomeView();
     return const Scaffold(
       // appBar: AppBar(
       //   title: const Center(child: Text('Login')),
