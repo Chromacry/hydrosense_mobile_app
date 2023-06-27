@@ -26,6 +26,11 @@ class App extends StatelessWidget {
   const App({Key? key});
   @override
   Widget build(BuildContext context) {
+    //* Force app to be potriait mode
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     //* Initialized data using provider
     return MultiProvider(
       providers: [
