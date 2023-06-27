@@ -4,12 +4,7 @@ import 'package:hydrosense_mobile_app/src/screens/ForgetPassword/view/forget_pas
 
 class ForgetPassword extends StatelessWidget {
   static String routeName = '/ForgetPassword';
-  const ForgetPassword({
-    super.key,
-    required this.context,
-  });
-
-  final BuildContext context;
+  const ForgetPassword({super.key,});
   @override
   Widget build(context) {
     return Scaffold(
