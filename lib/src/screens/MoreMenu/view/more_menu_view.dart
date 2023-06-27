@@ -147,7 +147,7 @@ class MoreMenuView extends StatelessWidget {
                   color: Color(MoreMenuStyles.moreMenuBoxColor),
                   borderRadius: BorderRadius.circular(11),
                 ),
-                child: Expanded(
+                child: Flexible(
                   child: GridView.count(
                     physics: NeverScrollableScrollPhysics(),
                     primary: false,

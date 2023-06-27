@@ -83,6 +83,7 @@ class _DropdownTextBoxState extends State<DropdownTextBox> {
           ),
           //* Dropdown Menu Style
           dropdownStyleData: DropdownStyleData(
+            maxHeight: 200,
             decoration: BoxDecoration(
               color: Colors.black,
               borderRadius: BorderRadius.only(
