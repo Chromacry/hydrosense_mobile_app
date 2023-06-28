@@ -4,6 +4,7 @@ class InputTextBox extends StatelessWidget {
   final String inputTextLabelValue;
   final Color? allColorAttributes;
   final Function(String) onChanged;
+  final String? Function(String?)? validator;
   final bool obscureTextEnabled;
 
   const InputTextBox({
@@ -11,11 +12,13 @@ class InputTextBox extends StatelessWidget {
     required this.inputTextLabelValue,
     this.allColorAttributes,
     required this.onChanged,
+    required this.validator,
     required this.obscureTextEnabled,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
+      validator: validator,
       cursorColor: allColorAttributes ?? Colors.white,
       autocorrect: true,
       obscureText: obscureTextEnabled,
