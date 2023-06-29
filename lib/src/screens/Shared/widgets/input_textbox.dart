@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class InputTextBox extends StatelessWidget {
   final String inputTextLabelValue;
+  final String? inputTextValue;
   final Color? allColorAttributes;
   final Function(String) onChanged;
   final String? Function(String?)? validator;
@@ -10,6 +11,7 @@ class InputTextBox extends StatelessWidget {
   const InputTextBox({
     Key? key,
     required this.inputTextLabelValue,
+    this.inputTextValue,
     this.allColorAttributes,
     required this.onChanged,
     required this.validator,
@@ -22,6 +24,7 @@ class InputTextBox extends StatelessWidget {
       cursorColor: allColorAttributes ?? Colors.white,
       autocorrect: true,
       obscureText: obscureTextEnabled,
+      initialValue: inputTextValue,
       decoration: InputDecoration(
         labelText: inputTextLabelValue,
         focusColor: allColorAttributes ?? Colors.white,

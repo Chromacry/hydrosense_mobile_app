@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
 class DropdownTextBox extends StatefulWidget {
-  final List<String> options;
+  final List<List<String>> options;
   final String hintText;
-
+  final String? selectedValue;
+  final ValueChanged<String> onChanged;
   DropdownTextBox({
     super.key,
     required this.options,
     required this.hintText,
+    this.selectedValue,
+    required this.onChanged,
   });
 
   @override
@@ -16,8 +19,7 @@ class DropdownTextBox extends StatefulWidget {
 }
 
 class _DropdownTextBoxState extends State<DropdownTextBox> {
-  List<String> options = [];
-  String? selectedValue;
+  List<List<String>> options = [];
 
   @override
   void initState() {
@@ -38,7 +40,7 @@ class _DropdownTextBoxState extends State<DropdownTextBox> {
               color: Colors.white,
             ),
           ),
-          //* Icon of dropdown box
+          //* Icon of dropdselectedValue
           iconStyleData: IconStyleData(
             iconEnabledColor: Colors.white,
             icon: Icon(Icons.keyboard_arrow_down_rounded),
@@ -61,9 +63,9 @@ class _DropdownTextBoxState extends State<DropdownTextBox> {
           //* Dropdown Menu Items Styles
           items: options
               .map((item) => DropdownMenuItem<String>(
-                    value: item,
+                    value: item[0], //* show id
                     child: Text(
-                      item,
+                      item[1], //* show value for user
                       style: const TextStyle(
                         fontSize: 14,
                         color: Colors.white,
@@ -71,11 +73,9 @@ class _DropdownTextBoxState extends State<DropdownTextBox> {
                     ),
                   ))
               .toList(),
-          value: selectedValue,
+          value: widget.selectedValue,
           onChanged: (value) {
-            setState(() {
-              selectedValue = value as String;
-            });
+            widget.onChanged(value as String);
           },
           menuItemStyleData: const MenuItemStyleData(
             height: 40,
