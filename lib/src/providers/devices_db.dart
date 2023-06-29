@@ -24,7 +24,7 @@ class DevicesDB with ChangeNotifier {
 
   List<Device> getAllDevicesByHouseholdId({householdId}) {
     List<Device> householdDevices = [];
-    for (var currentDevice in devices) {
+    for (Device currentDevice in devices) {
       if (currentDevice.device_household_id == householdId)
         householdDevices.add(currentDevice);
     }
@@ -33,7 +33,7 @@ class DevicesDB with ChangeNotifier {
 
   Device getDeviceById({deviceId}) {
     Device deviceData = Device(id: deviceId);
-    for (var currentDevice in devices) {
+    for (Device currentDevice in devices) {
       if (currentDevice.id == deviceId) deviceData = currentDevice;
     }
     return deviceData;
