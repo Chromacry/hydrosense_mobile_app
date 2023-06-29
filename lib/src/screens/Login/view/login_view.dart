@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hydrosense_mobile_app/src/constants/global_constants.dart';
 import 'package:hydrosense_mobile_app/src/providers/users_db.dart';
 import 'package:hydrosense_mobile_app/src/screens/ForgetPassword/forget_password.dart';
 import 'package:hydrosense_mobile_app/src/screens/Layout/layout.dart';
@@ -37,7 +38,12 @@ class LoginView extends StatelessWidget {
         // If the form is valid, display a snackbar. In the real world,
         // you'd often call a server or save the information in a database.
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Processing Data')),
+          SnackBar(
+            content: Text(GlobalConstants.CLIENT_STATUS_MSGS['SUCCESSFUL_LOGIN']
+                .toString()),
+            backgroundColor: Colors.white,
+            padding: EdgeInsets.only(bottom: 50),
+          ),
         );
         PersistentNavBarNavigator.pushNewScreen(
           context,
