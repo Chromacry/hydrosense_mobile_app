@@ -46,13 +46,13 @@ class _AddDeviceModalState extends State<AddDeviceModal> {
       if (_addDeviceFormKey.currentState!.validate()) {
         debugPrint('FK ' + deviceNameValue.toString());
         devicesDB.addDevice(
-          deviceIdValue,
-          deviceNameValue,
-          deviceSerialNumberValue,
-          deviceHouseholdIdValue,
-          deviceLocationIdValue,
-          createdBy,
-          dateNow,
+          deviceId: deviceIdValue,
+          deviceName: deviceNameValue,
+          deviceSerialNumber: deviceSerialNumberValue,
+          deviceHouseholdId: deviceHouseholdIdValue,
+          deviceLocationId: deviceLocationIdValue,
+          createdBy: createdBy,
+          createdAt: dateNow,
         );
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Adding Device...')),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/screens/Devices/widgets/add_device_modal.dart';
+import 'package:hydrosense_mobile_app/src/screens/Devices/widgets/delete_device_modal.dart';
 import 'package:hydrosense_mobile_app/src/screens/Devices/widgets/device_button.dart';
 import 'package:hydrosense_mobile_app/src/screens/Devices/widgets/edit_device_modal.dart';
 
@@ -8,13 +9,15 @@ class DevicesWidgets {
     required String deviceNameText,
     required String deviceLocationText,
     required Function() onTap,
-    required IconData icon,
+    IconData? icon,
+    Color? backgroundColorIcon,
   }) =>
       DeviceButton(
         deviceNameText: deviceNameText,
         deviceLocationText: deviceLocationText,
         onTap: onTap,
         icon: icon,
+        backgroundColorIcon: backgroundColorIcon,
       );
   static Widget addDeviceModal() => AddDeviceModal();
   static Widget editDeviceModal({
@@ -25,6 +28,20 @@ class DevicesWidgets {
     required deviceLocationId,
   }) =>
       EditDeviceModal(
+        deviceId: deviceId,
+        deviceName: deviceName,
+        deviceSerialNumber: deviceSerialNumber,
+        deviceHouseholdId: deviceHouseholdId,
+        deviceLocationId: deviceLocationId,
+      );
+  static Widget deleteDeviceModal({
+    required deviceId,
+    required deviceName,
+    required deviceSerialNumber,
+    required deviceHouseholdId,
+    required deviceLocationId,
+  }) =>
+      DeleteDeviceModal(
         deviceId: deviceId,
         deviceName: deviceName,
         deviceSerialNumber: deviceSerialNumber,

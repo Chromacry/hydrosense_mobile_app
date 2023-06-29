@@ -15,18 +15,30 @@ class DevicesView extends StatefulWidget {
 }
 
 class _DevicesViewState extends State<DevicesView> {
+  bool isDeleteModeOn = false;
+
   @override
   Widget build(BuildContext context) {
     UsersDB usersDB = Provider.of<UsersDB>(context);
     DevicesDB devicesDB = Provider.of<DevicesDB>(context);
-    List<Device> devicesDBList =
-        devicesDB.getAllDevicesByHouseholdId(GlobalConstants.temp_householdID);
+    List<Device> devicesDBList = devicesDB.getAllDevicesByHouseholdId(
+        householdId: GlobalConstants.temp_householdID);
+    //* Listen on provider
     devicesDB.addListener(() {
       debugPrint('Heloo world');
       //* Reload the page when the provider is notified
       setState(() {});
     });
-    debugPrint('IM NEW');
+
+    //* Toggle delete mode
+    void onPressedDeleteMode() {
+      if (!isDeleteModeOn)
+        isDeleteModeOn = true;
+      else
+        isDeleteModeOn = false;
+      setState(() {});
+    }
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20),
@@ -49,16 +61,18 @@ class _DevicesViewState extends State<DevicesView> {
                   ),
                   //* Add device button
                   IconButton(
-                    onPressed: () => showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) =>
-                          DevicesWidgets.addDeviceModal(),
-                    ),
-                    icon: Icon(
-                      Icons.add_box_rounded,
-                      color: Colors.white,
-                      size: 40,
-                    ),
+                    onPressed: onPressedDeleteMode,
+                    icon: isDeleteModeOn
+                        ? Icon(
+                            Icons.delete_forever_rounded,
+                            color: Colors.red[200],
+                            size: 35,
+                          )
+                        : Icon(
+                            Icons.delete_rounded,
+                            color: Colors.red[200],
+                            size: 35,
+                          ),
                   ),
                 ],
               ),
@@ -95,20 +109,33 @@ class _DevicesViewState extends State<DevicesView> {
                       return DevicesWidgets.deviceButton(
                         deviceNameText: deviceName,
                         deviceLocationText: deviceLocation,
-                        icon: Icons.location_on_rounded,
+                        backgroundColorIcon:
+                            isDeleteModeOn ? Colors.red[200] : Colors.grey,
                         onTap: () {
-                          debugPrint('Device #1 Pressed');
-                          showDialog<String>(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                DevicesWidgets.editDeviceModal(
+                          isDeleteModeOn
+                              //* Show delete modal
+                              ? showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      DevicesWidgets.deleteDeviceModal(
+                                        deviceId: deviceId,
+                                        deviceName: deviceName,
+                                        deviceHouseholdId: deviceHouseholdId,
+                                        deviceSerialNumber: deviceSerialNumber,
+                                        deviceLocationId: deviceLocationId,
+                                      ))
+                              : //* Show edit modal
+                              showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      DevicesWidgets.editDeviceModal(
                                     deviceId: deviceId,
                                     deviceName: deviceName,
                                     deviceHouseholdId: deviceHouseholdId,
                                     deviceSerialNumber: deviceSerialNumber,
                                     deviceLocationId: deviceLocationId,
-                                    ),
-                          );
+                                  ),
+                                );
                         },
                       );
                     },

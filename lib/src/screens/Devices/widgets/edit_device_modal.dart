@@ -67,12 +67,13 @@ class _EditDeviceModalState extends State<EditDeviceModal> {
       if (_editDeviceFormKey.currentState!.validate()) {
         debugPrint('id ' + deviceIdValue.toString());
         devicesDB.updateDeviceById(
-            deviceIdValue,
-            deviceNameValue,
-            deviceSerialNumberValue,
-            deviceHouseholdIdValue,
-            deviceLocationIdValue,
-            updatedBy);
+          deviceId: deviceIdValue,
+          deviceName: deviceNameValue,
+          deviceSerialNumber: deviceSerialNumberValue,
+          householdId: deviceHouseholdIdValue,
+          deviceLocationId: deviceLocationIdValue,
+          updatedBy: updatedBy,
+        );
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Updating Device Info...')),
         );

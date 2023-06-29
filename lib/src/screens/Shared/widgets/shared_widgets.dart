@@ -8,16 +8,20 @@ class SharedWidgets {
     inputTextValue,
     allColorAttributes,
     onChanged,
+    autocorrect,
     validator,
     obscureTextEnabled,
+    enabled,
   }) {
     return InputTextBox(
       inputTextLabelValue: textLabel,
       inputTextValue: inputTextValue,
       allColorAttributes: allColorAttributes,
       onChanged: onChanged,
+      autocorrect: autocorrect,
       validator: validator,
-      obscureTextEnabled: obscureTextEnabled ?? false,
+      obscureTextEnabled: obscureTextEnabled,
+      enabled: enabled,
     );
   }
 
