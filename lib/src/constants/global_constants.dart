@@ -15,4 +15,6 @@ class GlobalConstants {
   static const Map<String, String> CLIENT_STATUS_MSGS = {
     'SUCCESSFUL_LOGIN': 'Successfully logged in',
   };
+
+  static const String temp_householdID = '48dc7336-389d-4283-91a6-8bec27bc6df6';
 }
