@@ -20,16 +20,16 @@ class LoginView extends StatelessWidget {
     String emailaddress = '';
 
     String? emailValidator(value) {
-      if (value == null || value.isEmpty) {
-        return 'Email field is empty!';
-      }
+      // if (value == null || value.isEmpty) {
+      //   return 'Email field is empty!';
+      // }
       return null;
     }
 
     String? passwordValidator(value) {
-      if (value == null || value.isEmpty) {
-        return 'Password field is empty!';
-      }
+      // if (value == null || value.isEmpty) {
+      //   return 'Password field is empty!';
+      // }
       return null;
     }
 
@@ -39,10 +39,20 @@ class LoginView extends StatelessWidget {
         // you'd often call a server or save the information in a database.
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(GlobalConstants.CLIENT_STATUS_MSGS['SUCCESSFUL_LOGIN']
-                .toString()),
-            backgroundColor: Colors.white,
-            padding: EdgeInsets.only(bottom: 50),
+            behavior: SnackBarBehavior.floating,
+            shape: ContinuousRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(11))),
+            content: Text(
+              GlobalConstants.CLIENT_STATUS_MSGS['SUCCESSFUL_LOGIN'].toString(),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            backgroundColor: Colors.grey[800],
+            elevation: 5,
           ),
         );
         PersistentNavBarNavigator.pushNewScreen(
