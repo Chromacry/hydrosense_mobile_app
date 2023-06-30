@@ -3,6 +3,7 @@ import 'package:hydrosense_mobile_app/src/constants/design_constants.dart';
 import 'package:hydrosense_mobile_app/src/constants/global_constants.dart';
 import 'package:hydrosense_mobile_app/src/providers/devices_db.dart';
 import 'package:hydrosense_mobile_app/src/screens/Shared/widgets/shared_widgets.dart';
+import 'package:hydrosense_mobile_app/src/utils/DateTimeUtil.dart';
 import 'package:provider/provider.dart';
 
 class EditDeviceModal extends StatefulWidget {
@@ -11,6 +12,7 @@ class EditDeviceModal extends StatefulWidget {
   final String deviceSerialNumber;
   final String deviceHouseholdId;
   final String deviceLocationId;
+  final List<List<String>> dropdownLocationOptions;
   EditDeviceModal({
     Key? key,
     required this.deviceId,
@@ -18,6 +20,7 @@ class EditDeviceModal extends StatefulWidget {
     required this.deviceSerialNumber,
     required this.deviceHouseholdId,
     required this.deviceLocationId,
+    required this.dropdownLocationOptions,
   }) : super(key: key);
   @override
   State<EditDeviceModal> createState() => _EditDeviceModalState();
@@ -61,11 +64,7 @@ class _EditDeviceModalState extends State<EditDeviceModal> {
     };
 
     void onSubmitEditDevice() {
-      String dateNow = DateTime.now()
-          .toString()
-          .substring(0, 19); //* Substring to remove milliseconds
       if (_editDeviceFormKey.currentState!.validate()) {
-        debugPrint('id ' + deviceIdValue.toString());
         devicesDB.updateDeviceById(
           deviceId: deviceIdValue,
           deviceName: deviceNameValue,
@@ -73,6 +72,7 @@ class _EditDeviceModalState extends State<EditDeviceModal> {
           householdId: deviceHouseholdIdValue,
           deviceLocationId: deviceLocationIdValue,
           updatedBy: updatedBy,
+          updatedAt: DateTimeUtil.getCurrentDateTime(),
         );
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Updating Device Info...')),
@@ -178,13 +178,7 @@ class _EditDeviceModalState extends State<EditDeviceModal> {
                   ),
                   //* Device location dropdownbox
                   SharedWidgets.dropdownTextBox(
-                    options: <List<String>>[
-                      ['1', 'Kitchen'],
-                      ['2', 'Bathroom'],
-                      ['3', 'Guest Bathroom'],
-                      ['4', 'Master Bedroom'],
-                      ['5', 'Garden'],
-                    ],
+                    options: widget.dropdownLocationOptions,
                     hintText: 'Select location of device',
                     onChanged: onChangeDeviceLocationId,
                     selectedValue: dropdownLocationSelectedValue,

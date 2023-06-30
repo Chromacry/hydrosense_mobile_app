@@ -3,21 +3,14 @@ import 'package:hydrosense_mobile_app/src/constants/design_constants.dart';
 import 'package:hydrosense_mobile_app/src/constants/global_constants.dart';
 import 'package:hydrosense_mobile_app/src/providers/devices_db.dart';
 import 'package:hydrosense_mobile_app/src/screens/Shared/widgets/shared_widgets.dart';
+import 'package:hydrosense_mobile_app/src/utils/DateTimeUtil.dart';
 import 'package:provider/provider.dart';
 
 class DeleteDeviceModal extends StatefulWidget {
   final String deviceId;
-  final String deviceName;
-  final String deviceSerialNumber;
-  final String deviceHouseholdId;
-  final String deviceLocationId;
   DeleteDeviceModal({
     Key? key,
     required this.deviceId,
-    required this.deviceName,
-    required this.deviceSerialNumber,
-    required this.deviceHouseholdId,
-    required this.deviceLocationId,
   }) : super(key: key);
 
   @override
@@ -34,11 +27,11 @@ class _DeleteDeviceModalState extends State<DeleteDeviceModal> {
         'Patrica Chew'; //! need to get created by from current user
 
     void onSubmitDeleteDevice() {
-      String dateNow = DateTime.now()
-          .toString()
-          .substring(0, 19); //* Substring to remove milliseconds
       devicesDB.deleteDeviceById(
-          deviceId: widget.deviceId, deletedBy: deletedBy, deletedAt: dateNow);
+        deviceId: widget.deviceId,
+        deletedBy: deletedBy,
+        deletedAt: DateTimeUtil.getCurrentDateTime(),
+      );
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Device deleted successfully!')),
       );

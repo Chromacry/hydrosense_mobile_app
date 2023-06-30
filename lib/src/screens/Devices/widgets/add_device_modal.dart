@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/constants/design_constants.dart';
 import 'package:hydrosense_mobile_app/src/constants/global_constants.dart';
+import 'package:hydrosense_mobile_app/src/models/device_location.dart';
+import 'package:hydrosense_mobile_app/src/providers/device_locations_db.dart';
 import 'package:hydrosense_mobile_app/src/providers/devices_db.dart';
 import 'package:hydrosense_mobile_app/src/screens/Shared/widgets/shared_widgets.dart';
+import 'package:hydrosense_mobile_app/src/utils/DateTimeUtil.dart';
 import 'package:provider/provider.dart';
 
 class AddDeviceModal extends StatefulWidget {
@@ -20,17 +23,32 @@ class _AddDeviceModalState extends State<AddDeviceModal> {
   String? deviceSerialNumberValue;
   String? deviceLocationIdValue;
 
+  String deviceHouseholdIdValue = GlobalConstants
+      .temp_householdID; //! need to get household ID from current user
+  String createdBy =
+      'Patrica Chew'; //! need to get created by from current user
+
   @override
   Widget build(BuildContext context) {
     DevicesDB devicesDB = Provider.of<DevicesDB>(context);
-    String deviceHouseholdIdValue = GlobalConstants
-        .temp_householdID; //! need to get household ID from current user
-    String createdBy =
-        'Patrica Chew'; //! need to get created by from current user
+    DeviceLocationsDB deviceLocationsDB =
+        Provider.of<DeviceLocationsDB>(context);
+    List<DeviceLocation> deviceLocationsList =
+        deviceLocationsDB.getAllDeviceLocationsByHouseholdId(
+            householdId: GlobalConstants.temp_householdID);
+
+    List<List<String>> dropdownLocationOptions =
+        deviceLocationsList.map((currentLocationValues) {
+      return [
+        currentLocationValues.id ?? '',
+        currentLocationValues.device_location_name ?? '',
+      ];
+    }).toList();
 
     dynamic onChangeDeviceId = (value) => deviceIdValue = value;
     dynamic onChangeDeviceName = (value) => deviceNameValue = value;
-    dynamic onChangeDeviceSerialNumber = (value) => deviceSerialNumberValue = value;
+    dynamic onChangeDeviceSerialNumber =
+        (value) => deviceSerialNumberValue = value;
     dynamic onChangeDeviceLocationId = (value) {
       //* Refresh for dropdown widget
       setState(() {
@@ -38,11 +56,15 @@ class _AddDeviceModalState extends State<AddDeviceModal> {
         dropdownLocationSelectedValue = value;
       });
     };
+    //* Device Name validator
+    dynamic deviceNameValidator = (value) {
+      if (value == null || value.isEmpty) {
+        return 'Device Name is empty!';
+      }
+      return null;
+    };
 
     void onSubmitAddDevice() {
-      String dateNow = DateTime.now()
-          .toString()
-          .substring(0, 19); //* Substring to remove milliseconds
       if (_addDeviceFormKey.currentState!.validate()) {
         debugPrint('FK ' + deviceNameValue.toString());
         devicesDB.addDevice(
@@ -52,7 +74,7 @@ class _AddDeviceModalState extends State<AddDeviceModal> {
           deviceHouseholdId: deviceHouseholdIdValue,
           deviceLocationId: deviceLocationIdValue,
           createdBy: createdBy,
-          createdAt: dateNow,
+          createdAt: DateTimeUtil.getCurrentDateTime(),
         );
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Adding Device...')),
@@ -82,95 +104,81 @@ class _AddDeviceModalState extends State<AddDeviceModal> {
         ],
       ),
       children: [
-        Scrollbar(
-          thumbVisibility: true,
-          child: SingleChildScrollView(
-            child: Form(
-              key: _addDeviceFormKey,
-              child: Column(
-                children: <Widget>[
-                  //* Sub Title Information
-                  Container(
-                    padding: AddDevicsStyles.titleContainerPadding,
-                    margin: AddDevicsStyles.titleContainerMargin,
-                    alignment: AddDevicsStyles.titleAlign,
-                    child: const Text(
-                      'Information',
-                      textAlign: TextAlign.left,
-                      style: AddDevicsStyles.addDeviceSubTitle,
-                    ),
+        SingleChildScrollView(
+          child: Form(
+            key: _addDeviceFormKey,
+            child: Column(
+              children: <Widget>[
+                //* Sub Title Information
+                Container(
+                  padding: AddDevicsStyles.titleContainerPadding,
+                  margin: AddDevicsStyles.titleContainerMargin,
+                  alignment: AddDevicsStyles.titleAlign,
+                  child: const Text(
+                    'Information',
+                    textAlign: TextAlign.left,
+                    style: AddDevicsStyles.addDeviceSubTitle,
                   ),
-                  //* Device Name textbox
-                  SharedWidgets.inputTextBox(
-                    textLabel: 'Device Name',
-                    allColorAttributes: Colors.white,
-                    onChanged: onChangeDeviceName,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Device Name is empty!';
-                      }
-                      return null;
-                    },
+                ),
+                //* Device Name textbox
+                SharedWidgets.inputTextBox(
+                  textLabel: 'Device Name',
+                  allColorAttributes: Colors.white,
+                  onChanged: onChangeDeviceName,
+                  validator: deviceNameValidator,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                //* Details
+                Container(
+                  padding: AddDevicsStyles.titleContainerPadding,
+                  margin: AddDevicsStyles.titleContainerMargin,
+                  alignment: AddDevicsStyles.titleAlign,
+                  child: const Text(
+                    'Details',
+                    textAlign: TextAlign.left,
+                    style: AddDevicsStyles.addDeviceSubTitle,
                   ),
-                  const SizedBox(
-                    height: 20,
+                ),
+                SharedWidgets.inputTextBox(
+                  textLabel: 'Device UUID',
+                  allColorAttributes: Colors.white,
+                  onChanged: onChangeDeviceId,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                SharedWidgets.inputTextBox(
+                  textLabel: 'Device Serial Number',
+                  allColorAttributes: Colors.white,
+                  onChanged: onChangeDeviceSerialNumber,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                //* Device Location sub title
+                Container(
+                  padding: AddDevicsStyles.titleContainerPadding,
+                  margin: AddDevicsStyles.titleContainerMargin,
+                  alignment: AddDevicsStyles.titleAlign,
+                  child: const Text(
+                    'Device Location',
+                    textAlign: TextAlign.left,
+                    style: AddDevicsStyles.addDeviceSubTitle,
                   ),
-                  //* Details
-                  Container(
-                    padding: AddDevicsStyles.titleContainerPadding,
-                    margin: AddDevicsStyles.titleContainerMargin,
-                    alignment: AddDevicsStyles.titleAlign,
-                    child: const Text(
-                      'Details',
-                      textAlign: TextAlign.left,
-                      style: AddDevicsStyles.addDeviceSubTitle,
-                    ),
-                  ),
-                  SharedWidgets.inputTextBox(
-                    textLabel: 'Device UUID',
-                    allColorAttributes: Colors.white,
-                    onChanged: onChangeDeviceId,
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  SharedWidgets.inputTextBox(
-                    textLabel: 'Device Serial Number',
-                    allColorAttributes: Colors.white,
-                    onChanged: onChangeDeviceSerialNumber,
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  //* Device Location sub title
-                  Container(
-                    padding: AddDevicsStyles.titleContainerPadding,
-                    margin: AddDevicsStyles.titleContainerMargin,
-                    alignment: AddDevicsStyles.titleAlign,
-                    child: const Text(
-                      'Device Location',
-                      textAlign: TextAlign.left,
-                      style: AddDevicsStyles.addDeviceSubTitle,
-                    ),
-                  ),
-                  //* Device location dropdownbox
-                  SharedWidgets.dropdownTextBox(
-                    options: <List<String>>[
-                      ['1', 'Kitchen'],
-                      ['2', 'Bathroom'],
-                      ['3', 'Guest Bathroom'],
-                      ['4', 'Master Bedroom'],
-                      ['5', 'Garden'],
-                    ],
-                    hintText: 'Select location of device',
-                    onChanged: onChangeDeviceLocationId,
-                    selectedValue: dropdownLocationSelectedValue,
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                ],
-              ),
+                ),
+                //* Device location dropdownbox
+                SharedWidgets.dropdownTextBox(
+                  options: dropdownLocationOptions,
+                  hintText: 'Select location of device',
+                  onChanged: onChangeDeviceLocationId,
+                  selectedValue: dropdownLocationSelectedValue,
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+              ],
             ),
           ),
         ),
