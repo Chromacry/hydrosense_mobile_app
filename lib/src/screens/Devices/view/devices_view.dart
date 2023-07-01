@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/constants/global_constants.dart';
 import 'package:hydrosense_mobile_app/src/models/device.dart';
+import 'package:hydrosense_mobile_app/src/models/device_location.dart';
+import 'package:hydrosense_mobile_app/src/providers/device_locations_db.dart';
 import 'package:hydrosense_mobile_app/src/providers/devices_db.dart';
-import 'package:hydrosense_mobile_app/src/providers/users_db.dart';
 import 'package:hydrosense_mobile_app/src/screens/Devices/view/devices_style.dart';
 import 'package:hydrosense_mobile_app/src/screens/Devices/widgets/devices_widgets.dart';
 import 'package:provider/provider.dart';
@@ -16,26 +17,51 @@ class DevicesView extends StatefulWidget {
 
 class _DevicesViewState extends State<DevicesView> {
   bool isDeleteModeOn = false;
-
+  SnackBar? snackBar;
   @override
   Widget build(BuildContext context) {
-    UsersDB usersDB = Provider.of<UsersDB>(context);
     DevicesDB devicesDB = Provider.of<DevicesDB>(context);
+    DeviceLocationsDB deviceLocationsDB =
+        Provider.of<DeviceLocationsDB>(context);
+
+    //* grab all devices by household
     List<Device> devicesDBList = devicesDB.getAllDevicesByHouseholdId(
         householdId: GlobalConstants.temp_householdID);
+
+    //* grab all device locations by household
+    List<DeviceLocation> deviceLocationsList =
+        deviceLocationsDB.getAllDeviceLocationsByHouseholdId(
+            householdId: GlobalConstants.temp_householdID);
+
+    //* For dropdown list of locations
+    List<List<String>> dropdownLocationOptions =
+        deviceLocationsList.map((currentLocationValues) {
+      return [
+        currentLocationValues.id ?? '',
+        currentLocationValues.device_location_name ?? '',
+      ];
+    }).toList();
+
     //* Listen on provider
     devicesDB.addListener(() {
-      debugPrint('Heloo world');
       //* Reload the page when the provider is notified
       setState(() {});
     });
 
     //* Toggle delete mode
     void onPressedDeleteMode() {
-      if (!isDeleteModeOn)
+      if (!isDeleteModeOn) {
         isDeleteModeOn = true;
-      else
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   const SnackBar(
+        //       content: Text('Delete Mode enabled!'),
+        //       duration: Duration(days: 365),
+        //       backgroundColor: Colors.red),
+        // );
+      } else {
         isDeleteModeOn = false;
+        // ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+      }
       setState(() {});
     }
 
@@ -76,10 +102,28 @@ class _DevicesViewState extends State<DevicesView> {
                   ),
                 ],
               ),
+              //* Alert
+              isDeleteModeOn
+                  ? Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      width: double.maxFinite,
+                      child: Card(
+                        color: Colors.red,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Text(
+                            'Delete Mode enabled!',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(),
               //* Devices Box
               Container(
-                height: 214,
-                margin: EdgeInsets.only(bottom: 50),
+                height: 550, // 214,
+                // margin: EdgeInsets.only(bottom: 50),
                 decoration: BoxDecoration(
                   color: Color(DevicesStyles.devicesBoxColor),
                   borderRadius: BorderRadius.circular(11),
@@ -101,7 +145,12 @@ class _DevicesViewState extends State<DevicesView> {
                       String deviceName = currentDevice.device_name.toString();
                       String deviceLocationId =
                           currentDevice.device_location_id.toString();
-                      String deviceLocation = 'Level 2 - Kitchen';
+                      String deviceLocation = deviceLocationsDB
+                          .getDeviceLocationById(
+                            deviceLocationId: deviceLocationId,
+                          )
+                          .device_location_name
+                          .toString();
                       String deviceHouseholdId =
                           GlobalConstants.temp_householdID;
                       String deviceSerialNumber =
@@ -119,10 +168,6 @@ class _DevicesViewState extends State<DevicesView> {
                                   builder: (BuildContext context) =>
                                       DevicesWidgets.deleteDeviceModal(
                                         deviceId: deviceId,
-                                        deviceName: deviceName,
-                                        deviceHouseholdId: deviceHouseholdId,
-                                        deviceSerialNumber: deviceSerialNumber,
-                                        deviceLocationId: deviceLocationId,
                                       ))
                               : //* Show edit modal
                               showDialog<String>(
@@ -134,6 +179,8 @@ class _DevicesViewState extends State<DevicesView> {
                                     deviceHouseholdId: deviceHouseholdId,
                                     deviceSerialNumber: deviceSerialNumber,
                                     deviceLocationId: deviceLocationId,
+                                    dropdownLocationOptions:
+                                        dropdownLocationOptions,
                                   ),
                                 );
                         },
@@ -150,22 +197,3 @@ class _DevicesViewState extends State<DevicesView> {
     );
   }
 }
-
-/*
-DevicesWidgets.deviceButton(
-  deviceNameText: 'Bathtub Tap',
-  deviceLocationText: 'Level 2 - Kitchen',
-  icon: Icons.location_on_rounded,
-  onTap: () {
-    debugPrint('Device #1 Pressed');
-    const String deviceId = '';
-    showDialog<String>(
-      context: context,
-      builder: (BuildContext context) =>
-          DevicesWidgets.editDeviceModal(
-        deviceId: deviceId,
-      ),
-    );
-  },
-),
-*/

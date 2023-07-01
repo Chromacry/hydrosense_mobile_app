@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hydrosense_mobile_app/src/providers/device_locations_db.dart';
 import 'package:hydrosense_mobile_app/src/providers/devices_db.dart';
 import 'package:hydrosense_mobile_app/src/providers/users_db.dart';
 import 'package:hydrosense_mobile_app/src/screens/Devices/devices.dart';
@@ -41,6 +42,9 @@ class App extends StatelessWidget {
         ),
         ChangeNotifierProvider<DevicesDB>(
           create: (context) => DevicesDB(),
+        ),
+        ChangeNotifierProvider<DeviceLocationsDB>(
+          create: (context) => DeviceLocationsDB(),
         ),
       ],
       child: MaterialApp(

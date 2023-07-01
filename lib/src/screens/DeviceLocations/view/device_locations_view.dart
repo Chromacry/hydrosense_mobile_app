@@ -26,8 +26,6 @@ class _DeviceLocationsViewState extends State<DeviceLocationsView> {
     deviceLocationsDB.addListener(() {
       //* Reload the page when the provider is notified
       setState(() {});
-      debugPrint('update data: ' +
-          deviceLocationsList[0].device_location_name.toString());
     });
     //* Toggle delete mode
     void onPressedDeleteMode() {
@@ -95,8 +93,8 @@ class _DeviceLocationsViewState extends State<DeviceLocationsView> {
                   : Container(),
               //* Devices Box
               Container(
-                height: 214,
-                margin: EdgeInsets.only(bottom: 50),
+                height: 550, // 214,
+                // padding: EdgeInsets.only(bottom: 50),
                 decoration: BoxDecoration(
                   color: Color(DevicesStyles.devicesBoxColor),
                   borderRadius: BorderRadius.circular(11),

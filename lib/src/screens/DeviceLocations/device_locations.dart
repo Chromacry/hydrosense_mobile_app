@@ -20,7 +20,7 @@ class DeviceLocations extends StatelessWidget {
               width: 1,
             ),
             Text('Device Locations'),
-            //* Add new Device
+            //* Add new Device location
             IconButton(
               onPressed: () => showDialog<String>(
                 context: context,

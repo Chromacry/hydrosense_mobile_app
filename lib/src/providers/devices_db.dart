@@ -25,8 +25,8 @@ class DevicesDB with ChangeNotifier {
   List<Device> getAllDevicesByHouseholdId({householdId}) {
     List<Device> householdDevices = [];
     for (Device currentDevice in devices) {
-      if (currentDevice.device_household_id == householdId)
-        householdDevices.add(currentDevice);
+      if (currentDevice.device_household_id == householdId &&
+          currentDevice.deleted_at == null) householdDevices.add(currentDevice);
     }
     return householdDevices;
   }
@@ -60,44 +60,40 @@ class DevicesDB with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateDeviceById(
-      {deviceId,
-      deviceName,
-      deviceSerialNumber,
-      householdId,
-      deviceLocationId,
-      updatedBy}) {
+  void updateDeviceById({
+    deviceId,
+    deviceName,
+    deviceSerialNumber,
+    householdId,
+    deviceLocationId,
+    updatedBy,
+    updatedAt,
+  }) {
     int deviceIndex = devices.indexWhere((element) => element.id == deviceId);
-    debugPrint(deviceIndex.toString());
-    devices[deviceIndex] = Device(
-        device_name: deviceName,
-        device_serialnumber: deviceSerialNumber,
-        device_household_id: householdId,
-        device_location_id: deviceLocationId,
-        updated_by: updatedBy,
-        updated_at: '');
-    notifyListeners();
+    if (deviceIndex != -1) {
+      Device currentDevice = devices[deviceIndex];
+      currentDevice.device_name = deviceName;
+      currentDevice.device_serialnumber = deviceSerialNumber;
+      currentDevice.device_household_id = householdId;
+      currentDevice.device_location_id = deviceLocationId;
+      currentDevice.updated_by = updatedBy;
+      currentDevice.updated_at = updatedAt;
+      notifyListeners();
+    }
   }
 
-  void deleteDeviceById(
-      {deviceId,
-      deviceName,
-      deviceSerialNumber,
-      householdId,
-      deviceLocationId,
-      deletedBy,
-      deletedAt}) {
+  void deleteDeviceById({
+    deviceId,
+    deletedBy,
+    deletedAt,
+  }) {
     int deviceIndex = devices.indexWhere((element) => element.id == deviceId);
-    debugPrint(deviceIndex.toString());
-    devices[deviceIndex] = Device(
-      device_name: deviceName,
-      device_serialnumber: deviceSerialNumber,
-      device_household_id: householdId,
-      device_location_id: deviceLocationId,
-      deleted_by: deletedBy,
-      updated_at: deletedAt,
-    );
-    notifyListeners();
+    if (deviceIndex != -1) {
+      Device currentDevice = devices[deviceIndex];
+      currentDevice.deleted_by = deletedBy;
+      currentDevice.deleted_at = deletedAt;
+      notifyListeners();
+    }
   }
 
   void removeDeviceById(deviceId) {
