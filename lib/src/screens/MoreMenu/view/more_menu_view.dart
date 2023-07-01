@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/screens/DeviceLocations/device_locations.dart';
 import 'package:hydrosense_mobile_app/src/screens/Devices/devices.dart';
+import 'package:hydrosense_mobile_app/src/screens/HouseholdMembers/household_members.dart';
 import 'package:hydrosense_mobile_app/src/screens/Login/login.dart';
 import 'package:hydrosense_mobile_app/src/screens/MoreMenu/view/more_menu_style.dart';
 import 'package:hydrosense_mobile_app/src/screens/MoreMenu/widgets/more_menu_widgets.dart';
@@ -181,7 +182,12 @@ class MoreMenuView extends StatelessWidget {
                       MoreMenuWidgets.moreMenuButton(
                         buttonText: 'Household Members',
                         icon: Icons.people_rounded,
-                        onTap: () => debugPrint('Household Members Pressed'),
+                        onTap: () => PersistentNavBarNavigator.pushNewScreen(
+                          context,
+                          screen: HouseholdMembers(),
+                          withNavBar: false,
+                          pageTransitionAnimation: PageTransitionAnimation.fade,
+                        ),
                       ),
                       MoreMenuWidgets.moreMenuButton(
                         buttonText: 'Update Info',

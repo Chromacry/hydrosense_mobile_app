@@ -79,27 +79,6 @@ class DeviceLocationItem extends StatelessWidget {
               color: Colors.black,
               size: 30,
             ),
-            //* Profile Image
-            // CircleAvatar(
-            //   radius: 25,
-            //   backgroundImage: NetworkImage(
-            //     'https://i.pinimg.com/236x/da/10/86/da108670e521c5486ea9f5679b2c64fb--diana-korkunova-on-instagram.jpg',
-            //   ), // RandomAvatar('saytoonz')
-            // ),
-
-            // Expanded(
-            //   // width: 285,
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: [
-            //       Icon(
-            //         Icons.keyboard_arrow_right_rounded,
-            //         color: Colors.black,
-            //         size: 30,
-            //       ),
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       ),
