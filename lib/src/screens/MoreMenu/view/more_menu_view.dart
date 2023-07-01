@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:hydrosense_mobile_app/src/constants/global_constants.dart';
+import 'package:hydrosense_mobile_app/src/screens/ChangePassword/change_password.dart';
 import 'package:hydrosense_mobile_app/src/screens/DeviceLocations/device_locations.dart';
 import 'package:hydrosense_mobile_app/src/screens/Devices/devices.dart';
 import 'package:hydrosense_mobile_app/src/screens/HouseholdMembers/household_members.dart';
 import 'package:hydrosense_mobile_app/src/screens/Login/login.dart';
 import 'package:hydrosense_mobile_app/src/screens/MoreMenu/view/more_menu_style.dart';
 import 'package:hydrosense_mobile_app/src/screens/MoreMenu/widgets/more_menu_widgets.dart';
+import 'package:hydrosense_mobile_app/src/screens/MoreMenu/widgets/tariff_rate_modal.dart';
+import 'package:hydrosense_mobile_app/src/screens/UpdateInfo/update_info.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 import 'package:random_avatar/random_avatar.dart';
@@ -192,7 +196,12 @@ class MoreMenuView extends StatelessWidget {
                       MoreMenuWidgets.moreMenuButton(
                         buttonText: 'Update Info',
                         icon: Icons.account_circle_rounded,
-                        onTap: () => debugPrint('Update Info Pressed'),
+                        onTap: () => PersistentNavBarNavigator.pushNewScreen(
+                          context,
+                          screen: UpdateInfo(),
+                          withNavBar: false,
+                          pageTransitionAnimation: PageTransitionAnimation.fade,
+                        ),
                       ),
                       MoreMenuWidgets.moreMenuButton(
                         buttonText: 'Water Logs',
@@ -202,12 +211,23 @@ class MoreMenuView extends StatelessWidget {
                       MoreMenuWidgets.moreMenuButton(
                         buttonText: 'Tariff Rate',
                         icon: Icons.attach_money_rounded,
-                        onTap: () => debugPrint('Tariff Rate Pressed'),
+                        onTap: () => showDialog(
+                          context: context,
+                          builder: (context) => TariffRateModal(
+                            householdId: GlobalConstants.temp_householdID,
+                            tariffRate: '0.5',
+                          ),
+                        ),
                       ),
                       MoreMenuWidgets.moreMenuButton(
                         buttonText: 'Change Password',
                         icon: Icons.lock_reset_rounded,
-                        onTap: () => debugPrint('Change Password Pressed'),
+                        onTap: () => PersistentNavBarNavigator.pushNewScreen(
+                          context,
+                          screen: ChangePassword(),
+                          withNavBar: false,
+                          pageTransitionAnimation: PageTransitionAnimation.fade,
+                        ),
                       ),
                       MoreMenuWidgets.moreMenuButton(
                         buttonText: 'Settings',

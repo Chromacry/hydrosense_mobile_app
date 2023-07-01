@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/constants/design_constants.dart';
+import 'package:hydrosense_mobile_app/src/screens/Alerts/alerts.dart';
 import 'package:hydrosense_mobile_app/src/screens/Dashboard/dashboard.dart';
 import 'package:hydrosense_mobile_app/src/screens/Login/login.dart';
 import 'package:hydrosense_mobile_app/src/screens/MoreMenu/more_menu.dart';
@@ -19,7 +20,7 @@ class BottomNavigation extends StatelessWidget {
       return [
         Dashboard(),
         WaterUsage(),
-        Login(),
+        Alerts(),
         MoreMenu(),
       ];
     }
