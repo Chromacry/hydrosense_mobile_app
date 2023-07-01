@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hydrosense_mobile_app/src/screens/DeviceLocations/widgets/add_device_location_modal.dart';
-import 'package:hydrosense_mobile_app/src/screens/DeviceLocations/widgets/delete_device_location_modal.dart';
-import 'package:hydrosense_mobile_app/src/screens/DeviceLocations/widgets/edit_device_location_modal.dart';
+import 'package:hydrosense_mobile_app/src/screens/HouseholdMembers/widgets/add_household_member_modal.dart';
+import 'package:hydrosense_mobile_app/src/screens/HouseholdMembers/widgets/delete_household_member_modal.dart';
+import 'package:hydrosense_mobile_app/src/screens/HouseholdMembers/widgets/edit_household_member_modal.dart';
 import 'package:hydrosense_mobile_app/src/screens/HouseholdMembers/widgets/household_member_item.dart';
 
 class HouseholdMembersWidgets {
@@ -9,7 +9,7 @@ class HouseholdMembersWidgets {
     required userName,
     required userRole,
     required householdId,
-    required locationCreatedAt,
+    required userCreatedAt,
     Color? containerItemColor,
     required Function() onTap,
   }) =>
@@ -17,27 +17,31 @@ class HouseholdMembersWidgets {
         userName: userName,
         userRole: userRole,
         householdId: householdId,
-        locationCreatedAt: locationCreatedAt,
+        householdCreatedAt: userCreatedAt,
         containerItemColor: containerItemColor,
         onTap: onTap,
       );
-  static Widget addDeviceLocationModal() => AddDeviceLocationModal();
-  static Widget editDeviceLocationModal({
-    required deviceLocationId,
-    required deviceLocationName,
-    required deviceHouseholdId,
+  static Widget addHouseholdMemberModal() => AddHouseholdMemberModal();
+  static Widget editHouseholdMemberModal({
+    required userId,
+    required emailAddress,
+    required userName,
+    required phoneNumber,
+    required householdId,
     required updatedBy,
   }) =>
-      EditDeviceLocationModal(
-        deviceLocationId: deviceLocationId,
-        deviceLocationName: deviceLocationName,
-        deviceHouseholdId: deviceHouseholdId,
+      EditHouseholdMemberModal(
+        userId: userId,
+        emailAddress: emailAddress,
+        userName: userName,
+        householdId: householdId,
+        phoneNumber: phoneNumber,
       );
   static Widget deleteDeviceLocationModal({
-    required deviceLocationId,
+    required userId,
     required deletedBy,
   }) =>
-      DeleteDeviceLocationModal(
-        deviceLocationId: deviceLocationId,
+      DeleteHouseholdMemberModal(
+        userId: userId,
       );
 }

@@ -2,38 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/constants/design_constants.dart';
 import 'package:hydrosense_mobile_app/src/constants/global_constants.dart';
 import 'package:hydrosense_mobile_app/src/providers/device_locations_db.dart';
+import 'package:hydrosense_mobile_app/src/providers/users_db.dart';
 import 'package:hydrosense_mobile_app/src/screens/Shared/widgets/shared_widgets.dart';
 import 'package:provider/provider.dart';
 
-class AddDeviceLocationModal extends StatelessWidget {
-  AddDeviceLocationModal({super.key});
+class AddHouseholdMemberModal extends StatelessWidget {
+  AddHouseholdMemberModal({super.key});
 
-  final _addDeviceLocationFormKey = GlobalKey<FormState>();
-  String? deviceLocationNameValue;
-  String deviceHouseholdIdValue = GlobalConstants
-      .temp_householdID; //! need to get household ID from current user
-  String createdBy =
-      'Patrica Chew'; //! need to get created by from current user
+  final _addHouseholdMemberFormKey = GlobalKey<FormState>();
+  String? userName;
+  String? emailAddress;
+  String? phoneNumber;
+  String? password;
+  String? confirmPassword;
   @override
   Widget build(BuildContext context) {
-    DeviceLocationsDB deviceLocationsDB =
-        Provider.of<DeviceLocationsDB>(context);
+    UsersDB usersDB = Provider.of<UsersDB>(context);
 
-    dynamic onChangeDeviceName = (value) => deviceLocationNameValue = value;
-    void onSubmitAddDevice() {
-      //* Get current DateTime
-      String dateNow = DateTime.now()
-          .toString()
-          .substring(0, 19); //* Substring to remove milliseconds
-      if (_addDeviceLocationFormKey.currentState!.validate()) {
-        deviceLocationsDB.addDeviceLocation(
-          deviceLocationName: deviceLocationNameValue,
-          deviceHouseholdId: deviceHouseholdIdValue,
-          createdBy: createdBy,
-          createdAt: dateNow,
-        );
+    dynamic onChangeUsername = (value) => userName = value;
+    dynamic onChangeEmailAddress = (value) => emailAddress = value;
+    dynamic onChangePhoneNumber = (value) => phoneNumber = value;
+    dynamic onChangePassword = (value) => password = value;
+    dynamic onChangeConfirmPassword = (value) => confirmPassword = value;
+
+
+    void onSubmitAddMember() {
+      if (_addHouseholdMemberFormKey.currentState!.validate()) {
+        usersDB.addUser(
+            userName: userName,
+            emailAddress: emailAddress,
+            phoneNo: phoneNumber,
+            householdId: GlobalConstants.temp_householdID,
+            roleId: 'Household User',
+            createdBy: 'Patricia Chew');
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Adding DeviceLocation...')),
+          const SnackBar(content: Text('Successfully added member!')),
         );
         Navigator.pop(context);
       }
@@ -57,8 +60,7 @@ class AddDeviceLocationModal extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          const Text('Add Device Location',
-              style: AddDevicsStyles.addDeviceTitle),
+          const Text('Add Member', style: AddDevicsStyles.addDeviceTitle),
           const SizedBox(
             height: 10,
           ),
@@ -73,7 +75,7 @@ class AddDeviceLocationModal extends StatelessWidget {
           thumbVisibility: true,
           child: SingleChildScrollView(
             child: Form(
-              key: _addDeviceLocationFormKey,
+              key: _addHouseholdMemberFormKey,
               child: Column(
                 children: <Widget>[
                   //* Sub Title Information
@@ -87,11 +89,60 @@ class AddDeviceLocationModal extends StatelessWidget {
                       style: AddDevicsStyles.addDeviceSubTitle,
                     ),
                   ),
-                  //* Device Name textbox
+                  //* Usernane textbox
                   SharedWidgets.inputTextBox(
-                    textLabel: 'Device Location Name',
+                    textLabel: 'Username',
+                    inputTextValue: userName,
                     allColorAttributes: Colors.white,
-                    onChanged: onChangeDeviceName,
+                    onChanged: onChangeUsername,
+                    validator: deviceLocationNameValidator,
+                  ),
+                  //* Email textbox
+                  SharedWidgets.inputTextBox(
+                    textLabel: 'Email Address',
+                    inputTextValue: emailAddress,
+                    allColorAttributes: Colors.white,
+                    onChanged: onChangeEmailAddress,
+                    validator: deviceLocationNameValidator,
+                  ),
+                  //* Phone number textbox
+                  SharedWidgets.inputTextBox(
+                    textLabel: 'Phone Number',
+                    inputTextValue: phoneNumber,
+                    allColorAttributes: Colors.white,
+                    onChanged: onChangePhoneNumber,
+                    validator: deviceLocationNameValidator,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  //* Sub Title Security
+                  Container(
+                    padding: AddDevicsStyles.titleContainerPadding,
+                    margin: AddDevicsStyles.titleContainerMargin,
+                    alignment: AddDevicsStyles.titleAlign,
+                    child: const Text(
+                      'Security',
+                      textAlign: TextAlign.left,
+                      style: AddDevicsStyles.addDeviceSubTitle,
+                    ),
+                  ),
+                  //* Password textbox
+                  SharedWidgets.inputTextBox(
+                    textLabel: 'Password',
+                    inputTextValue: password,
+                    allColorAttributes: Colors.white,
+                    obscureTextEnabled: true,
+                    onChanged: onChangePassword,
+                    validator: deviceLocationNameValidator,
+                  ),
+                  //* Confirm Password textbox
+                  SharedWidgets.inputTextBox(
+                    textLabel: 'Confirm Password',
+                    inputTextValue: confirmPassword,
+                    obscureTextEnabled: true,
+                    allColorAttributes: Colors.white,
+                    onChanged: onChangeConfirmPassword,
                     validator: deviceLocationNameValidator,
                   ),
                   const SizedBox(
@@ -111,7 +162,7 @@ class AddDeviceLocationModal extends StatelessWidget {
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: onSubmitAddDevice,
+              onPressed: onSubmitAddMember,
               child: const Text('Add'),
             ),
           ],

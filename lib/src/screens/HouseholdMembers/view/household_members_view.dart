@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/constants/global_constants.dart';
 import 'package:hydrosense_mobile_app/src/models/device_location.dart';
-import 'package:hydrosense_mobile_app/src/providers/device_locations_db.dart';
-import 'package:hydrosense_mobile_app/src/screens/DeviceLocations/widgets/device_locations_widgets.dart';
+import 'package:hydrosense_mobile_app/src/models/user.dart';
+import 'package:hydrosense_mobile_app/src/providers/users_db.dart';
 import 'package:hydrosense_mobile_app/src/screens/Devices/view/devices_style.dart';
 import 'package:hydrosense_mobile_app/src/screens/HouseholdMembers/widgets/household_members_widgets.dart';
 import 'package:provider/provider.dart';
@@ -18,13 +18,12 @@ class _HouseholdMembersViewState extends State<HouseholdMembersView> {
   bool isDeleteModeOn = false;
   @override
   Widget build(BuildContext context) {
-    DeviceLocationsDB deviceLocationsDB =
-        Provider.of<DeviceLocationsDB>(context);
-    List<DeviceLocation> deviceLocationsList =
-        deviceLocationsDB.getAllDeviceLocationsByHouseholdId(
-            householdId: GlobalConstants.temp_householdID);
+    UsersDB usersDB = Provider.of<UsersDB>(context);
+
+    List<User> usersList = usersDB.getAllUsersByHouseholdId(
+        householdId: GlobalConstants.temp_householdID);
     //* Listen on provider
-    deviceLocationsDB.addListener(() {
+    usersDB.addListener(() {
       //* Reload the page when the provider is notified
       setState(() {});
     });
@@ -100,33 +99,30 @@ class _HouseholdMembersViewState extends State<HouseholdMembersView> {
                   color: Color(DevicesStyles.devicesBoxColor),
                   borderRadius: BorderRadius.circular(11),
                 ),
-                child: Flexible(
+                child: Expanded(
                   child: ListView.builder(
                     physics: AlwaysScrollableScrollPhysics(),
                     primary: false,
                     padding: const EdgeInsets.all(10),
 
                     itemBuilder: (context, index) {
-                      DeviceLocation currentDeviceLocation =
-                          deviceLocationsList[index];
-                      String locationId = currentDeviceLocation.id.toString();
-                      String householdId =
-                          currentDeviceLocation.household_id.toString();
-                      String deviceLocationName =
-                          currentDeviceLocation.device_location_name.toString();
-                      String deviceCreatedAt =
-                          currentDeviceLocation.created_at.toString();
-                      // String locationCreatedAt = DateTime.parse(
-                      //         currentDeviceLocation.created_at.toString())
-                      //     .toString();
+                      User currentUser = usersList[index];
+                      String userId = currentUser.id.toString();
+                      String roleId = currentUser.role_id.toString();
+                      String householdId = GlobalConstants.temp_householdID;
+                      String username = currentUser.username.toString();
+                      String emailAddress =
+                          currentUser.email_address.toString();
+                      String phoneNumber = currentUser.phone_number.toString();
+                      String userCreatedAt = currentUser.created_at.toString();
 
                       return Padding(
                         padding: EdgeInsets.only(bottom: 5),
                         child: HouseholdMembersWidgets.householdMemberItem(
-                          userName: deviceLocationName,
-                          userRole: deviceLocationName,
+                          userName: username,
+                          userRole: roleId,
                           householdId: householdId,
-                          locationCreatedAt: deviceCreatedAt,
+                          userCreatedAt: userCreatedAt,
                           containerItemColor:
                               isDeleteModeOn ? Colors.red[200] : Colors.grey,
                           onTap: () {
@@ -135,20 +131,22 @@ class _HouseholdMembersViewState extends State<HouseholdMembersView> {
                                 ? showDialog<String>(
                                     context: context,
                                     builder: (BuildContext context) =>
-                                        DeviceLocationsWidgets
+                                        HouseholdMembersWidgets
                                             .deleteDeviceLocationModal(
-                                          deviceLocationId: locationId,
-                                          deletedBy: '',
+                                          userId: userId,
+                                          deletedBy: 'Patrica Chew',
                                         ))
                                 : //* Show edit modal
                                 showDialog<String>(
                                     context: context,
                                     builder: (BuildContext context) =>
-                                        DeviceLocationsWidgets
-                                            .editDeviceLocationModal(
-                                      deviceLocationId: locationId,
-                                      deviceLocationName: deviceLocationName,
-                                      deviceHouseholdId: householdId,
+                                        HouseholdMembersWidgets
+                                            .editHouseholdMemberModal(
+                                      userId: userId,
+                                      userName: username,
+                                      emailAddress: emailAddress,
+                                      phoneNumber: phoneNumber,
+                                      householdId: householdId,
                                       updatedBy: 'Particiaaa Chew',
                                     ),
                                   );
@@ -156,7 +154,7 @@ class _HouseholdMembersViewState extends State<HouseholdMembersView> {
                         ),
                       );
                     },
-                    itemCount: deviceLocationsList.length,
+                    itemCount: usersList.length,
                     // children: <Widget>[
                     //   DeviceLocationsWidgets.deviceLocationItem(),
                     // ],

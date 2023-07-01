@@ -5,7 +5,7 @@ class HouseholdMemberItem extends StatelessWidget {
   final String userName;
   final String userRole;
   final String householdId;
-  final String locationCreatedAt;
+  final String householdCreatedAt;
   final Color? containerItemColor;
   final Function() onTap;
   const HouseholdMemberItem({
@@ -13,7 +13,7 @@ class HouseholdMemberItem extends StatelessWidget {
     required this.userName,
     required this.userRole,
     required this.householdId,
-    required this.locationCreatedAt,
+    required this.householdCreatedAt,
     required this.containerItemColor,
     required this.onTap,
   }) : super(key: key);
@@ -35,13 +35,20 @@ class HouseholdMemberItem extends StatelessWidget {
             Container(
               child: Row(
                 children: [
+                  // CircleAvatar(
+                  //   radius: 20,
+                  //   backgroundColor: Colors.black,
+                  //   child: Icon(
+                  //     Icons.location_pin,
+                  //     color: Colors.white,
+                  //   ),
+                  // ),
+                  //* Profile Image
                   CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.black,
-                    child: Icon(
-                      Icons.location_pin,
-                      color: Colors.white,
-                    ),
+                    radius: 25,
+                    backgroundImage: NetworkImage(
+                      'https://i.pinimg.com/236x/da/10/86/da108670e521c5486ea9f5679b2c64fb--diana-korkunova-on-instagram.jpg',
+                    ), // RandomAvatar('saytoonz')
                   ),
                   const SizedBox(
                     width: 10,
@@ -74,7 +81,7 @@ class HouseholdMemberItem extends StatelessWidget {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          locationCreatedAt,
+                          householdCreatedAt,
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             color: Colors.black45,
@@ -91,27 +98,6 @@ class HouseholdMemberItem extends StatelessWidget {
               color: Colors.black,
               size: 30,
             ),
-            //* Profile Image
-            // CircleAvatar(
-            //   radius: 25,
-            //   backgroundImage: NetworkImage(
-            //     'https://i.pinimg.com/236x/da/10/86/da108670e521c5486ea9f5679b2c64fb--diana-korkunova-on-instagram.jpg',
-            //   ), // RandomAvatar('saytoonz')
-            // ),
-
-            // Expanded(
-            //   // width: 285,
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: [
-            //       Icon(
-            //         Icons.keyboard_arrow_right_rounded,
-            //         color: Colors.black,
-            //         size: 30,
-            //       ),
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       ),

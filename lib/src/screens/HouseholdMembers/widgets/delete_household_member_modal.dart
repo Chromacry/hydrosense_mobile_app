@@ -1,41 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/constants/design_constants.dart';
 import 'package:hydrosense_mobile_app/src/constants/global_constants.dart';
-import 'package:hydrosense_mobile_app/src/providers/device_locations_db.dart';
+import 'package:hydrosense_mobile_app/src/providers/users_db.dart';
 import 'package:provider/provider.dart';
 
-class DeleteDeviceLocationModal extends StatefulWidget {
-  final String deviceLocationId;
-  DeleteDeviceLocationModal({
+class DeleteHouseholdMemberModal extends StatefulWidget {
+  final String userId;
+  DeleteHouseholdMemberModal({
     Key? key,
-    required this.deviceLocationId,
+    required this.userId,
   }) : super(key: key);
 
   @override
-  State<DeleteDeviceLocationModal> createState() => _DeleteDeviceModalState();
+  State<DeleteHouseholdMemberModal> createState() =>
+      _DeleteeHouseholdMemberModalState();
 }
 
-class _DeleteDeviceModalState extends State<DeleteDeviceLocationModal> {
+class _DeleteeHouseholdMemberModalState
+    extends State<DeleteHouseholdMemberModal> {
   @override
   Widget build(BuildContext context) {
-    DeviceLocationsDB deviceLocationsDB =
-        Provider.of<DeviceLocationsDB>(context);
-    String deviceLocationHouseholdIdValue = GlobalConstants
-        .temp_householdID; //! need to get household ID from current user
-    String deletedBy =
-        'Patrica Chew'; //! need to get created by from current user
+    UsersDB usersDB = Provider.of<UsersDB>(context);
 
     void onSubmitDeleteDevice() {
-      String dateNow = DateTime.now()
-          .toString()
-          .substring(0, 19); //* Substring to remove milliseconds
-      deviceLocationsDB.deleteDeviceLocationById(
-        deviceLocationId: widget.deviceLocationId,
-        deletedBy: deletedBy,
-        deletedAt: dateNow,
+      usersDB.deleteUserById(
+        userId: widget.userId,
+        deletedBy: 'Patrica Chew',
       );
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Device deleted successfully!')),
+        const SnackBar(content: Text('Successfully deleted member!')),
       );
       Navigator.pop(context);
     }

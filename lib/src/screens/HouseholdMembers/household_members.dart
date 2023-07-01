@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/constants/design_constants.dart';
-import 'package:hydrosense_mobile_app/src/screens/DeviceLocations/widgets/device_locations_widgets.dart';
 import 'package:hydrosense_mobile_app/src/screens/HouseholdMembers/view/household_members_view.dart';
+import 'package:hydrosense_mobile_app/src/screens/HouseholdMembers/widgets/household_members_widgets.dart';
 
 class HouseholdMembers extends StatelessWidget {
   static String routeName = '/DeviceLocations';
@@ -25,7 +25,7 @@ class HouseholdMembers extends StatelessWidget {
               onPressed: () => showDialog<String>(
                 context: context,
                 builder: (BuildContext context) =>
-                    DeviceLocationsWidgets.addDeviceLocationModal(),
+                    HouseholdMembersWidgets.addHouseholdMemberModal(),
               ),
               icon: Icon(
                 Icons.add_box_rounded,

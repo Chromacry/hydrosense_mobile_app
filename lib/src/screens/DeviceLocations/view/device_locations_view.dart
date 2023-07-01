@@ -99,7 +99,7 @@ class _DeviceLocationsViewState extends State<DeviceLocationsView> {
                   color: Color(DevicesStyles.devicesBoxColor),
                   borderRadius: BorderRadius.circular(11),
                 ),
-                child: Flexible(
+                child: Expanded(
                   child: ListView.builder(
                     physics: AlwaysScrollableScrollPhysics(),
                     primary: false,

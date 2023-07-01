@@ -128,7 +128,7 @@ class _DevicesViewState extends State<DevicesView> {
                   color: Color(DevicesStyles.devicesBoxColor),
                   borderRadius: BorderRadius.circular(11),
                 ),
-                child: Flexible(
+                child: Expanded(
                   child: GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 4,

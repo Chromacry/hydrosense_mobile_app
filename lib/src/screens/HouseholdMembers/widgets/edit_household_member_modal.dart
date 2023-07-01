@@ -1,68 +1,101 @@
 import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/constants/design_constants.dart';
+import 'package:hydrosense_mobile_app/src/models/user.dart';
 import 'package:hydrosense_mobile_app/src/providers/device_locations_db.dart';
+import 'package:hydrosense_mobile_app/src/providers/users_db.dart';
 import 'package:hydrosense_mobile_app/src/screens/Shared/widgets/shared_widgets.dart';
 import 'package:provider/provider.dart';
 
-class EditDeviceLocationModal extends StatefulWidget {
-  final String deviceLocationId;
-  final String deviceLocationName;
-  final String deviceHouseholdId;
+class EditHouseholdMemberModal extends StatefulWidget {
+  final String userId;
+  final String userName;
+  final String emailAddress;
+  final String phoneNumber;
+  final String householdId;
 
-  EditDeviceLocationModal({
+  EditHouseholdMemberModal({
     Key? key,
-    required this.deviceLocationId,
-    required this.deviceLocationName,
-    required this.deviceHouseholdId,
+    required this.userId,
+    required this.userName,
+    required this.emailAddress,
+    required this.phoneNumber,
+    required this.householdId,
   }) : super(key: key);
 
   @override
-  State<EditDeviceLocationModal> createState() =>
-      _EditDeviceLocationModalState();
+  State<EditHouseholdMemberModal> createState() =>
+      _EditHouseholdMemberModalState();
 }
 
-class _EditDeviceLocationModalState extends State<EditDeviceLocationModal> {
-  final _editDeviceLocationFormKey = GlobalKey<FormState>();
-  String? deviceLocationName;
+class _EditHouseholdMemberModalState extends State<EditHouseholdMemberModal> {
+  final _editHouseholdMemberFormKey = GlobalKey<FormState>();
+  String? userName;
+  String? emailAddress;
+  String? phoneNumber;
 
   void initState() {
     super.initState();
-    deviceLocationName = widget.deviceLocationName;
+    userName = widget.userName;
+    emailAddress = widget.emailAddress;
+    phoneNumber = widget.phoneNumber;
   }
 
   @override
   Widget build(BuildContext context) {
-    DeviceLocationsDB deviceLocationsDB =
-        Provider.of<DeviceLocationsDB>(context);
+    UsersDB usersDB = Provider.of<UsersDB>(context);
 
-    //* Device Location Name validator
-    dynamic deviceLocationNameValidator = (value) {
+    //* validators
+    dynamic userNameValidator = (value) {
       if (value == null || value.isEmpty) {
-        return 'Device Location Name is empty!';
+        return 'Username is empty!';
       }
       return null;
     };
 
-    dynamic onChangedDeviceLocationName = (value) {
-      deviceLocationName = value;
+    dynamic emailAddressValidator = (value) {
+      if (value == null || value.isEmpty) {
+        return 'Email Address is empty!';
+      }
+      return null;
+    };
+
+    dynamic phoneNumberValidator = (value) {
+      if (value == null || value.isEmpty) {
+        return 'Phone Number is empty!';
+      }
+      return null;
+    };
+
+    dynamic onChangedUserName = (value) {
+      userName = value;
       //* Refresh widget
       setState(() {});
     };
 
-    void onSubmitEditDeviceLocation() {
-      String dateNow = DateTime.now()
-          .toString()
-          .substring(0, 19); //* Substring to remove milliseconds
-      if (_editDeviceLocationFormKey.currentState!.validate()) {
-        deviceLocationsDB.updateDeviceLocationById(
-          deviceLocationId: widget.deviceLocationId,
-          deviceLocationName: deviceLocationName,
-          householdId: widget.deviceHouseholdId,
-          updatedAt: dateNow,
-          updatedBy: 'Patricccccca chew',
+    dynamic onChangedEmailAddress = (value) {
+      userName = value;
+      //* Refresh widget
+      setState(() {});
+    };
+
+    dynamic onChangedPhoneNumber = (value) {
+      phoneNumber = value;
+      //* Refresh widget
+      setState(() {});
+    };
+
+    void onSubmitEditHouseholdMember() {
+      if (_editHouseholdMemberFormKey.currentState!.validate()) {
+        usersDB.updateUserInfoById(
+          userId: widget.userId,
+          emailAddress: emailAddress,
+          phoneNo: phoneNumber,
+          userName: userName,
+          updatedBy: 'Patrica Chew',
         );
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Updating Device Location Info...')),
+          const SnackBar(
+              content: Text('Successfully updated household member Info!')),
         );
         Navigator.pop(context);
       }
@@ -74,8 +107,8 @@ class _EditDeviceLocationModalState extends State<EditDeviceLocationModal> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           const Text(
-            'Edit Device Location',
-            style: EditDevicsStyles.editDeviceTitle,
+            'Edit Household Member',
+            style: EditHouseholdMemberStyles.editDeviceTitle,
           ),
           const SizedBox(
             height: 10,
@@ -90,28 +123,60 @@ class _EditDeviceLocationModalState extends State<EditDeviceLocationModal> {
         thumbVisibility: true,
         child: SingleChildScrollView(
           child: Form(
-            key: _editDeviceLocationFormKey,
+            key: _editHouseholdMemberFormKey,
             child: Column(
               children: <Widget>[
                 //* Sub Title Information
                 Container(
-                  padding: EditDevicsStyles.titleContainerPadding,
-                  margin: EditDevicsStyles.titleContainerMargin,
-                  alignment: EditDevicsStyles.titleAlign,
+                  padding: EditHouseholdMemberStyles.titleContainerPadding,
+                  margin: EditHouseholdMemberStyles.titleContainerMargin,
+                  alignment: EditHouseholdMemberStyles.titleAlign,
                   child: const Text(
                     'Information',
                     textAlign: TextAlign.left,
-                    style: EditDevicsStyles.addDeviceSubTitle,
+                    style: EditHouseholdMemberStyles.addDeviceSubTitle,
                   ),
                 ),
-                //* Device Name textbox
+                //* Usernane textbox
                 SharedWidgets.inputTextBox(
-                  textLabel: 'Device Location Name',
-                  inputTextValue: widget.deviceLocationName,
+                  textLabel: 'Username',
+                  inputTextValue: widget.userName,
                   allColorAttributes: Colors.white,
-                  onChanged: onChangedDeviceLocationName,
-                  validator: deviceLocationNameValidator,
+                  onChanged: onChangedUserName,
+                  validator: userNameValidator,
                 ),
+                //* Email textbox
+                SharedWidgets.inputTextBox(
+                  textLabel: 'Email Address',
+                  inputTextValue: widget.emailAddress,
+                  allColorAttributes: Colors.white,
+                  onChanged: onChangedEmailAddress,
+                  validator: emailAddressValidator,
+                ),
+                //* Phone number textbox
+                SharedWidgets.inputTextBox(
+                  textLabel: 'Phone Number',
+                  inputTextValue: widget.phoneNumber,
+                  allColorAttributes: Colors.white,
+                  onChanged: onChangedPhoneNumber,
+                  validator: phoneNumberValidator,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                //* Sub Title Information
+                Container(
+                  padding: EditHouseholdMemberStyles.titleContainerPadding,
+                  margin: EditHouseholdMemberStyles.titleContainerMargin,
+                  alignment: EditHouseholdMemberStyles.titleAlign,
+                  child: const Text(
+                    'Security',
+                    textAlign: TextAlign.left,
+                    style: EditHouseholdMemberStyles.addDeviceSubTitle,
+                  ),
+                ),
+                //* Password textbox
+
                 const SizedBox(
                   height: 20,
                 ),
@@ -126,7 +191,7 @@ class _EditDeviceLocationModalState extends State<EditDeviceLocationModal> {
           child: const Text('Cancel'),
         ),
         TextButton(
-          onPressed: onSubmitEditDeviceLocation,
+          onPressed: onSubmitEditHouseholdMember,
           child: const Text('Update'),
         ),
       ],
@@ -134,7 +199,7 @@ class _EditDeviceLocationModalState extends State<EditDeviceLocationModal> {
   }
 }
 
-class EditDevicsStyles {
+class EditHouseholdMemberStyles {
   //* Title Text
   static const Alignment titleAlign = Alignment.centerLeft;
   static const EdgeInsets titleContainerMargin = EdgeInsets.only(bottom: 20);

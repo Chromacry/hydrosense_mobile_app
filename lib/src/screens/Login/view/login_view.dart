@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/constants/global_constants.dart';
-import 'package:hydrosense_mobile_app/src/providers/users_db.dart';
 import 'package:hydrosense_mobile_app/src/screens/ForgetPassword/forget_password.dart';
 import 'package:hydrosense_mobile_app/src/screens/Layout/layout.dart';
 import 'package:hydrosense_mobile_app/src/screens/Login/view/login_style.dart';
 import 'package:hydrosense_mobile_app/src/screens/Login/widgets/login_widgets.dart';
 import 'package:hydrosense_mobile_app/src/screens/Shared/widgets/shared_widgets.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
-import 'package:provider/provider.dart';
 
 class LoginView extends StatelessWidget {
   LoginView({super.key});
@@ -16,7 +14,6 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UsersDB usersDBList = Provider.of<UsersDB>(context);
     String emailaddress = '';
 
     String? emailValidator(value) {
@@ -62,9 +59,6 @@ class LoginView extends StatelessWidget {
           pageTransitionAnimation: PageTransitionAnimation.slideUp,
         );
       }
-
-      //! Change the below method to check if the user exists instead
-      usersDBList.addUser('defaultUsername', emailaddress, '12345678');
     }
 
     return SafeArea(

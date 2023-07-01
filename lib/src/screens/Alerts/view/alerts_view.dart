@@ -40,7 +40,7 @@ class AlertsView extends StatelessWidget {
                   color: Color(DesignConstants.COLOR_DARKGRAY_SECONDARY),
                   borderRadius: BorderRadius.circular(11),
                 ),
-                child: Flexible(
+                child: Expanded(
                   child: ListView.builder(
                     physics: AlwaysScrollableScrollPhysics(),
                     primary: false,
