@@ -11,7 +11,7 @@ class DevicesDB with ChangeNotifier {
     Device(
         id: 'dwadwawadwdadwadwa',
         device_household_id: GlobalConstants.temp_householdID,
-        device_location_id: '1',
+        device_location_id: '2323adwadwasdaw',
         device_serialnumber: 'SN123456789WTS',
         device_name: 'I love DSAG',
         created_by: 'System',

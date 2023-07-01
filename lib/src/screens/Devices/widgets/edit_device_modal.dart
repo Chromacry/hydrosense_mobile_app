@@ -91,7 +91,7 @@ class _EditDeviceModalState extends State<EditDeviceModal> {
           const SizedBox(
             height: 10,
           ),
-          const Text('Edit Device', style: AddDevicsStyles.addDeviceTitle),
+          const Text('Edit Device', style: EditDevicsStyles.addDeviceTitle),
           const SizedBox(
             height: 10,
           ),
@@ -111,13 +111,13 @@ class _EditDeviceModalState extends State<EditDeviceModal> {
                 children: <Widget>[
                   //* Sub Title Information
                   Container(
-                    padding: AddDevicsStyles.titleContainerPadding,
-                    margin: AddDevicsStyles.titleContainerMargin,
-                    alignment: AddDevicsStyles.titleAlign,
+                    padding: EditDevicsStyles.titleContainerPadding,
+                    margin: EditDevicsStyles.titleContainerMargin,
+                    alignment: EditDevicsStyles.titleAlign,
                     child: const Text(
                       'Information',
                       textAlign: TextAlign.left,
-                      style: AddDevicsStyles.addDeviceSubTitle,
+                      style: EditDevicsStyles.addDeviceSubTitle,
                     ),
                   ),
                   //* Device Name textbox
@@ -138,13 +138,13 @@ class _EditDeviceModalState extends State<EditDeviceModal> {
                   ),
                   //* Details
                   Container(
-                    padding: AddDevicsStyles.titleContainerPadding,
-                    margin: AddDevicsStyles.titleContainerMargin,
-                    alignment: AddDevicsStyles.titleAlign,
+                    padding: EditDevicsStyles.titleContainerPadding,
+                    margin: EditDevicsStyles.titleContainerMargin,
+                    alignment: EditDevicsStyles.titleAlign,
                     child: const Text(
                       'Details',
                       textAlign: TextAlign.left,
-                      style: AddDevicsStyles.addDeviceSubTitle,
+                      style: EditDevicsStyles.addDeviceSubTitle,
                     ),
                   ),
                   SharedWidgets.inputTextBox(
@@ -167,13 +167,13 @@ class _EditDeviceModalState extends State<EditDeviceModal> {
                   ),
                   //* Device Location sub title
                   Container(
-                    padding: AddDevicsStyles.titleContainerPadding,
-                    margin: AddDevicsStyles.titleContainerMargin,
-                    alignment: AddDevicsStyles.titleAlign,
+                    padding: EditDevicsStyles.titleContainerPadding,
+                    margin: EditDevicsStyles.titleContainerMargin,
+                    alignment: EditDevicsStyles.titleAlign,
                     child: const Text(
                       'Device Location',
                       textAlign: TextAlign.left,
-                      style: AddDevicsStyles.addDeviceSubTitle,
+                      style: EditDevicsStyles.addDeviceSubTitle,
                     ),
                   ),
                   //* Device location dropdownbox
@@ -210,7 +210,7 @@ class _EditDeviceModalState extends State<EditDeviceModal> {
   }
 }
 
-class AddDevicsStyles {
+class EditDevicsStyles {
   //* Title Text
   static const Alignment titleAlign = Alignment.centerLeft;
   static const EdgeInsets titleContainerMargin = EdgeInsets.only(bottom: 20);
