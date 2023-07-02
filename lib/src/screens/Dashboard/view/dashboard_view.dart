@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hydrosense_mobile_app/src/providers/users_db.dart';
+import 'package:hydrosense_mobile_app/src/models/waterusagelog.dart';
+import 'package:hydrosense_mobile_app/src/providers/waterlogs_db.dart';
 import 'package:hydrosense_mobile_app/src/screens/Dashboard/view/dashboard_style.dart';
 import 'package:hydrosense_mobile_app/src/screens/Dashboard/widgets/dashboard_widgets.dart';
+import 'package:hydrosense_mobile_app/src/utils/DateTimeUtil.dart';
 import 'package:provider/provider.dart';
 
 class DashboardView extends StatelessWidget {
@@ -9,7 +11,12 @@ class DashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UsersDB usersDBList = Provider.of<UsersDB>(context);
+    WaterLogsDB waterLogsDB = Provider.of<WaterLogsDB>(context);
+    WaterUsageLog overallData = waterLogsDB.getOverallDashboardData(
+      from: DateTimeUtil.getCurrentDate(),
+      to: DateTimeUtil.getCurrentDate(),
+      tariffRate: '4.5',
+    );
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20),
@@ -54,8 +61,9 @@ class DashboardView extends StatelessWidget {
                       child: Container(
                         padding: DashboardStyles.cardPadding,
                         child: Column(
-                          children: const <Widget>[
-                            Text('0 litres',
+                          children: <Widget>[
+                            Text(
+                                '${overallData.total_water_usage?.toStringAsFixed(2)} m3',
                                 style: DashboardStyles.cardTextValue),
                             Text('Water used',
                                 style: DashboardStyles.cardTextTitle)
@@ -76,8 +84,9 @@ class DashboardView extends StatelessWidget {
                       child: Container(
                         padding: DashboardStyles.cardPadding,
                         child: Column(
-                          children: const [
-                            Text('0 hr', style: DashboardStyles.cardTextValue),
+                          children: [
+                            Text('${overallData.total_time_spent?.toStringAsFixed(2)} hr',
+                                style: DashboardStyles.cardTextValue),
                             Text('Time Spent',
                                 style: DashboardStyles.cardTextTitle)
                           ],
@@ -97,8 +106,8 @@ class DashboardView extends StatelessWidget {
                       child: Container(
                         padding: DashboardStyles.cardPadding,
                         child: Column(
-                          children: const [
-                            Text('\$00.00',
+                          children: [
+                            Text('\$ ${overallData.total_estimated_cost?.toStringAsFixed(2)}',
                                 style: DashboardStyles.cardTextValue),
                             Text('Estimated Cost',
                                 style: DashboardStyles.cardTextTitle)

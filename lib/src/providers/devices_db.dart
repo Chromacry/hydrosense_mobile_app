@@ -9,7 +9,7 @@ class DevicesDB with ChangeNotifier {
   //* Data list
   List<Device> devices = [
     Device(
-        id: 'dwadwawadwdadwadwa',
+        id: 'deviceabc12321UUID',
         device_household_id: GlobalConstants.temp_householdID,
         device_location_id: '2323adwadwasdaw',
         device_serialnumber: 'SN123456789WTS',
