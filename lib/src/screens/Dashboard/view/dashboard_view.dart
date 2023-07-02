@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hydrosense_mobile_app/src/models/WaterLog.dart';
 import 'package:hydrosense_mobile_app/src/models/waterusagelog.dart';
 import 'package:hydrosense_mobile_app/src/providers/waterlogs_db.dart';
 import 'package:hydrosense_mobile_app/src/screens/Dashboard/view/dashboard_style.dart';
@@ -6,17 +7,30 @@ import 'package:hydrosense_mobile_app/src/screens/Dashboard/widgets/dashboard_wi
 import 'package:hydrosense_mobile_app/src/utils/DateTimeUtil.dart';
 import 'package:provider/provider.dart';
 
-class DashboardView extends StatelessWidget {
+class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
 
   @override
+  State<DashboardView> createState() => _DashboardViewState();
+}
+
+class _DashboardViewState extends State<DashboardView> {
+  @override
   Widget build(BuildContext context) {
     WaterLogsDB waterLogsDB = Provider.of<WaterLogsDB>(context);
+    List<WaterLog> waterlogsList = waterLogsDB.getAllWaterUsageDataByDateRange(
+      from: DateTimeUtil.getCurrentDate(),
+      to: DateTimeUtil.getCurrentDate(),
+    );
     WaterUsageLog overallData = waterLogsDB.getOverallDashboardData(
       from: DateTimeUtil.getCurrentDate(),
       to: DateTimeUtil.getCurrentDate(),
       tariffRate: '4.5',
     );
+
+    waterLogsDB.addListener(() {
+      setState(() {});
+    });
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20),
@@ -85,7 +99,8 @@ class DashboardView extends StatelessWidget {
                         padding: DashboardStyles.cardPadding,
                         child: Column(
                           children: [
-                            Text('${overallData.total_time_spent?.toStringAsFixed(2)} hr',
+                            Text(
+                                '${overallData.total_time_spent?.toStringAsFixed(2)} hr',
                                 style: DashboardStyles.cardTextValue),
                             Text('Time Spent',
                                 style: DashboardStyles.cardTextTitle)
@@ -107,7 +122,8 @@ class DashboardView extends StatelessWidget {
                         padding: DashboardStyles.cardPadding,
                         child: Column(
                           children: [
-                            Text('\$ ${overallData.total_estimated_cost?.toStringAsFixed(2)}',
+                            Text(
+                                '\$ ${overallData.total_estimated_cost?.toStringAsFixed(2)}',
                                 style: DashboardStyles.cardTextValue),
                             Text('Estimated Cost',
                                 style: DashboardStyles.cardTextTitle)
@@ -117,7 +133,8 @@ class DashboardView extends StatelessWidget {
                     ),
                     const SizedBox(height: 50),
                     //* Chart for average water usage
-                    DashboardWidgets.waterUsageBarChart(),
+                    DashboardWidgets.waterUsageBarChart(
+                        waterloglist: waterlogsList),
                     const SizedBox(height: 50),
                     //* Estimated Cost of water usage Text
                     Container(

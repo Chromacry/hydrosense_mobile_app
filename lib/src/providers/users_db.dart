@@ -50,8 +50,19 @@ class UsersDB with ChangeNotifier {
   List<User> getAllUsersByHouseholdId({householdId}) {
     List<User> usersList = [];
     for (var currentUser in users) {
-      if (currentUser.household_id == householdId && currentUser.deleted_at == null) usersList.add(currentUser);
+      if (currentUser.household_id == householdId &&
+          currentUser.deleted_at == null) usersList.add(currentUser);
     }
+    //* Sort the userlist
+    usersList.sort((a, b) {
+    if (a.role_id == "Household Admin") {
+      return -1;
+    } else if (b.role_id == "Household Admin") {
+      return 1;
+    } else {
+      return a.username.toString().compareTo(b.username.toString());
+    }
+  });
     return usersList;
   }
 

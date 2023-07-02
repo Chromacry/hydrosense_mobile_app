@@ -7,6 +7,7 @@ import 'package:hydrosense_mobile_app/src/providers/devices_db.dart';
 import 'package:hydrosense_mobile_app/src/screens/Shared/widgets/shared_widgets.dart';
 import 'package:hydrosense_mobile_app/src/utils/DateTimeUtil.dart';
 import 'package:provider/provider.dart';
+import 'dart:async';
 
 class AddDeviceModal extends StatefulWidget {
   AddDeviceModal({super.key});
@@ -22,7 +23,8 @@ class _AddDeviceModalState extends State<AddDeviceModal> {
   String? deviceNameValue;
   String? deviceSerialNumberValue;
   String? deviceLocationIdValue;
-
+  bool isDeviceLocationEmpty = false;
+  
   String deviceHouseholdIdValue = GlobalConstants
       .temp_householdID; //! need to get household ID from current user
   String createdBy =
@@ -45,6 +47,7 @@ class _AddDeviceModalState extends State<AddDeviceModal> {
       ];
     }).toList();
 
+    //* Onchnage values
     dynamic onChangeDeviceId = (value) => deviceIdValue = value;
     dynamic onChangeDeviceName = (value) => deviceNameValue = value;
     dynamic onChangeDeviceSerialNumber =
@@ -56,17 +59,34 @@ class _AddDeviceModalState extends State<AddDeviceModal> {
         dropdownLocationSelectedValue = value;
       });
     };
-    //* Device Name validator
+
+    //*  validators
     dynamic deviceNameValidator = (value) {
       if (value == null || value.isEmpty) {
         return 'Device Name is empty!';
       }
       return null;
     };
+    dynamic deviceSerialNumberValidator = (value) {
+      if (value == null || value.isEmpty) {
+        return 'Device Serial Number is empty!';
+      }
+      return null;
+    };
 
     void onSubmitAddDevice() {
       if (_addDeviceFormKey.currentState!.validate()) {
-        debugPrint('FK ' + deviceNameValue.toString());
+        //* Check if location dropdown has value
+        if (dropdownLocationSelectedValue == null) {
+          isDeviceLocationEmpty = true;
+          setState(() {});
+          Timer(Duration(milliseconds: 1500), () {
+            isDeviceLocationEmpty = false;
+            setState(() {});
+          });
+          return;
+        }
+
         devicesDB.addDevice(
           deviceId: deviceIdValue,
           deviceName: deviceNameValue,
@@ -77,7 +97,8 @@ class _AddDeviceModalState extends State<AddDeviceModal> {
           createdAt: DateTimeUtil.getCurrentDateTime(),
         );
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Adding Device...')),
+          SharedWidgets.statusSnackbar(
+              textMessage: 'Successfully added Device!'),
         );
         Navigator.pop(context);
       }
@@ -153,6 +174,7 @@ class _AddDeviceModalState extends State<AddDeviceModal> {
                   textLabel: 'Device Serial Number',
                   allColorAttributes: Colors.white,
                   onChanged: onChangeDeviceSerialNumber,
+                  validator: deviceSerialNumberValidator,
                 ),
                 const SizedBox(
                   height: 15,
@@ -175,6 +197,11 @@ class _AddDeviceModalState extends State<AddDeviceModal> {
                   onChanged: onChangeDeviceLocationId,
                   selectedValue: dropdownLocationSelectedValue,
                 ),
+                //* show if empty locaiton device
+                isDeviceLocationEmpty
+                    ? Text('Device location is empty!',
+                        style: TextStyle(color: Colors.red))
+                    : Container(),
                 const SizedBox(
                   height: 50,
                 ),

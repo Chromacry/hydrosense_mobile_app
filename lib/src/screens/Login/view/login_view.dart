@@ -17,16 +17,24 @@ class LoginView extends StatelessWidget {
     String emailaddress = '';
 
     String? emailValidator(value) {
-      // if (value == null || value.isEmpty) {
-      //   return 'Email field is empty!';
-      // }
+      if (value == null || value.isEmpty) {
+        return 'Email field is empty!';
+      }
+      // Regular expression to match an email address
+      final RegExp emailRegex =
+          RegExp(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$');
+
+      // Check if the value matches the regular expression
+      if (!emailRegex.hasMatch(value)) {
+        return 'Invalid email address!';
+      }
       return null;
     }
 
     String? passwordValidator(value) {
-      // if (value == null || value.isEmpty) {
-      //   return 'Password field is empty!';
-      // }
+      if (value == null || value.isEmpty) {
+        return 'Password field is empty!';
+      }
       return null;
     }
 
@@ -34,24 +42,9 @@ class LoginView extends StatelessWidget {
       if (_loginFormKey.currentState!.validate()) {
         // If the form is valid, display a snackbar. In the real world,
         // you'd often call a server or save the information in a database.
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            behavior: SnackBarBehavior.floating,
-            shape: ContinuousRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(11))),
-            content: Text(
-              GlobalConstants.CLIENT_STATUS_MSGS['SUCCESSFUL_LOGIN'].toString(),
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            backgroundColor: Colors.grey[800],
-            elevation: 5,
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SharedWidgets.statusSnackbar(
+            textMessage: GlobalConstants.CLIENT_STATUS_MSGS['SUCCESSFUL_LOGIN']
+                .toString()));
         PersistentNavBarNavigator.pushNewScreen(
           context,
           screen: Layout(),

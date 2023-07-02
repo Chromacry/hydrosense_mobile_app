@@ -21,8 +21,6 @@ class _DeleteDeviceModalState extends State<DeleteDeviceModal> {
   @override
   Widget build(BuildContext context) {
     DevicesDB devicesDB = Provider.of<DevicesDB>(context);
-    String deviceHouseholdIdValue = GlobalConstants
-        .temp_householdID; //! need to get household ID from current user
     String deletedBy =
         'Patrica Chew'; //! need to get created by from current user
 
@@ -33,7 +31,8 @@ class _DeleteDeviceModalState extends State<DeleteDeviceModal> {
         deletedAt: DateTimeUtil.getCurrentDateTime(),
       );
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Device deleted successfully!')),
+        SharedWidgets.statusSnackbar(
+            textMessage: 'Device deleted successfully!'),
       );
       Navigator.pop(context);
     }

@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:hydrosense_mobile_app/src/models/WaterLog.dart';
+import 'package:hydrosense_mobile_app/src/utils/WaterUsageUtil.dart';
+import 'dart:math';
 
 class WaterUsageBarChart extends StatefulWidget {
-  WaterUsageBarChart({super.key});
+  final List<WaterLog> waterloglist;
+  WaterUsageBarChart({
+    Key? key,
+    required this.waterloglist,
+  }) : super(key: key);
 
   final Color? leftBarColor = Colors.yellow[200];
   final Color? rightBarColor = Colors.red[200];
@@ -13,35 +20,32 @@ class WaterUsageBarChart extends StatefulWidget {
 }
 
 class _WaterUsageBarChartState extends State<WaterUsageBarChart> {
-  final double width = 7;
+  final double width = 10; //7
 
   late List<BarChartGroupData> rawBarGroups;
   late List<BarChartGroupData> showingBarGroups;
 
+  double highestWaterUsageValue = 0;
+
   int touchedGroupIndex = -1;
+  List<double> waterUsageList = [];
 
   @override
   void initState() {
     super.initState();
     //* Amount of bar in chart
-    //* makeGroupData(Grouping, Bar1, Bar2)
-    final barGroup1 = makeGroupData(0, 0, 2);
-    final barGroup2 = makeGroupData(1, 300, 20);
-    final barGroup3 = makeGroupData(2, 256, 400);
-    final barGroup4 = makeGroupData(3, 500, 16);
-    final barGroup5 = makeGroupData(4, 80, 6);
-    final barGroup6 = makeGroupData(5, 100, 500);
-    final barGroup7 = makeGroupData(6, 10, 1.5);
-
-    final items = [
-      barGroup1,
-      barGroup2,
-      barGroup3,
-      barGroup4,
-      barGroup5,
-      barGroup6,
-      barGroup7,
-    ];
+    //* makeGroupData(Grouping, Bar1)
+    List<BarChartGroupData> items = [];
+    widget.waterloglist.asMap().forEach((index, waterlog) {
+      double waterUsage = WaterUsageUtil.getWaterUsage(
+            flowRate: waterlog.flow_rate.toString(),
+            timeUsed: waterlog.time_used.toString(),
+          ) /
+          1000;
+      waterUsageList.add(waterUsage);
+      items.add(makeGroupData(index, waterUsage));
+    });
+    highestWaterUsageValue = waterUsageList.reduce(max).ceilToDouble();
     rawBarGroups = items;
     showingBarGroups = rawBarGroups;
   }
@@ -72,7 +76,7 @@ class _WaterUsageBarChartState extends State<WaterUsageBarChart> {
                     width: 8,
                   ),
                   Text(
-                    'per month',
+                    'last 6 hours',
                     style: TextStyle(
                       color: Color(0xff77839a),
                       fontSize: 16,
@@ -89,7 +93,7 @@ class _WaterUsageBarChartState extends State<WaterUsageBarChart> {
             child: Container(
               child: BarChart(
                 BarChartData(
-                  maxY: 500,
+                  maxY: highestWaterUsageValue,
                   barTouchData: BarTouchData(
                     touchTooltipData: BarTouchTooltipData(
                       tooltipBgColor: Colors.grey,
@@ -187,11 +191,11 @@ class _WaterUsageBarChartState extends State<WaterUsageBarChart> {
     );
     String text;
     if (value == 0) {
-      text = '1K';
-    } else if (value == 250) {
-      text = '2.5K';
-    } else if (value == 500) {
-      text = '5K';
+      text = '0';
+    } else if (value == 1.5) {
+      text = '1.5';
+    } else if (value == highestWaterUsageValue) {
+      text = '${highestWaterUsageValue} m3';
     } else {
       return Container();
     }
@@ -205,7 +209,15 @@ class _WaterUsageBarChartState extends State<WaterUsageBarChart> {
   //* By number of bars created
   Widget bottomTitles(double value, TitleMeta meta) {
     //TODO Dynamically create titles from data
-    final titles = <String>['J', 'F', 'M', 'A', 'M*', 'J', 'J*'];
+    final titles = <String>[
+      '12am',
+      '1am',
+      '2am',
+      '3am',
+      '4am',
+      '5am',
+      '6am',
+    ];
 
     final intIndex = value.isFinite ? value.toInt() : 0;
     final title =
@@ -228,19 +240,14 @@ class _WaterUsageBarChartState extends State<WaterUsageBarChart> {
     );
   }
 
-  BarChartGroupData makeGroupData(int x, double y1, double y2) {
+  BarChartGroupData makeGroupData(int x, double y1) {
     return BarChartGroupData(
-      barsSpace: 4, //4
+      barsSpace: 1, //4
       x: x,
       barRods: [
         BarChartRodData(
           toY: y1,
           color: widget.leftBarColor,
-          width: width,
-        ),
-        BarChartRodData(
-          toY: y2,
-          color: widget.rightBarColor,
           width: width,
         ),
       ],

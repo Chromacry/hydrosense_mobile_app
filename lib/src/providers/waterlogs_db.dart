@@ -3,6 +3,7 @@ import 'package:hydrosense_mobile_app/src/constants/global_constants.dart';
 import 'package:hydrosense_mobile_app/src/models/WaterLog.dart';
 import 'package:hydrosense_mobile_app/src/models/waterusagelog.dart';
 import 'package:hydrosense_mobile_app/src/utils/DateTimeUtil.dart';
+import 'package:hydrosense_mobile_app/src/utils/WaterUsageUtil.dart';
 import 'package:uuid/uuid.dart';
 
 Uuid uuid = Uuid();
@@ -15,21 +16,49 @@ class WaterLogsDB with ChangeNotifier {
       device_id: 'deviceabc12321UUID',
       time_used: '12', //* in mins
       flow_rate: '7',
-      created_at: '2023-06-25 05:30:00',
+      created_at: '2023-07-02 05:30:00',
     ),
     WaterLog(
       id: uuid.v4(),
       device_id: 'deviceabc12321UUID',
       time_used: '60', //* in mins
       flow_rate: '7',
-      created_at: '2023-07-02 13:30:50',
+      created_at: '2023-07-02 08:30:50',
     ),
     WaterLog(
       id: uuid.v4(),
       device_id: 'deviceabc12321UUID',
       time_used: '422.5', //* in mins
       flow_rate: '7',
-      created_at: '2023-07-02 06:30:00',
+      created_at: '2023-07-02 08:30:00',
+    ),
+    WaterLog(
+      id: uuid.v4(),
+      device_id: 'deviceabc12321UUID',
+      time_used: '12', //* in mins
+      flow_rate: '7',
+      created_at: '2023-07-02 10:30:00',
+    ),
+    WaterLog(
+      id: uuid.v4(),
+      device_id: 'deviceabc12321UUID',
+      time_used: '60', //* in mins
+      flow_rate: '7',
+      created_at: '2023-07-02 09:30:50',
+    ),
+    WaterLog(
+      id: uuid.v4(),
+      device_id: 'deviceabc12321UUID',
+      time_used: '422.5', //* in mins
+      flow_rate: '7',
+      created_at: '2023-07-02 13:30:00',
+    ),
+    WaterLog(
+      id: uuid.v4(),
+      device_id: 'deviceabc12321UUID',
+      time_used: '12', //* in mins
+      flow_rate: '7',
+      created_at: '2023-07-02 15:30:00',
     ),
   ];
 
@@ -43,14 +72,19 @@ class WaterLogsDB with ChangeNotifier {
   }) {
     DateTime fromCreatedAt = DateTime.parse(from);
     DateTime toCreatedAt = DateTime.parse(to);
+
     List<WaterLog> waterLogsByDateRange = [];
+
     for (WaterLog currentWaterLog in waterlogs) {
       DateTime currentLogDate =
-          DateTime.parse(currentWaterLog.created_at.toString());
-      if (currentLogDate.isAfter(
-              DateTimeUtil.convertToDateOnly(toCreatedAt.toString())) &&
-          currentLogDate.isBefore(
-              DateTimeUtil.convertToDateOnly(fromCreatedAt.toString()))) {
+          DateTimeUtil.convertToDateOnly(currentWaterLog.created_at.toString());
+      if (currentLogDate.compareTo(
+                  DateTimeUtil.convertToDateOnly(toCreatedAt.toString())) ==
+              0 ||
+          currentLogDate.isAfter(
+                  DateTimeUtil.convertToDateOnly(toCreatedAt.toString())) &&
+              currentLogDate.isBefore(
+                  DateTimeUtil.convertToDateOnly(fromCreatedAt.toString()))) {
         waterLogsByDateRange.add(currentWaterLog);
       }
     }
@@ -82,18 +116,22 @@ class WaterLogsDB with ChangeNotifier {
         totalTimeUsedPerHour +=
             double.parse(currentWaterLog.time_used.toString()) / 60;
         //* Add water usage
-        totalWaterUsagePerHour +=
-            (double.parse(currentWaterLog.flow_rate.toString()) * 60) *
-                (double.parse(currentWaterLog.time_used.toString()) / 60);
+        totalWaterUsagePerHour += WaterUsageUtil.getWaterUsage(
+          flowRate: currentWaterLog.flow_rate.toString(),
+          timeUsed: currentWaterLog.time_used.toString(),
+        );
       }
     }
     //* calculate cost of water usage
-    double totalEstimatedCost =
-        ((double.parse(tariffRate) / 1000) * totalWaterUsagePerHour ) + 4.5;
+    double totalEstimatedCost = WaterUsageUtil.getEstimatedCost(
+      tariffRate: tariffRate,
+      waterUsage: totalWaterUsagePerHour,
+    );
     //* return total data
     return WaterUsageLog(
       total_time_spent: totalTimeUsedPerHour,
-      total_water_usage: totalWaterUsagePerHour / 1000, //*divided by 1000 to change litres to cubic metres
+      total_water_usage: totalWaterUsagePerHour /
+          1000, //*divided by 1000 to change litres to cubic metres
       total_estimated_cost: totalEstimatedCost,
     );
   }

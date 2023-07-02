@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class DateTimeUtil {
   static String getCurrentDateTime() => //* Get current DateTime
       DateTime.now()
@@ -10,7 +12,11 @@ class DateTimeUtil {
           .substring(0, 10); //* Substring to remove milliseconds
 
   static DateTime convertToDateOnly(String date) => //* Get current DateTime
-      DateTime.parse(date
-          .toString()
-          .substring(0, 10)); //* Substring to remove milliseconds
+      DateTime.parse(
+        date.toString().substring(0, 10),
+      ); //* Substring to remove milliseconds
+
+  static String convertToHumanReadableDate(String date) =>
+      //* Get current DateTime
+      DateFormat.yMMMd().format(DateTime.parse(date.toString()));
 }

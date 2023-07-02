@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/screens/Shared/widgets/dropdown_textbox.dart';
 import 'package:hydrosense_mobile_app/src/screens/Shared/widgets/input_textbox.dart';
+import 'package:hydrosense_mobile_app/src/screens/Shared/widgets/status_snackbar.dart';
 
 class SharedWidgets {
   static Widget inputTextBox({
@@ -37,4 +38,7 @@ class SharedWidgets {
         selectedValue: selectedValue,
         onChanged: onChanged,
       );
+
+  static SnackBar statusSnackbar({textMessage}) =>
+      StatusSnackbar.snackbarStatus(textMessage: textMessage);
 }

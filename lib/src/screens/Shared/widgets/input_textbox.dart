@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class InputTextBox extends StatelessWidget {
+class InputTextBox extends StatefulWidget {
   final String inputTextLabelValue;
   final String? inputTextValue;
   final Color? allColorAttributes;
@@ -20,21 +20,56 @@ class InputTextBox extends StatelessWidget {
     required this.obscureTextEnabled,
     this.enabled,
   }) : super(key: key);
+
+  @override
+  State<InputTextBox> createState() => _InputTextBoxState();
+}
+
+class _InputTextBoxState extends State<InputTextBox> {
+  bool? obscureTextEnabled;
+
+  @override
+  void initState() {
+    obscureTextEnabled = widget.obscureTextEnabled;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    void _toggleObscureText() {
+      //* toggle
+      setState(() {
+        if (obscureTextEnabled == true)
+          obscureTextEnabled = false;
+        else
+          obscureTextEnabled = true;
+      });
+    }
+
     return TextFormField(
-      validator: validator,
-      cursorColor: allColorAttributes ?? Colors.white,
-      autocorrect: autocorrect ?? false,
-      enabled: enabled ?? true,
+      validator: widget.validator,
+      cursorColor: widget.allColorAttributes ?? Colors.white,
+      autocorrect: widget.autocorrect ?? false,
+      enabled: widget.enabled ?? true,
       obscureText: obscureTextEnabled ?? false,
-      initialValue: inputTextValue,
+      initialValue: widget.inputTextValue,
       decoration: InputDecoration(
-        labelText: inputTextLabelValue,
-        focusColor: allColorAttributes ?? Colors.white,
+        labelText: widget.inputTextLabelValue,
+        focusColor: widget.allColorAttributes ?? Colors.white,
         enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: allColorAttributes ?? Colors.white),
+          borderSide:
+              BorderSide(color: widget.allColorAttributes ?? Colors.white),
         ),
+        suffixIcon: widget.obscureTextEnabled ?? false
+            ? InkWell(
+                onTap: _toggleObscureText,
+                child: Icon(
+                  obscureTextEnabled ?? false
+                      ? Icons.visibility
+                      : Icons.visibility_off,
+                ),
+              )
+            : Ink(),
         // border: const OutlineInputBorder(
         //   borderRadius: BorderRadius.all(
         //     Radius.circular(11),
@@ -52,19 +87,19 @@ class InputTextBox extends StatelessWidget {
         //   ),
         // ),
         labelStyle: TextStyle(
-          color: allColorAttributes ?? Colors.white,
+          color: widget.allColorAttributes ?? Colors.white,
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
             width: 2,
-            color: allColorAttributes ?? Colors.white,
+            color: widget.allColorAttributes ?? Colors.white,
           ),
         ),
       ),
       style: TextStyle(
-        color: allColorAttributes ?? Colors.white,
+        color: widget.allColorAttributes ?? Colors.white,
       ),
-      onChanged: onChanged,
+      onChanged: widget.onChanged,
     );
   }
 }

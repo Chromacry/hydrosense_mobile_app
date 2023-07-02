@@ -17,7 +17,6 @@ class DevicesView extends StatefulWidget {
 
 class _DevicesViewState extends State<DevicesView> {
   bool isDeleteModeOn = false;
-  SnackBar? snackBar;
   @override
   Widget build(BuildContext context) {
     DevicesDB devicesDB = Provider.of<DevicesDB>(context);
@@ -52,12 +51,6 @@ class _DevicesViewState extends State<DevicesView> {
     void onPressedDeleteMode() {
       if (!isDeleteModeOn) {
         isDeleteModeOn = true;
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   const SnackBar(
-        //       content: Text('Delete Mode enabled!'),
-        //       duration: Duration(days: 365),
-        //       backgroundColor: Colors.red),
-        // );
       } else {
         isDeleteModeOn = false;
         // ScaffoldMessenger.of(context).hideCurrentMaterialBanner();

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/constants/design_constants.dart';
 import 'package:hydrosense_mobile_app/src/constants/global_constants.dart';
@@ -33,6 +35,8 @@ class _EditDeviceModalState extends State<EditDeviceModal> {
   String? deviceNameValue;
   String? deviceSerialNumberValue;
   String? deviceLocationIdValue;
+  bool isDeviceLocationEmpty = false;
+
   @override
   void initState() {
     super.initState();
@@ -63,8 +67,31 @@ class _EditDeviceModalState extends State<EditDeviceModal> {
       });
     };
 
+    //*  validators
+    dynamic deviceNameValidator = (value) {
+      if (value == null || value.isEmpty) {
+        return 'Device Name is empty!';
+      }
+      return null;
+    };
+    dynamic deviceSerialNumberValidator = (value) {
+      if (value == null || value.isEmpty) {
+        return 'Device Serial Number is empty!';
+      }
+      return null;
+    };
     void onSubmitEditDevice() {
       if (_editDeviceFormKey.currentState!.validate()) {
+        //* Check if location dropdown has value
+        if (dropdownLocationSelectedValue == null) {
+          isDeviceLocationEmpty = true;
+          setState(() {});
+          Timer(Duration(milliseconds: 1500), () {
+            isDeviceLocationEmpty = false;
+            setState(() {});
+          });
+          return;
+        }
         devicesDB.updateDeviceById(
           deviceId: deviceIdValue,
           deviceName: deviceNameValue,
@@ -75,7 +102,8 @@ class _EditDeviceModalState extends State<EditDeviceModal> {
           updatedAt: DateTimeUtil.getCurrentDateTime(),
         );
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Updating Device Info...')),
+          SharedWidgets.statusSnackbar(
+              textMessage: 'Device updated successfully!'),
         );
         Navigator.pop(context);
       }
@@ -126,12 +154,7 @@ class _EditDeviceModalState extends State<EditDeviceModal> {
                     inputTextValue: deviceNameValue,
                     allColorAttributes: Colors.white,
                     onChanged: onChangeDeviceName,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Device Name is empty!';
-                      }
-                      return null;
-                    },
+                    validator: deviceNameValidator,
                   ),
                   const SizedBox(
                     height: 20,
@@ -160,6 +183,7 @@ class _EditDeviceModalState extends State<EditDeviceModal> {
                     textLabel: 'Device Serial Number',
                     inputTextValue: deviceSerialNumberValue,
                     allColorAttributes: Colors.white,
+                    validator: deviceSerialNumberValidator,
                     onChanged: onChangeDeviceSerialNumber,
                   ),
                   const SizedBox(

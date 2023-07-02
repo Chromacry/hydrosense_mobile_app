@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/constants/design_constants.dart';
+import 'package:hydrosense_mobile_app/src/utils/DateTimeUtil.dart';
 
 class HouseholdMemberItem extends StatelessWidget {
   final String userName;
@@ -81,7 +82,7 @@ class HouseholdMemberItem extends StatelessWidget {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          householdCreatedAt,
+                          DateTimeUtil.convertToHumanReadableDate(householdCreatedAt),
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             color: Colors.black45,
