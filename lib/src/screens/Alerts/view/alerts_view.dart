@@ -11,6 +11,7 @@ class AlertsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final items = List<String>.generate(20, (i) => 'Item ${i + 1}');
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20),
@@ -48,12 +49,12 @@ class AlertsView extends StatelessWidget {
                       return Padding(
                         padding: EdgeInsets.only(bottom: 5),
                         child: AlertItem(
-                            key: Key(index.toString()),
                             title: 'Water leak detected',
                             message: 'oh no!',
                             createdTime: '2015-06-22',
                             containerItemColor: Colors.white,
-                            onTap: (dismissDirection) => debugPrint('dwa')),
+                            onDismissed: (dismissDirection) =>
+                                debugPrint('dwa')),
                       );
                     },
                     itemCount: 2,

@@ -7,21 +7,21 @@ class AlertItem extends StatelessWidget {
   final String message;
   final String createdTime;
   final Color? containerItemColor;
-  final void Function(DismissDirection) onTap;
+  final void Function(DismissDirection) onDismissed;
   const AlertItem({
     Key? key,
     required this.title,
     required this.message,
     required this.createdTime,
     required this.containerItemColor,
-    required this.onTap,
+    required this.onDismissed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: Key('idk'),
-      onDismissed: onTap,
+      key: UniqueKey(),
+      onDismissed: onDismissed,
       direction: DismissDirection.startToEnd,
       child: Container(
         decoration: BoxDecoration(

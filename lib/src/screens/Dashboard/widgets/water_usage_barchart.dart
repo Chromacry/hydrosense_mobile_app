@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:hydrosense_mobile_app/src/constants/design_constants.dart';
 import 'package:hydrosense_mobile_app/src/models/WaterLog.dart';
 import 'package:hydrosense_mobile_app/src/utils/WaterUsageUtil.dart';
 import 'dart:math';
@@ -36,6 +37,7 @@ class _WaterUsageBarChartState extends State<WaterUsageBarChart> {
     //* Amount of bar in chart
     //* makeGroupData(Grouping, Bar1)
     List<BarChartGroupData> items = [];
+    //* Add default value when there's no value from today's data
     widget.waterloglist.asMap().forEach((index, waterlog) {
       double waterUsage = WaterUsageUtil.getWaterUsage(
             flowRate: waterlog.flow_rate.toString(),
@@ -45,7 +47,8 @@ class _WaterUsageBarChartState extends State<WaterUsageBarChart> {
       waterUsageList.add(waterUsage);
       items.add(makeGroupData(index, waterUsage));
     });
-    highestWaterUsageValue = waterUsageList.reduce(max).ceilToDouble();
+    if (widget.waterloglist.length >= 1)
+      highestWaterUsageValue = waterUsageList.reduce(max).ceilToDouble();
     rawBarGroups = items;
     showingBarGroups = rawBarGroups;
   }
@@ -89,94 +92,104 @@ class _WaterUsageBarChartState extends State<WaterUsageBarChart> {
           const SizedBox(
             height: 38,
           ),
-          Expanded(
-            child: Container(
-              child: BarChart(
-                BarChartData(
-                  maxY: highestWaterUsageValue,
-                  barTouchData: BarTouchData(
-                    touchTooltipData: BarTouchTooltipData(
-                      tooltipBgColor: Colors.grey,
-                      getTooltipItem: (a, b, c, d) => null,
-                    ),
-                    touchCallback: (FlTouchEvent event, response) {
-                      if (response == null || response.spot == null) {
-                        setState(() {
-                          touchedGroupIndex = -1;
-                          showingBarGroups = List.of(rawBarGroups);
-                        });
-                        return;
-                      }
+          // Expanded(
+          //   child: Container(
+          //     child: BarChart(
+          //       BarChartData(
+          //         maxY: highestWaterUsageValue,
+          //         barTouchData: BarTouchData(
+          //           touchTooltipData: BarTouchTooltipData(
+          //             tooltipBgColor: Colors.grey,
+          //             getTooltipItem: (a, b, c, d) => null,
+          //           ),
+          //           touchCallback: (FlTouchEvent event, response) {
+          //             if (response == null || response.spot == null) {
+          //               setState(() {
+          //                 touchedGroupIndex = -1;
+          //                 showingBarGroups = List.of(rawBarGroups);
+          //               });
+          //               return;
+          //             }
 
-                      touchedGroupIndex = response.spot!.touchedBarGroupIndex;
+          //             touchedGroupIndex = response.spot!.touchedBarGroupIndex;
 
-                      setState(() {
-                        if (!event.isInterestedForInteractions) {
-                          touchedGroupIndex = -1;
-                          showingBarGroups = List.of(rawBarGroups);
-                          return;
-                        }
-                        showingBarGroups = List.of(rawBarGroups);
-                        if (touchedGroupIndex != -1) {
-                          var sum = 0.0;
-                          for (final rod
-                              in showingBarGroups[touchedGroupIndex].barRods) {
-                            sum += rod.toY;
-                          }
-                          final avg = sum /
-                              showingBarGroups[touchedGroupIndex]
-                                  .barRods
-                                  .length;
+          //             setState(() {
+          //               if (!event.isInterestedForInteractions) {
+          //                 touchedGroupIndex = -1;
+          //                 showingBarGroups = List.of(rawBarGroups);
+          //                 return;
+          //               }
+          //               showingBarGroups = List.of(rawBarGroups);
+          //               if (touchedGroupIndex != -1) {
+          //                 var sum = 0.0;
+          //                 for (final rod
+          //                     in showingBarGroups[touchedGroupIndex].barRods) {
+          //                   sum += rod.toY;
+          //                 }
+          //                 final avg = sum /
+          //                     showingBarGroups[touchedGroupIndex]
+          //                         .barRods
+          //                         .length;
 
-                          showingBarGroups[touchedGroupIndex] =
-                              showingBarGroups[touchedGroupIndex].copyWith(
-                            barRods: showingBarGroups[touchedGroupIndex]
-                                .barRods
-                                .map((rod) {
-                              return rod.copyWith(
-                                  toY: avg, color: widget.avgColor);
-                            }).toList(),
-                          );
-                        }
-                      });
-                    },
-                  ),
-                  titlesData: FlTitlesData(
-                    show: true,
-                    rightTitles: AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
-                    topTitles: AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
-                    bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: bottomTitles,
-                        reservedSize: 42,
-                      ),
-                    ),
-                    leftTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 30, //28
-                        interval: 1,
-                        getTitlesWidget: leftTitles,
-                      ),
-                    ),
-                  ),
-                  borderData: FlBorderData(
-                    show: false,
-                  ),
-                  barGroups: showingBarGroups,
-                  gridData: FlGridData(show: false),
-                ),
+          //                 showingBarGroups[touchedGroupIndex] =
+          //                     showingBarGroups[touchedGroupIndex].copyWith(
+          //                   barRods: showingBarGroups[touchedGroupIndex]
+          //                       .barRods
+          //                       .map((rod) {
+          //                     return rod.copyWith(
+          //                         toY: avg, color: widget.avgColor);
+          //                   }).toList(),
+          //                 );
+          //               }
+          //             });
+          //           },
+          //         ),
+          //         titlesData: FlTitlesData(
+          //           show: true,
+          //           rightTitles: AxisTitles(
+          //             sideTitles: SideTitles(showTitles: false),
+          //           ),
+          //           topTitles: AxisTitles(
+          //             sideTitles: SideTitles(showTitles: false),
+          //           ),
+          //           bottomTitles: AxisTitles(
+          //             sideTitles: SideTitles(
+          //               showTitles: true,
+          //               getTitlesWidget: bottomTitles,
+          //               reservedSize: 42,
+          //             ),
+          //           ),
+          //           leftTitles: AxisTitles(
+          //             sideTitles: SideTitles(
+          //               showTitles: true,
+          //               reservedSize: 30, //28
+          //               interval: 1,
+          //               getTitlesWidget: leftTitles,
+          //             ),
+          //           ),
+          //         ),
+          //         borderData: FlBorderData(
+          //           show: false,
+          //         ),
+          //         barGroups: showingBarGroups,
+          //         gridData: FlGridData(show: false),
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          Center(
+            child: Text(
+              'No data for today!',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),
-          // const SizedBox(
-          //   height: 12,
-          // ),
+          const SizedBox(
+            height: 12,
+          ),
         ],
       ),
     );
