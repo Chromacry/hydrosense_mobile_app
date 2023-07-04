@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/constants/design_constants.dart';
 import 'package:hydrosense_mobile_app/src/screens/Alerts/view/alerts_style.dart';
+import 'package:hydrosense_mobile_app/src/screens/Alerts/widgets/alert_item.dart';
+import 'package:hydrosense_mobile_app/src/screens/Alerts/widgets/alert_widgets.dart';
 
 import 'package:hydrosense_mobile_app/src/screens/WaterUsage/view/water_usage_style.dart';
-import 'package:hydrosense_mobile_app/src/screens/WaterUsage/widgets/water_usage_widgets.dart';
 
 class AlertsView extends StatelessWidget {
   const AlertsView({super.key});
@@ -28,9 +29,7 @@ class AlertsView extends StatelessWidget {
                 ),
               ),
               Row(
-                children: [
-                  
-                ],
+                children: [],
               ),
               //* Alerts Box
               Container(
@@ -48,9 +47,16 @@ class AlertsView extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.only(bottom: 5),
-                        child: Placeholder(),
+                        child: AlertItem(
+                            key: Key(index.toString()),
+                            title: 'Water leak detected',
+                            message: 'oh no!',
+                            createdTime: '2015-06-22',
+                            containerItemColor: Colors.white,
+                            onTap: (dismissDirection) => debugPrint('dwa')),
                       );
                     },
+                    itemCount: 2,
                   ),
                 ),
               ),
@@ -58,23 +64,6 @@ class AlertsView extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class FilterModal extends StatelessWidget {
-  const FilterModal({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Filter'),
-      content: const Text('AlertDialog description'),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.pop(context, 'Close'),
-          child: const Text('Close'),
-        ),
-      ],
     );
   }
 }

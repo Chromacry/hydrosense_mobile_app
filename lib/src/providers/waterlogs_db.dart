@@ -14,51 +14,51 @@ class WaterLogsDB with ChangeNotifier {
     WaterLog(
       id: uuid.v4(),
       device_id: 'deviceabc12321UUID',
-      time_used: '12', //* in mins
+      time_used: '22', //* in mins
       flow_rate: '7',
-      created_at: '2023-07-02 05:30:00',
+      created_at: '2023-07-04 05:30:00',
     ),
     WaterLog(
       id: uuid.v4(),
       device_id: 'deviceabc12321UUID',
       time_used: '60', //* in mins
       flow_rate: '7',
-      created_at: '2023-07-02 08:30:50',
+      created_at: '2023-07-04 08:30:50',
     ),
     WaterLog(
       id: uuid.v4(),
       device_id: 'deviceabc12321UUID',
       time_used: '422.5', //* in mins
       flow_rate: '7',
-      created_at: '2023-07-02 08:30:00',
+      created_at: '2023-07-03 08:30:00',
     ),
     WaterLog(
       id: uuid.v4(),
       device_id: 'deviceabc12321UUID',
       time_used: '12', //* in mins
       flow_rate: '7',
-      created_at: '2023-07-02 10:30:00',
+      created_at: '2023-07-03 10:30:00',
     ),
     WaterLog(
       id: uuid.v4(),
       device_id: 'deviceabc12321UUID',
       time_used: '60', //* in mins
       flow_rate: '7',
-      created_at: '2023-07-02 09:30:50',
+      created_at: '2023-07-03 09:30:50',
     ),
     WaterLog(
       id: uuid.v4(),
       device_id: 'deviceabc12321UUID',
       time_used: '422.5', //* in mins
       flow_rate: '7',
-      created_at: '2023-07-02 13:30:00',
+      created_at: '2023-07-03 13:30:00',
     ),
     WaterLog(
       id: uuid.v4(),
       device_id: 'deviceabc12321UUID',
       time_used: '12', //* in mins
       flow_rate: '7',
-      created_at: '2023-07-02 15:30:00',
+      created_at: '2023-07-03 15:30:00',
     ),
   ];
 

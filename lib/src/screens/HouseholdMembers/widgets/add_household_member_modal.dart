@@ -25,7 +25,6 @@ class AddHouseholdMemberModal extends StatelessWidget {
     dynamic onChangePassword = (value) => password = value;
     dynamic onChangeConfirmPassword = (value) => confirmPassword = value;
 
-
     void onSubmitAddMember() {
       if (_addHouseholdMemberFormKey.currentState!.validate()) {
         usersDB.addUser(
@@ -42,10 +41,42 @@ class AddHouseholdMemberModal extends StatelessWidget {
       }
     }
 
-    //* Device Location Name validator
-    dynamic deviceLocationNameValidator = (value) {
+    //* validator
+    dynamic userNameValidator = (value) {
       if (value == null || value.isEmpty) {
-        return 'Device Location Name is empty!';
+        return 'Username is empty!';
+      }
+      return null;
+    };
+    String? emailAddressValidator(value) {
+      if (value == null || value.isEmpty) {
+        return 'Email field is empty!';
+      }
+      // Regular expression to match an email address
+      final RegExp emailRegex =
+          RegExp(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$');
+
+      // Check if the value matches the regular expression
+      if (!emailRegex.hasMatch(value)) {
+        return 'Invalid email address!';
+      }
+      return null;
+    }
+    dynamic phoneNumberValidator = (value) {
+      if (value == null || value.isEmpty) {
+        return 'Phone Number is empty!';
+      }
+      return null;
+    };
+    dynamic passwordValidator = (value) {
+      if (value == null || value.isEmpty) {
+        return 'Password is empty!';
+      }
+      return null;
+    };
+    dynamic confirmPasswordValidator = (value) {
+      if (value == null || value.isEmpty) {
+        return 'Confirm Password is empty!';
       }
       return null;
     };
@@ -95,7 +126,7 @@ class AddHouseholdMemberModal extends StatelessWidget {
                     inputTextValue: userName,
                     allColorAttributes: Colors.white,
                     onChanged: onChangeUsername,
-                    validator: deviceLocationNameValidator,
+                    validator: userNameValidator,
                   ),
                   //* Email textbox
                   SharedWidgets.inputTextBox(
@@ -103,7 +134,7 @@ class AddHouseholdMemberModal extends StatelessWidget {
                     inputTextValue: emailAddress,
                     allColorAttributes: Colors.white,
                     onChanged: onChangeEmailAddress,
-                    validator: deviceLocationNameValidator,
+                    validator: emailAddressValidator,
                   ),
                   //* Phone number textbox
                   SharedWidgets.inputTextBox(
@@ -111,7 +142,7 @@ class AddHouseholdMemberModal extends StatelessWidget {
                     inputTextValue: phoneNumber,
                     allColorAttributes: Colors.white,
                     onChanged: onChangePhoneNumber,
-                    validator: deviceLocationNameValidator,
+                    validator: phoneNumberValidator,
                   ),
                   const SizedBox(
                     height: 20,
@@ -134,7 +165,7 @@ class AddHouseholdMemberModal extends StatelessWidget {
                     allColorAttributes: Colors.white,
                     obscureTextEnabled: true,
                     onChanged: onChangePassword,
-                    validator: deviceLocationNameValidator,
+                    validator: passwordValidator,
                   ),
                   //* Confirm Password textbox
                   SharedWidgets.inputTextBox(
@@ -143,7 +174,7 @@ class AddHouseholdMemberModal extends StatelessWidget {
                     obscureTextEnabled: true,
                     allColorAttributes: Colors.white,
                     onChanged: onChangeConfirmPassword,
-                    validator: deviceLocationNameValidator,
+                    validator: confirmPasswordValidator,
                   ),
                   const SizedBox(
                     height: 50,

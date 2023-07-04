@@ -9,13 +9,14 @@ class DevicesDB with ChangeNotifier {
   //* Data list
   List<Device> devices = [
     Device(
-        id: 'deviceabc12321UUID',
-        device_household_id: GlobalConstants.temp_householdID,
-        device_location_id: '2323adwadwasdaw',
-        device_serialnumber: 'SN123456789WTS',
-        device_name: 'I love DSAG',
-        created_by: 'System',
-        created_at: 'Now'),
+      id: 'deviceabc12321UUID',
+      device_household_id: GlobalConstants.temp_householdID,
+      device_location_id: '2323adwadwasdaw',
+      device_serialnumber: 'SN123456789WTS',
+      device_name: 'Sink Tap',
+      created_by: 'System',
+      created_at: '2023-07-03 00:00:00',
+    ),
   ];
 
   List<Device> getAllDevices() {
@@ -29,6 +30,16 @@ class DevicesDB with ChangeNotifier {
           currentDevice.deleted_at == null) householdDevices.add(currentDevice);
     }
     return householdDevices;
+  }
+
+  //*Check if the device is tagged to location
+  bool getDeviceByLocationId(String locationId) {
+    for (Device currentDevice in devices) {
+      if (currentDevice.device_location_id == locationId) {
+        return true;
+      }
+    }
+    return false;
   }
 
   Device getDeviceById({deviceId}) {

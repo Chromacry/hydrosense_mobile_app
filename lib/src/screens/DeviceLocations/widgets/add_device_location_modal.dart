@@ -19,33 +19,33 @@ class AddDeviceLocationModal extends StatelessWidget {
     DeviceLocationsDB deviceLocationsDB =
         Provider.of<DeviceLocationsDB>(context);
 
-    dynamic onChangeDeviceName = (value) => deviceLocationNameValue = value;
-    void onSubmitAddDevice() {
-      //* Get current DateTime
-      String dateNow = DateTime.now()
-          .toString()
-          .substring(0, 19); //* Substring to remove milliseconds
-      if (_addDeviceLocationFormKey.currentState!.validate()) {
-        deviceLocationsDB.addDeviceLocation(
-          deviceLocationName: deviceLocationNameValue,
-          deviceHouseholdId: deviceHouseholdIdValue,
-          createdBy: createdBy,
-          createdAt: dateNow,
-        );
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Adding DeviceLocation...')),
-        );
-        Navigator.pop(context);
-      }
-    }
+    dynamic onChangeDeviceLocation = (value) => deviceLocationNameValue = value;
 
-    //* Device Location Name validator
+    //*  validators
     dynamic deviceLocationNameValidator = (value) {
       if (value == null || value.isEmpty) {
         return 'Device Location Name is empty!';
       }
       return null;
     };
+
+    void onSubmitAddDevice() {
+      //* Get current DateTime
+      String dateNow = DateTime.now()
+          .toString()
+          .substring(0, 19); //* Substring to remove milliseconds
+      if (_addDeviceLocationFormKey.currentState!.validate()) {
+        String status = deviceLocationsDB.addDeviceLocation(
+          deviceLocationName: deviceLocationNameValue,
+          deviceHouseholdId: deviceHouseholdIdValue,
+          createdBy: createdBy,
+          createdAt: dateNow,
+        );
+        ScaffoldMessenger.of(context).showSnackBar(SharedWidgets.statusSnackbar(
+            textMessage: status));
+        Navigator.pop(context);
+      }
+    }
 
     return SimpleDialog(
       contentPadding: EdgeInsets.all(20),
@@ -91,7 +91,7 @@ class AddDeviceLocationModal extends StatelessWidget {
                   SharedWidgets.inputTextBox(
                     textLabel: 'Device Location Name',
                     allColorAttributes: Colors.white,
-                    onChanged: onChangeDeviceName,
+                    onChanged: onChangeDeviceLocation,
                     validator: deviceLocationNameValidator,
                   ),
                   const SizedBox(

@@ -27,7 +27,7 @@ class _DashboardViewState extends State<DashboardView> {
       to: DateTimeUtil.getCurrentDate(),
       tariffRate: '4.5',
     );
-
+    debugPrint('dwa' + waterlogsList.length.toString());
     waterLogsDB.addListener(() {
       setState(() {});
     });
@@ -132,28 +132,27 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                     const SizedBox(height: 50),
-                    //* Chart for average water usage
-                    DashboardWidgets.waterUsageBarChart(
-                        waterloglist: waterlogsList),
-                    const SizedBox(height: 50),
-                    //* Estimated Cost of water usage Text
-                    Container(
-                      alignment: Alignment.center,
-                      padding: DashboardStyles.overallContainerPadding,
-                      child: const Text(
-                        "Estimated Cost of water usage",
-                        textAlign: TextAlign.center,
-                        style: DashboardStyles.costUsageTitle,
-                      ),
-                    ),
-                    //* Chart for estimated cost for water usage
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: DashboardWidgets.costUsageLineChart(),
-                    ),
-                    const SizedBox(height: 50),
                   ],
                 ),
+              ),
+              //* Chart for average water usage
+              DashboardWidgets.waterUsageBarChart(waterloglist: waterlogsList),
+              const SizedBox(height: 50),
+              //* Estimated Cost of water usage Text
+              Container(
+                alignment: Alignment.center,
+                padding: DashboardStyles.overallContainerPadding,
+                child: const Text(
+                  "Estimated Cost of water usage",
+                  textAlign: TextAlign.center,
+                  style: DashboardStyles.costUsageTitle,
+                ),
+              ),
+              const SizedBox(height: 50),
+              //* Chart for estimated cost for water usage
+              Padding(
+                padding: const EdgeInsets.only(right: 20),
+                child: DashboardWidgets.costUsageLineChart(),
               ),
             ],
           ),

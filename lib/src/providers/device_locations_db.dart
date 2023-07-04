@@ -13,21 +13,21 @@ class DeviceLocationsDB with ChangeNotifier {
       device_location_name: 'Kitchen',
       household_id: GlobalConstants.temp_householdID,
       created_by: 'System',
-      created_at: 'Now',
+      created_at: '2023-07-03 00:00:00',
     ),
     DeviceLocation(
       id: '2323adwadwasdaw',
       device_location_name: 'Bathroom',
       household_id: GlobalConstants.temp_householdID,
       created_by: 'System',
-      created_at: 'Now',
+      created_at: '2023-07-03 00:00:00',
     ),
     DeviceLocation(
       id: '2323a32aaaa',
       device_location_name: 'Guest Bathroom',
       household_id: GlobalConstants.temp_householdID,
       created_by: 'System',
-      created_at: 'Now',
+      created_at: '2023-07-03 00:00:00',
     ),
   ];
 
@@ -52,7 +52,16 @@ class DeviceLocationsDB with ChangeNotifier {
     return deviceData;
   }
 
-  void addDeviceLocation(
+  DeviceLocation? getDeviceLocationByName({deviceLocationName}) {
+    DeviceLocation? deviceData;
+    for (DeviceLocation currentDevice in device_locations) {
+      if (currentDevice.device_location_name == deviceLocationName)
+        deviceData = currentDevice;
+    }
+    return deviceData;
+  }
+
+  String addDeviceLocation(
       {deviceLocationName, deviceHouseholdId, createdBy, createdAt}) {
     DeviceLocation deviceLocationData = DeviceLocation(
       id: uuid.v4(),
@@ -61,17 +70,28 @@ class DeviceLocationsDB with ChangeNotifier {
       created_at: createdAt,
       created_by: createdBy ?? 'system',
     );
+    //*Check if exist
+    DeviceLocation? deviceLocationExist =
+        getDeviceLocationByName(deviceLocationName: deviceLocationName);
+    if (deviceLocationExist != null) return 'device location exists!';
+
     device_locations.add(deviceLocationData);
     notifyListeners();
+    return 'Device location successfully added!';
   }
 
-  void updateDeviceLocationById({
+  String? updateDeviceLocationById({
     deviceLocationId,
     deviceLocationName,
     householdId,
     updatedBy,
     updatedAt,
   }) {
+    //*Check if exist
+    DeviceLocation? deviceLocationExist =
+        getDeviceLocationByName(deviceLocationName: deviceLocationName);
+    if (deviceLocationExist != null) return 'device location exists!';
+
     int deviceLocationIndex = device_locations
         .indexWhere((element) => element.id == deviceLocationId);
     if (deviceLocationIndex != -1) {
@@ -83,6 +103,7 @@ class DeviceLocationsDB with ChangeNotifier {
       currentDeviceLocation.updated_by = updatedBy;
       currentDeviceLocation.updated_at = updatedAt;
       notifyListeners();
+      return 'Successfully updated device location!';
     }
   }
 

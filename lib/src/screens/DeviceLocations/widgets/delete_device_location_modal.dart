@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/constants/design_constants.dart';
 import 'package:hydrosense_mobile_app/src/constants/global_constants.dart';
 import 'package:hydrosense_mobile_app/src/providers/device_locations_db.dart';
+import 'package:hydrosense_mobile_app/src/providers/devices_db.dart';
+import 'package:hydrosense_mobile_app/src/screens/Shared/widgets/shared_widgets.dart';
 import 'package:provider/provider.dart';
 
 class DeleteDeviceLocationModal extends StatefulWidget {
@@ -20,8 +22,8 @@ class _DeleteDeviceModalState extends State<DeleteDeviceLocationModal> {
   Widget build(BuildContext context) {
     DeviceLocationsDB deviceLocationsDB =
         Provider.of<DeviceLocationsDB>(context);
-    String deviceLocationHouseholdIdValue = GlobalConstants
-        .temp_householdID; //! need to get household ID from current user
+    DevicesDB devicesDB = Provider.of<DevicesDB>(context);
+
     String deletedBy =
         'Patrica Chew'; //! need to get created by from current user
 
@@ -29,15 +31,25 @@ class _DeleteDeviceModalState extends State<DeleteDeviceLocationModal> {
       String dateNow = DateTime.now()
           .toString()
           .substring(0, 19); //* Substring to remove milliseconds
-      deviceLocationsDB.deleteDeviceLocationById(
-        deviceLocationId: widget.deviceLocationId,
-        deletedBy: deletedBy,
-        deletedAt: dateNow,
-      );
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Device deleted successfully!')),
-      );
-      Navigator.pop(context);
+
+      bool deviceStatus =
+          devicesDB.getDeviceByLocationId(widget.deviceLocationId);
+      if (deviceStatus == true) {
+        ScaffoldMessenger.of(context).showSnackBar(SharedWidgets.statusSnackbar(
+            textMessage:
+                'Device deleted failed! Device is still tagged to location!'));
+        Navigator.pop(context);
+        return;
+      } else {
+        deviceLocationsDB.deleteDeviceLocationById(
+          deviceLocationId: widget.deviceLocationId,
+          deletedBy: deletedBy,
+          deletedAt: dateNow,
+        );
+        ScaffoldMessenger.of(context).showSnackBar(SharedWidgets.statusSnackbar(
+            textMessage: 'Device deleted successfully!'));
+        Navigator.pop(context);
+      }
     }
 
     return AlertDialog(

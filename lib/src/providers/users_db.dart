@@ -32,7 +32,7 @@ class UsersDB with ChangeNotifier {
     ),
     User(
       id: uuid.v4(),
-      username: 'John Chew',
+      username: 'Evelyn Chew',
       email_address: 'patricia.chew@gmail.com',
       phone_number: '12345678',
       profile_photo: '',
@@ -55,14 +55,19 @@ class UsersDB with ChangeNotifier {
     }
     //* Sort the userlist
     usersList.sort((a, b) {
-    if (a.role_id == "Household Admin") {
-      return -1;
-    } else if (b.role_id == "Household Admin") {
-      return 1;
-    } else {
-      return a.username.toString().compareTo(b.username.toString());
-    }
-  });
+      if (a.role_id == "Household Admin") {
+        return -1;
+      }
+      // else if (b.role_id == "Household User") {
+      //   return 1;
+      // }
+      else {
+        return a.username
+            .toString()
+            .toUpperCase()
+            .compareTo(b.username.toString().toUpperCase());
+      }
+    });
     return usersList;
   }
 

@@ -54,16 +54,15 @@ class _EditDeviceLocationModalState extends State<EditDeviceLocationModal> {
           .toString()
           .substring(0, 19); //* Substring to remove milliseconds
       if (_editDeviceLocationFormKey.currentState!.validate()) {
-        deviceLocationsDB.updateDeviceLocationById(
+        String? status = deviceLocationsDB.updateDeviceLocationById(
           deviceLocationId: widget.deviceLocationId,
           deviceLocationName: deviceLocationName,
           householdId: widget.deviceHouseholdId,
           updatedAt: dateNow,
           updatedBy: 'Patricccccca chew',
         );
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Updating Device Location Info...')),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SharedWidgets.statusSnackbar(textMessage: status));
         Navigator.pop(context);
       }
     }

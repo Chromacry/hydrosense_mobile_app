@@ -22,6 +22,8 @@ class _DeviceLocationsViewState extends State<DeviceLocationsView> {
     List<DeviceLocation> deviceLocationsList =
         deviceLocationsDB.getAllDeviceLocationsByHouseholdId(
             householdId: GlobalConstants.temp_householdID);
+    
+    
     //* Listen on provider
     deviceLocationsDB.addListener(() {
       //* Reload the page when the provider is notified
