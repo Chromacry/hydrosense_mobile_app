@@ -102,7 +102,7 @@ class _EditDeviceModalState extends State<EditDeviceModal> {
           updatedAt: DateTimeUtil.getCurrentDateTime(),
         );
         ScaffoldMessenger.of(context).showSnackBar(
-          SharedWidgets.statusSnackbar(
+          StatusSnackbar.snackbarStatus(
               textMessage: 'Device updated successfully!'),
         );
         Navigator.pop(context);
@@ -149,8 +149,8 @@ class _EditDeviceModalState extends State<EditDeviceModal> {
                     ),
                   ),
                   //* Device Name textbox
-                  SharedWidgets.inputTextBox(
-                    textLabel: 'Device Name',
+                  InputTextBox(
+                    inputTextLabelValue: 'Device Name',
                     inputTextValue: deviceNameValue,
                     allColorAttributes: Colors.white,
                     onChanged: onChangeDeviceName,
@@ -170,8 +170,8 @@ class _EditDeviceModalState extends State<EditDeviceModal> {
                       style: EditDevicsStyles.addDeviceSubTitle,
                     ),
                   ),
-                  SharedWidgets.inputTextBox(
-                    textLabel: 'Device UUID',
+                  InputTextBox(
+                    inputTextLabelValue: 'Device UUID',
                     inputTextValue: deviceIdValue,
                     allColorAttributes: Colors.white,
                     onChanged: onChangeDeviceId,
@@ -179,8 +179,8 @@ class _EditDeviceModalState extends State<EditDeviceModal> {
                   const SizedBox(
                     height: 15,
                   ),
-                  SharedWidgets.inputTextBox(
-                    textLabel: 'Device Serial Number',
+                  InputTextBox(
+                    inputTextLabelValue: 'Device Serial Number',
                     inputTextValue: deviceSerialNumberValue,
                     allColorAttributes: Colors.white,
                     validator: deviceSerialNumberValidator,
@@ -201,7 +201,7 @@ class _EditDeviceModalState extends State<EditDeviceModal> {
                     ),
                   ),
                   //* Device location dropdownbox
-                  SharedWidgets.dropdownTextBox(
+                  DropdownTextBox(
                     options: widget.dropdownLocationOptions,
                     hintText: 'Select location of device',
                     onChanged: onChangeDeviceLocationId,

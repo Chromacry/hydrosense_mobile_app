@@ -42,9 +42,11 @@ class LoginView extends StatelessWidget {
       if (_loginFormKey.currentState!.validate()) {
         // If the form is valid, display a snackbar. In the real world,
         // you'd often call a server or save the information in a database.
-        ScaffoldMessenger.of(context).showSnackBar(SharedWidgets.statusSnackbar(
-            textMessage: GlobalConstants.CLIENT_STATUS_MSGS['SUCCESSFUL_LOGIN']
-                .toString()));
+        ScaffoldMessenger.of(context).showSnackBar(
+            StatusSnackbar.snackbarStatus(
+                textMessage: GlobalConstants
+                    .CLIENT_STATUS_MSGS['SUCCESSFUL_LOGIN']
+                    .toString()));
         PersistentNavBarNavigator.pushNewScreen(
           context,
           screen: Layout(),
@@ -81,19 +83,20 @@ class LoginView extends StatelessWidget {
               //* Email Address TextBox
               Container(
                 margin: const EdgeInsets.only(bottom: 15),
-                child: SharedWidgets.inputTextBox(
-                  textLabel: 'Email Address',
+                child: InputTextBox(
+                  inputTextLabelValue: 'Email Address',
                   onChanged: (text) {
                     debugPrint(text);
                     emailaddress = text;
                   },
+                  obscureTextEnabled: false,
                   validator: emailValidator,
                 ),
               ),
               //* Password TextBox
               Container(
-                child: SharedWidgets.inputTextBox(
-                  textLabel: 'Password',
+                child: InputTextBox(
+                  inputTextLabelValue: 'Password',
                   onChanged: (text) => debugPrint(text),
                   validator: passwordValidator,
                   obscureTextEnabled: true,
@@ -142,7 +145,7 @@ class LoginView extends StatelessWidget {
                 height: 30,
               ),
               //* Continue With Section
-              LoginWidgets.lineWithText(
+              LineWithText(
                 text: 'Continue with',
                 thickness: 2,
                 fontSize: 18,

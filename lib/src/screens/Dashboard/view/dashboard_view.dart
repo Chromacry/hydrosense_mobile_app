@@ -136,7 +136,7 @@ class _DashboardViewState extends State<DashboardView> {
                 ),
               ),
               //* Chart for average water usage
-              DashboardWidgets.waterUsageBarChart(waterloglist: waterlogsList),
+              WaterUsageBarChart(waterloglist: waterlogsList),
               const SizedBox(height: 50),
               //* Estimated Cost of water usage Text
               Container(
@@ -152,7 +152,7 @@ class _DashboardViewState extends State<DashboardView> {
               //* Chart for estimated cost for water usage
               Padding(
                 padding: const EdgeInsets.only(right: 20),
-                child: DashboardWidgets.costUsageLineChart(),
+                child: CostUsageLineChart(),
               ),
             ],
           ),

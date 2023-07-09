@@ -118,11 +118,11 @@ class _HouseholdMembersViewState extends State<HouseholdMembersView> {
 
                       return Padding(
                         padding: EdgeInsets.only(bottom: 5),
-                        child: HouseholdMembersWidgets.householdMemberItem(
+                        child: HouseholdMemberItem(
                           userName: username,
                           userRole: roleId,
                           householdId: householdId,
-                          userCreatedAt: userCreatedAt,
+                          householdCreatedAt: userCreatedAt,
                           containerItemColor:
                               isDeleteModeOn ? Colors.red[200] : Colors.grey,
                           onTap: () {
@@ -131,23 +131,19 @@ class _HouseholdMembersViewState extends State<HouseholdMembersView> {
                                 ? showDialog<String>(
                                     context: context,
                                     builder: (BuildContext context) =>
-                                        HouseholdMembersWidgets
-                                            .deleteDeviceLocationModal(
+                                        DeleteHouseholdMemberModal(
                                           userId: userId,
-                                          deletedBy: 'Patrica Chew',
                                         ))
                                 : //* Show edit modal
                                 showDialog<String>(
                                     context: context,
                                     builder: (BuildContext context) =>
-                                        HouseholdMembersWidgets
-                                            .editHouseholdMemberModal(
+                                        EditHouseholdMemberModal(
                                       userId: userId,
                                       userName: username,
                                       emailAddress: emailAddress,
                                       phoneNumber: phoneNumber,
                                       householdId: householdId,
-                                      updatedBy: 'Particiaaa Chew',
                                     ),
                                   );
                           },

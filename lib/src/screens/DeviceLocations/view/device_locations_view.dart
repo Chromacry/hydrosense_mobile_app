@@ -22,8 +22,7 @@ class _DeviceLocationsViewState extends State<DeviceLocationsView> {
     List<DeviceLocation> deviceLocationsList =
         deviceLocationsDB.getAllDeviceLocationsByHouseholdId(
             householdId: GlobalConstants.temp_householdID);
-    
-    
+
     //* Listen on provider
     deviceLocationsDB.addListener(() {
       //* Reload the page when the provider is notified
@@ -124,7 +123,7 @@ class _DeviceLocationsViewState extends State<DeviceLocationsView> {
                       //* Reverse string
                       return Padding(
                         padding: EdgeInsets.only(bottom: 5),
-                        child: DeviceLocationsWidgets.deviceLocationItem(
+                        child: DeviceLocationItem(
                           locationName: deviceLocationName,
                           locationHouseholdId: householdId,
                           locationCreatedAt: deviceCreatedAt,
@@ -136,8 +135,7 @@ class _DeviceLocationsViewState extends State<DeviceLocationsView> {
                                 ? showDialog<String>(
                                     context: context,
                                     builder: (BuildContext context) =>
-                                        DeviceLocationsWidgets
-                                            .deleteDeviceLocationModal(
+                                        DeleteDeviceLocationModal(
                                           deviceLocationId: locationId,
                                           deletedBy: '',
                                         ))
@@ -145,12 +143,10 @@ class _DeviceLocationsViewState extends State<DeviceLocationsView> {
                                 showDialog<String>(
                                     context: context,
                                     builder: (BuildContext context) =>
-                                        DeviceLocationsWidgets
-                                            .editDeviceLocationModal(
+                                        EditDeviceLocationModal(
                                       deviceLocationId: locationId,
                                       deviceLocationName: deviceLocationName,
                                       deviceHouseholdId: householdId,
-                                      updatedBy: 'Particiaaa Chew',
                                     ),
                                   );
                           },

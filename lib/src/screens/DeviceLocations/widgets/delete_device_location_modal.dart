@@ -8,9 +8,11 @@ import 'package:provider/provider.dart';
 
 class DeleteDeviceLocationModal extends StatefulWidget {
   final String deviceLocationId;
+  final String deletedBy;
   DeleteDeviceLocationModal({
     Key? key,
     required this.deviceLocationId,
+    required this.deletedBy,
   }) : super(key: key);
 
   @override
@@ -35,7 +37,7 @@ class _DeleteDeviceModalState extends State<DeleteDeviceLocationModal> {
       bool deviceStatus =
           devicesDB.getDeviceByLocationId(widget.deviceLocationId);
       if (deviceStatus == true) {
-        ScaffoldMessenger.of(context).showSnackBar(SharedWidgets.statusSnackbar(
+        ScaffoldMessenger.of(context).showSnackBar(StatusSnackbar.snackbarStatus(
             textMessage:
                 'Device deleted failed! Device is still tagged to location!'));
         Navigator.pop(context);
@@ -46,8 +48,9 @@ class _DeleteDeviceModalState extends State<DeleteDeviceLocationModal> {
           deletedBy: deletedBy,
           deletedAt: dateNow,
         );
-        ScaffoldMessenger.of(context).showSnackBar(SharedWidgets.statusSnackbar(
-            textMessage: 'Device deleted successfully!'));
+        ScaffoldMessenger.of(context).showSnackBar(
+            StatusSnackbar.snackbarStatus(
+                textMessage: 'Device deleted successfully!'));
         Navigator.pop(context);
       }
     }

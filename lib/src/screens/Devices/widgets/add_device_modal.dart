@@ -24,7 +24,7 @@ class _AddDeviceModalState extends State<AddDeviceModal> {
   String? deviceSerialNumberValue;
   String? deviceLocationIdValue;
   bool isDeviceLocationEmpty = false;
-  
+
   String deviceHouseholdIdValue = GlobalConstants
       .temp_householdID; //! need to get household ID from current user
   String createdBy =
@@ -97,7 +97,7 @@ class _AddDeviceModalState extends State<AddDeviceModal> {
           createdAt: DateTimeUtil.getCurrentDateTime(),
         );
         ScaffoldMessenger.of(context).showSnackBar(
-          SharedWidgets.statusSnackbar(
+          StatusSnackbar.snackbarStatus(
               textMessage: 'Successfully added Device!'),
         );
         Navigator.pop(context);
@@ -142,8 +142,8 @@ class _AddDeviceModalState extends State<AddDeviceModal> {
                   ),
                 ),
                 //* Device Name textbox
-                SharedWidgets.inputTextBox(
-                  textLabel: 'Device Name',
+                InputTextBox(
+                  inputTextLabelValue: 'Device Name',
                   allColorAttributes: Colors.white,
                   onChanged: onChangeDeviceName,
                   validator: deviceNameValidator,
@@ -162,16 +162,16 @@ class _AddDeviceModalState extends State<AddDeviceModal> {
                     style: AddDevicsStyles.addDeviceSubTitle,
                   ),
                 ),
-                SharedWidgets.inputTextBox(
-                  textLabel: 'Device UUID',
+                InputTextBox(
+                  inputTextLabelValue: 'Device UUID',
                   allColorAttributes: Colors.white,
                   onChanged: onChangeDeviceId,
                 ),
                 const SizedBox(
                   height: 15,
                 ),
-                SharedWidgets.inputTextBox(
-                  textLabel: 'Device Serial Number',
+                InputTextBox(
+                  inputTextLabelValue: 'Device Serial Number',
                   allColorAttributes: Colors.white,
                   onChanged: onChangeDeviceSerialNumber,
                   validator: deviceSerialNumberValidator,
@@ -191,7 +191,7 @@ class _AddDeviceModalState extends State<AddDeviceModal> {
                   ),
                 ),
                 //* Device location dropdownbox
-                SharedWidgets.dropdownTextBox(
+                DropdownTextBox(
                   options: dropdownLocationOptions,
                   hintText: 'Select location of device',
                   onChanged: onChangeDeviceLocationId,

@@ -24,8 +24,7 @@ class DeviceLocations extends StatelessWidget {
             IconButton(
               onPressed: () => showDialog<String>(
                 context: context,
-                builder: (BuildContext context) =>
-                    DeviceLocationsWidgets.addDeviceLocationModal(),
+                builder: (BuildContext context) => AddDeviceLocationModal(),
               ),
               icon: Icon(
                 Icons.add_box_rounded,

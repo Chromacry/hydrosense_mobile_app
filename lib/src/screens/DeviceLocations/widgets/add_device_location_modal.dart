@@ -41,8 +41,8 @@ class AddDeviceLocationModal extends StatelessWidget {
           createdBy: createdBy,
           createdAt: dateNow,
         );
-        ScaffoldMessenger.of(context).showSnackBar(SharedWidgets.statusSnackbar(
-            textMessage: status));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(StatusSnackbar.snackbarStatus(textMessage: status));
         Navigator.pop(context);
       }
     }
@@ -88,8 +88,8 @@ class AddDeviceLocationModal extends StatelessWidget {
                     ),
                   ),
                   //* Device Name textbox
-                  SharedWidgets.inputTextBox(
-                    textLabel: 'Device Location Name',
+                  InputTextBox(
+                    inputTextLabelValue: 'Device Location Name',
                     allColorAttributes: Colors.white,
                     onChanged: onChangeDeviceLocation,
                     validator: deviceLocationNameValidator,

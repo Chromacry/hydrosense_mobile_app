@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/providers/users_db.dart';
-import 'package:hydrosense_mobile_app/src/screens/ForgetPassword/view/forget_password_style.dart';
 import 'package:hydrosense_mobile_app/src/screens/Shared/widgets/shared_widgets.dart';
 import 'package:hydrosense_mobile_app/src/screens/UpdateInfo/view/update_info_style.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +15,22 @@ class UpdateInfoView extends StatelessWidget {
     void updateInfoHandler() {
       //! Change the below method to check user exist then send email to reset password.
       // usersDBList.updateUserByEmail('defaultUsername', emailaddress, '12345678');
+    }
+
+    //* validator
+    String? emailValidator(value) {
+      if (value == null || value.isEmpty) {
+        return 'Email field is empty!';
+      }
+      // Regular expression to match an email address
+      final RegExp emailRegex =
+          RegExp(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$');
+
+      // Check if the value matches the regular expression
+      if (!emailRegex.hasMatch(value)) {
+        return 'Invalid email address!';
+      }
+      return null;
     }
 
     return SafeArea(
@@ -44,24 +59,26 @@ class UpdateInfoView extends StatelessWidget {
               //* Password TextBox
               Container(
                 margin: const EdgeInsets.only(bottom: 15),
-                child: SharedWidgets.inputTextBox(
-                  textLabel: 'Email Address',
+                child: InputTextBox(
+                  inputTextLabelValue: 'Email Address',
                   onChanged: (text) {
                     debugPrint(text);
                     emailAddress = text;
                   },
+                  validator: emailValidator,
                   obscureTextEnabled: true,
                 ),
               ),
               //* Confirm Password TextBox
               Container(
                 margin: const EdgeInsets.only(bottom: 15),
-                child: SharedWidgets.inputTextBox(
-                  textLabel: 'Phone Number',
+                child: InputTextBox(
+                  inputTextLabelValue: 'Phone Number',
                   onChanged: (text) {
                     debugPrint(text);
                     phoneNumber = text;
                   },
+                  validator: (value) => null,
                   obscureTextEnabled: true,
                 ),
               ),

@@ -24,8 +24,7 @@ class Devices extends StatelessWidget {
             IconButton(
               onPressed: () => showDialog<String>(
                 context: context,
-                builder: (BuildContext context) =>
-                    DevicesWidgets.addDeviceModal(),
+                builder: (BuildContext context) => AddDeviceModal(),
               ),
               icon: Icon(
                 Icons.add_box_rounded,

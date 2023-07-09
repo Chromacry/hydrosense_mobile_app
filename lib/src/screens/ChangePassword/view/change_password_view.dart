@@ -63,8 +63,8 @@ class ChangePasswordView extends StatelessWidget {
                 //* Password TextBox
                 Container(
                   margin: const EdgeInsets.only(bottom: 15),
-                  child: SharedWidgets.inputTextBox(
-                    textLabel: 'Password',
+                  child: InputTextBox(
+                    inputTextLabelValue: 'Password',
                     validator: passwordValidator,
                     onChanged: onChangePassword,
                     obscureTextEnabled: true,
@@ -73,8 +73,8 @@ class ChangePasswordView extends StatelessWidget {
                 //* Confirm Password TextBox
                 Container(
                   margin: const EdgeInsets.only(bottom: 15),
-                  child: SharedWidgets.inputTextBox(
-                    textLabel: 'Confirm Password',
+                  child: InputTextBox(
+                    inputTextLabelValue: 'Confirm Password',
                     validator: confirmPasswordValidator,
                     onChanged: onChangeConfirmPassword,
                     obscureTextEnabled: true,

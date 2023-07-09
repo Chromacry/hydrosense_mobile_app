@@ -31,7 +31,7 @@ class _DeleteDeviceModalState extends State<DeleteDeviceModal> {
         deletedAt: DateTimeUtil.getCurrentDateTime(),
       );
       ScaffoldMessenger.of(context).showSnackBar(
-        SharedWidgets.statusSnackbar(
+        StatusSnackbar.snackbarStatus(
             textMessage: 'Device deleted successfully!'),
       );
       Navigator.pop(context);

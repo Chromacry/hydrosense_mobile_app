@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/constants/design_constants.dart';
 import 'package:hydrosense_mobile_app/src/screens/Alerts/view/alerts_style.dart';
-import 'package:hydrosense_mobile_app/src/screens/Alerts/widgets/alert_item.dart';
 import 'package:hydrosense_mobile_app/src/screens/Alerts/widgets/alert_widgets.dart';
 
 import 'package:hydrosense_mobile_app/src/screens/WaterUsage/view/water_usage_style.dart';

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/constants/design_constants.dart';
-import 'package:hydrosense_mobile_app/src/models/user.dart';
-import 'package:hydrosense_mobile_app/src/providers/device_locations_db.dart';
 import 'package:hydrosense_mobile_app/src/providers/users_db.dart';
 import 'package:hydrosense_mobile_app/src/screens/Shared/widgets/shared_widgets.dart';
 import 'package:provider/provider.dart';
@@ -138,24 +136,24 @@ class _EditHouseholdMemberModalState extends State<EditHouseholdMemberModal> {
                   ),
                 ),
                 //* Usernane textbox
-                SharedWidgets.inputTextBox(
-                  textLabel: 'Username',
+                InputTextBox(
+                  inputTextLabelValue: 'Username',
                   inputTextValue: widget.userName,
                   allColorAttributes: Colors.white,
                   onChanged: onChangedUserName,
                   validator: userNameValidator,
                 ),
                 //* Email textbox
-                SharedWidgets.inputTextBox(
-                  textLabel: 'Email Address',
+                InputTextBox(
+                  inputTextLabelValue: 'Email Address',
                   inputTextValue: widget.emailAddress,
                   allColorAttributes: Colors.white,
                   onChanged: onChangedEmailAddress,
                   validator: emailAddressValidator,
                 ),
                 //* Phone number textbox
-                SharedWidgets.inputTextBox(
-                  textLabel: 'Phone Number',
+                InputTextBox(
+                  inputTextLabelValue: 'Phone Number',
                   inputTextValue: widget.phoneNumber,
                   allColorAttributes: Colors.white,
                   onChanged: onChangedPhoneNumber,

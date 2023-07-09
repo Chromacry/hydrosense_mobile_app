@@ -41,7 +41,7 @@ class MoreMenuView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    
+
                     //* Profile Image
                     Positioned(
                       bottom: -50,
@@ -164,7 +164,7 @@ class MoreMenuView extends StatelessWidget {
                     crossAxisSpacing: 5,
                     mainAxisSpacing: 4,
                     children: <Widget>[
-                      MoreMenuWidgets.moreMenuButton(
+                      MoreMenuButton(
                         buttonText: 'Devices',
                         icon: Icons.devices_other_rounded,
                         onTap: () => PersistentNavBarNavigator.pushNewScreen(
@@ -174,7 +174,7 @@ class MoreMenuView extends StatelessWidget {
                           pageTransitionAnimation: PageTransitionAnimation.fade,
                         ),
                       ),
-                      MoreMenuWidgets.moreMenuButton(
+                      MoreMenuButton(
                         buttonText: 'Device Locations',
                         icon: Icons.location_on_rounded,
                         onTap: () => PersistentNavBarNavigator.pushNewScreen(
@@ -184,7 +184,7 @@ class MoreMenuView extends StatelessWidget {
                           pageTransitionAnimation: PageTransitionAnimation.fade,
                         ),
                       ),
-                      MoreMenuWidgets.moreMenuButton(
+                      MoreMenuButton(
                         buttonText: 'Household Members',
                         icon: Icons.people_rounded,
                         onTap: () => PersistentNavBarNavigator.pushNewScreen(
@@ -194,7 +194,7 @@ class MoreMenuView extends StatelessWidget {
                           pageTransitionAnimation: PageTransitionAnimation.fade,
                         ),
                       ),
-                      MoreMenuWidgets.moreMenuButton(
+                      MoreMenuButton(
                         buttonText: 'Update Info',
                         icon: Icons.account_circle_rounded,
                         onTap: () => PersistentNavBarNavigator.pushNewScreen(
@@ -204,12 +204,12 @@ class MoreMenuView extends StatelessWidget {
                           pageTransitionAnimation: PageTransitionAnimation.fade,
                         ),
                       ),
-                      MoreMenuWidgets.moreMenuButton(
+                      MoreMenuButton(
                         buttonText: 'Water Logs',
                         icon: Icons.library_books_rounded,
                         onTap: () => debugPrint('Water Logs Pressed'),
                       ),
-                      MoreMenuWidgets.moreMenuButton(
+                      MoreMenuButton(
                         buttonText: 'Tariff Rate',
                         icon: Icons.attach_money_rounded,
                         onTap: () => showDialog(
@@ -220,7 +220,7 @@ class MoreMenuView extends StatelessWidget {
                           ),
                         ),
                       ),
-                      MoreMenuWidgets.moreMenuButton(
+                      MoreMenuButton(
                         buttonText: 'Change Password',
                         icon: Icons.lock_reset_rounded,
                         onTap: () => PersistentNavBarNavigator.pushNewScreen(
@@ -230,7 +230,7 @@ class MoreMenuView extends StatelessWidget {
                           pageTransitionAnimation: PageTransitionAnimation.fade,
                         ),
                       ),
-                      MoreMenuWidgets.moreMenuButton(
+                      MoreMenuButton(
                         buttonText: 'Settings',
                         icon: Icons.settings_rounded,
                         onTap: () => debugPrint('Settings Pressed'),
@@ -256,7 +256,7 @@ class MoreMenuView extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    MoreMenuWidgets.preferencesSwitch(
+                    PreferencesSwitch(
                       title: 'Dark Mode',
                       titleStyle: MoreMenuStyles.preferencesDataTitle,
                       onToggle: (value) => debugPrint(value.toString()),
@@ -264,7 +264,7 @@ class MoreMenuView extends StatelessWidget {
                     const SizedBox(
                       height: 30,
                     ),
-                    MoreMenuWidgets.preferencesSwitch(
+                    PreferencesSwitch(
                       title: 'Notifications',
                       titleStyle: MoreMenuStyles.preferencesDataTitle,
                       onToggle: (value) => debugPrint(value.toString()),

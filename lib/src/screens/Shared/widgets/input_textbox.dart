@@ -15,9 +15,9 @@ class InputTextBox extends StatefulWidget {
     this.inputTextValue,
     this.allColorAttributes,
     required this.onChanged,
-    required this.validator,
+    this.validator,
     this.autocorrect,
-    required this.obscureTextEnabled,
+    this.obscureTextEnabled,
     this.enabled,
   }) : super(key: key);
 

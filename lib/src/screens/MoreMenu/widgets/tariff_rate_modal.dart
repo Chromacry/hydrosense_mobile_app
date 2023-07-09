@@ -88,12 +88,13 @@ class _TariffRateModalState extends State<TariffRateModal> {
                   ),
                 ),
                 //* Device Name textbox
-                SharedWidgets.inputTextBox(
-                  textLabel: 'Tariff Rate',
+                InputTextBox(
+                  inputTextLabelValue: 'Tariff Rate',
                   inputTextValue: widget.tariffRate,
                   allColorAttributes: Colors.white,
                   onChanged: onChangedTariffRate,
                   validator: tariffRateValidator,
+                  obscureTextEnabled: false,
                 ),
                 const SizedBox(
                   height: 20,

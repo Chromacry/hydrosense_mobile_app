@@ -8,7 +8,7 @@ class EditDeviceLocationModal extends StatefulWidget {
   final String deviceLocationId;
   final String deviceLocationName;
   final String deviceHouseholdId;
-
+  
   EditDeviceLocationModal({
     Key? key,
     required this.deviceLocationId,
@@ -61,8 +61,8 @@ class _EditDeviceLocationModalState extends State<EditDeviceLocationModal> {
           updatedAt: dateNow,
           updatedBy: 'Patricccccca chew',
         );
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SharedWidgets.statusSnackbar(textMessage: status));
+        ScaffoldMessenger.of(context).showSnackBar(
+            StatusSnackbar.snackbarStatus(textMessage: status.toString()));
         Navigator.pop(context);
       }
     }
@@ -104,8 +104,8 @@ class _EditDeviceLocationModalState extends State<EditDeviceLocationModal> {
                   ),
                 ),
                 //* Device Name textbox
-                SharedWidgets.inputTextBox(
-                  textLabel: 'Device Location Name',
+                InputTextBox(
+                  inputTextLabelValue: 'Device Location Name',
                   inputTextValue: widget.deviceLocationName,
                   allColorAttributes: Colors.white,
                   onChanged: onChangedDeviceLocationName,

@@ -148,7 +148,7 @@ class _DevicesViewState extends State<DevicesView> {
                           GlobalConstants.temp_householdID;
                       String deviceSerialNumber =
                           currentDevice.device_serialnumber.toString();
-                      return DevicesWidgets.deviceButton(
+                      return DeviceButton(
                         deviceNameText: deviceName,
                         deviceLocationText: deviceLocation,
                         backgroundColorIcon:
@@ -159,14 +159,14 @@ class _DevicesViewState extends State<DevicesView> {
                               ? showDialog<String>(
                                   context: context,
                                   builder: (BuildContext context) =>
-                                      DevicesWidgets.deleteDeviceModal(
+                                      DeleteDeviceModal(
                                         deviceId: deviceId,
                                       ))
                               : //* Show edit modal
                               showDialog<String>(
                                   context: context,
                                   builder: (BuildContext context) =>
-                                      DevicesWidgets.editDeviceModal(
+                                      EditDeviceModal(
                                     deviceId: deviceId,
                                     deviceName: deviceName,
                                     deviceHouseholdId: deviceHouseholdId,

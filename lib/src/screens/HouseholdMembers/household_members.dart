@@ -24,8 +24,7 @@ class HouseholdMembers extends StatelessWidget {
             IconButton(
               onPressed: () => showDialog<String>(
                 context: context,
-                builder: (BuildContext context) =>
-                    HouseholdMembersWidgets.addHouseholdMemberModal(),
+                builder: (BuildContext context) => AddHouseholdMemberModal(),
               ),
               icon: Icon(
                 Icons.add_box_rounded,

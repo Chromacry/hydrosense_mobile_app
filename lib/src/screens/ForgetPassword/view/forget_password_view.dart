@@ -64,8 +64,8 @@ class ForgetPasswordView extends StatelessWidget {
                 //* Email Address TextBox
                 Container(
                   margin: const EdgeInsets.only(bottom: 15),
-                  child: SharedWidgets.inputTextBox(
-                      textLabel: 'Email Address',
+                  child: InputTextBox(
+                      inputTextLabelValue: 'Email Address',
                       validator: emailAddressValidator,
                       onChanged: (text) {
                         debugPrint(text);
