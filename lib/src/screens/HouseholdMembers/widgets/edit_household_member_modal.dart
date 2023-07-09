@@ -82,6 +82,10 @@ class _EditHouseholdMemberModalState extends State<EditHouseholdMemberModal> {
       setState(() {});
     };
 
+    void resetPasswordHandler() {
+      //TODO: Reset password code here!
+    }
+
     void onSubmitEditHouseholdMember() {
       if (_editHouseholdMemberFormKey.currentState!.validate()) {
         usersDB.updateUserInfoById(
@@ -173,8 +177,26 @@ class _EditHouseholdMemberModalState extends State<EditHouseholdMemberModal> {
                     style: EditHouseholdMemberStyles.addDeviceSubTitle,
                   ),
                 ),
-                //* Password textbox
-
+                //* Password reset
+                Container(
+                  child: ElevatedButton.icon(
+                      onPressed: () => debugPrint('dwa'),
+                      style: const ButtonStyle(
+                        enableFeedback: true,
+                        backgroundColor: MaterialStatePropertyAll(
+                            Color(EditHouseholdMemberStyles.buttonColor)),
+                        fixedSize: MaterialStatePropertyAll(
+                            EditHouseholdMemberStyles.buttonSize),
+                        textStyle: MaterialStatePropertyAll(
+                            EditHouseholdMemberStyles.buttonText),
+                      ),
+                      label: const Text('Reset Password',
+                          style: EditHouseholdMemberStyles.buttonText),
+                      icon: const Icon(
+                        Icons.lock_reset_rounded,
+                        color: EditHouseholdMemberStyles.iconColor,
+                      )),
+                ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -218,4 +240,14 @@ class EditHouseholdMemberStyles {
     fontWeight: FontWeight.w500,
     color: Colors.white,
   );
+
+  //* Reset Button
+  static const Size buttonSize = Size(350, 25);
+  static const TextStyle buttonText = TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 20,
+    color: Colors.black,
+  );
+  static const Color iconColor = Colors.black;
+  static const int buttonColor = DesignConstants.COLOR_LIGHTBLUE_ACCENT;
 }
