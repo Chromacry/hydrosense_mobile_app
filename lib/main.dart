@@ -1,5 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hydrosense_mobile_app/firebase_options.dart';
 import 'package:hydrosense_mobile_app/src/providers/device_locations_db.dart';
 import 'package:hydrosense_mobile_app/src/providers/devices_db.dart';
 import 'package:hydrosense_mobile_app/src/providers/users_db.dart';
@@ -8,8 +10,13 @@ import 'package:provider/provider.dart';
 import 'package:hydrosense_mobile_app/src/screens/Login/login.dart';
 import 'src/constants/design_constants.dart';
 
-void main() {
-  runApp(const App());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  ).then((value) {
+    runApp(const App());
+  });
 }
 
 class App extends StatelessWidget {

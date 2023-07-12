@@ -47,10 +47,16 @@ android {
         applicationId "com.example.flutter_app"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
+        // minSdkVersion flutter.minSdkVersion
+        //* Added by ZX
+        minSdkVersion 19
+        //* Added by ZX
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        //* Added by ZX
+        multiDexEnabled true
+        //* Added by ZX
     }
 
     buildTypes {

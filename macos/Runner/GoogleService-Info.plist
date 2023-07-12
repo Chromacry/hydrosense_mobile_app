@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>540965707433-ih29b0mojrnnc250s9tilf51tpv26b93.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.540965707433-ih29b0mojrnnc250s9tilf51tpv26b93</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBMTpoL1eSSiq6aPp31WsbXrtRhW1zL1Dk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>540965707433</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.flutterApp</string>
+	<key>PROJECT_ID</key>
+	<string>hydrosense-app</string>
+	<key>STORAGE_BUCKET</key>
+	<string>hydrosense-app.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:540965707433:ios:9c672434cf5c770abb53b8</string>
+</dict>
+</plist>
