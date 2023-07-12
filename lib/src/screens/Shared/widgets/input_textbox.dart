@@ -9,6 +9,7 @@ class InputTextBox extends StatefulWidget {
   final bool? autocorrect;
   final bool? obscureTextEnabled;
   final bool? enabled;
+  final TextInputType? keyboardType;
   const InputTextBox({
     Key? key,
     required this.inputTextLabelValue,
@@ -19,6 +20,7 @@ class InputTextBox extends StatefulWidget {
     this.autocorrect,
     this.obscureTextEnabled,
     this.enabled,
+    this.keyboardType,
   }) : super(key: key);
 
   @override
@@ -27,7 +29,6 @@ class InputTextBox extends StatefulWidget {
 
 class _InputTextBoxState extends State<InputTextBox> {
   bool? obscureTextEnabled;
-
   @override
   void initState() {
     obscureTextEnabled = widget.obscureTextEnabled;
@@ -47,6 +48,7 @@ class _InputTextBoxState extends State<InputTextBox> {
     }
 
     return TextFormField(
+      keyboardType: widget.keyboardType,
       validator: widget.validator,
       cursorColor: widget.allColorAttributes ?? Colors.white,
       autocorrect: widget.autocorrect ?? false,

@@ -61,6 +61,7 @@ class AddHouseholdMemberModal extends StatelessWidget {
       }
       return null;
     }
+
     dynamic phoneNumberValidator = (value) {
       if (value == null || value.isEmpty) {
         return 'Phone Number is empty!';
@@ -129,6 +130,7 @@ class AddHouseholdMemberModal extends StatelessWidget {
                   ),
                   //* Email textbox
                   InputTextBox(
+                    keyboardType: TextInputType.emailAddress,
                     inputTextLabelValue: 'Email Address',
                     inputTextValue: emailAddress,
                     allColorAttributes: Colors.white,
@@ -137,6 +139,7 @@ class AddHouseholdMemberModal extends StatelessWidget {
                   ),
                   //* Phone number textbox
                   InputTextBox(
+                    keyboardType: TextInputType.phone,
                     inputTextLabelValue: 'Phone Number',
                     inputTextValue: phoneNumber,
                     allColorAttributes: Colors.white,
