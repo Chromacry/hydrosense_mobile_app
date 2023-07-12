@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/constants/global_constants.dart';
 import 'package:hydrosense_mobile_app/src/models/device.dart';
@@ -20,7 +21,14 @@ class DevicesDB with ChangeNotifier {
   ];
 
   List<Device> getAllDevices() {
+    // Future<DocumentReference<Map<String, dynamic>>> getAllDevices() {
     return devices;
+    // return FirebaseFirestore.instance.collection('devices').add({
+    //   'id': purpose,
+    //   'mode': mode,
+    //   'cost': cost,
+    //   'travelDate': travelDate,
+    // });
   }
 
   List<Device> getAllDevicesByHouseholdId({householdId}) {
@@ -49,8 +57,8 @@ class DevicesDB with ChangeNotifier {
     }
     return deviceData;
   }
-
-  void addDevice(
+  
+  Future<DocumentReference<Map<String, dynamic>>> addDevice(
       {deviceId,
       deviceName,
       deviceSerialNumber,
@@ -67,8 +75,17 @@ class DevicesDB with ChangeNotifier {
       created_at: createdAt,
       created_by: createdBy ?? 'system',
     );
-    devices.add(deviceData);
-    notifyListeners();
+    // devices.add(deviceData);
+    // notifyListeners();
+    return FirebaseFirestore.instance.collection('devices').add({
+      'id': deviceData.id,
+      'device_name': deviceData.device_name,
+      'device_serialnumber': deviceData.device_serialnumber,
+      'device_household_id': deviceData.device_household_id,
+      'device_location_id': deviceData.device_location_id,
+      'created_at': deviceData.created_at,
+      'created_by': deviceData.created_by,
+    });
   }
 
   void updateDeviceById({
