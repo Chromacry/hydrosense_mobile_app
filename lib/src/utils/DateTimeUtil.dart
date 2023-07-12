@@ -19,4 +19,7 @@ class DateTimeUtil {
   static String convertToHumanReadableDate(String date) =>
       //* Get current DateTime
       DateFormat.yMMMd().format(DateTime.parse(date.toString()));
+
+  static String convertToHumanReadable24HrTime(String date) =>
+      DateFormat('hh:mm').format(DateTime.parse(date.toString()));
 }
