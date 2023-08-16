@@ -9,6 +9,16 @@
 
 # Setup
   $ flutter doctor
+  $ flutter run
+
+# Additional commands
+  - Generate App Icon
+  In pubspec.yml add fluter icons and add configuration then run
+  $ flutter pub get
+  $ flutter pub run flutter_launcher_icons 
+
 
 # References
 https://docs.flutter.dev
+https://pub.dev/packages/flutter_launcher_icons
+

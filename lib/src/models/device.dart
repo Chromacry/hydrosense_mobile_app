@@ -27,12 +27,12 @@ class Device {
     this.deleted_by,
   });
 
-  Device.fromMap(Map<String, dynamic> snapshot, String id)
-      : id = id,
-        device_name = snapshot['device_name'] ?? '',
-        device_serialnumber = snapshot['device_serialnumber'] ?? '',
-        device_household_id =
-            double.parse(snapshot['household_id'].toString()).toString(),
-        created_at =
-            (snapshot['created_at'] ?? DateTimeUtil.getCurrentDateTime());
+  Device.fromMap(Map<String, dynamic> snapshot, String id): 
+  id = id,
+  device_name = snapshot['device_name'] ?? '',
+  device_serialnumber = snapshot['device_serialnumber'] ?? '',
+  device_household_id = snapshot['device_household_id'].toString(),
+  device_location_id = snapshot['device_location_id'].toString(),
+  created_at =
+      (snapshot['created_at'] ?? DateTimeUtil.getCurrentDateTime());
 }

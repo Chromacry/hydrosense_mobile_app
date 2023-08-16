@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/providers/users_db.dart';
 import 'package:hydrosense_mobile_app/src/screens/ForgetPassword/view/forget_password_style.dart';
+import 'package:hydrosense_mobile_app/src/screens/Login/login.dart';
 import 'package:hydrosense_mobile_app/src/screens/Shared/widgets/shared_widgets.dart';
+import 'package:hydrosense_mobile_app/src/services/firebase_auth/auth_service.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:provider/provider.dart';
 
 class ForgetPasswordView extends StatelessWidget {
@@ -9,9 +12,10 @@ class ForgetPasswordView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AuthService authService = AuthService();
     UsersDB usersDBList = Provider.of<UsersDB>(context);
     String emailaddress = '';
-    
+
     //* validator
     String? emailAddressValidator(value) {
       if (value == null || value.isEmpty) {
@@ -27,14 +31,26 @@ class ForgetPasswordView extends StatelessWidget {
       }
       return null;
     }
-    
-    
-    void resetPasswordHandler() {
+
+    void resetPasswordHandler() async {
       //! Change the below method to check user exist then send email to reset password.
       // usersDBList.updateUserByEmail('defaultUsername', emailaddress, '12345678');
       debugPrint('emailaddress: $emailaddress');
+      await authService.forgotPassword(email: emailaddress).then((value) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            StatusSnackbar.snackbarStatus(
+                textMessage: 'Reset Password email sent!'));
+        PersistentNavBarNavigator.pushNewScreen(
+            context,
+            screen: Login(),
+            withNavBar: false,
+            pageTransitionAnimation: PageTransitionAnimation.slideRight,
+          );
+      }).catchError((error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            StatusSnackbar.snackbarStatus(textMessage: error.toString()));
+      });
     }
-
 
     return SafeArea(
       child: Padding(
@@ -79,11 +95,15 @@ class ForgetPasswordView extends StatelessWidget {
                       onPressed: resetPasswordHandler,
                       style: const ButtonStyle(
                         enableFeedback: true,
-                        backgroundColor: MaterialStatePropertyAll(Color(ForgetPasswordStyles.buttonColor)),
-                        fixedSize: MaterialStatePropertyAll(ForgetPasswordStyles.buttonSize),
-                        textStyle: MaterialStatePropertyAll(ForgetPasswordStyles.buttonText),
+                        backgroundColor: MaterialStatePropertyAll(
+                            Color(ForgetPasswordStyles.buttonColor)),
+                        fixedSize: MaterialStatePropertyAll(
+                            ForgetPasswordStyles.buttonSize),
+                        textStyle: MaterialStatePropertyAll(
+                            ForgetPasswordStyles.buttonText),
                       ),
-                      label: const Text('Reset Password', style: ForgetPasswordStyles.buttonText),
+                      label: const Text('Reset Password',
+                          style: ForgetPasswordStyles.buttonText),
                       icon: const Icon(
                         Icons.lock_reset_rounded,
                         color: ForgetPasswordStyles.iconColor,

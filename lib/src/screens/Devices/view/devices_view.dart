@@ -23,8 +23,10 @@ class _DevicesViewState extends State<DevicesView> {
     DeviceLocationsDB deviceLocationsDB =
         Provider.of<DeviceLocationsDB>(context);
 
+    //* FIrebase
+    // DevicesDB devicesDB = DevicesDB();
     //* grab all devices by household
-    List<Device> devicesDBList = devicesDB.getAllDevicesByHouseholdId(
+    Stream<List<Device>> devicesDBList = devicesDB.getAllDevicesByHouseholdId(
         householdId: GlobalConstants.temp_householdID);
 
     //* grab all device locations by household
@@ -42,10 +44,10 @@ class _DevicesViewState extends State<DevicesView> {
     }).toList();
 
     //* Listen on provider
-    devicesDB.addListener(() {
-      //* Reload the page when the provider is notified
-      setState(() {});
-    });
+    // devicesDBList.listen((devices) {
+    //   //* Reload the page when the provider is notified
+    //   setState(() {});
+    // });
 
     //* Toggle delete mode
     void onPressedDeleteMode() {
@@ -58,135 +60,144 @@ class _DevicesViewState extends State<DevicesView> {
       setState(() {});
     }
 
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20),
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  //* Sub title
-                  Container(
-                    padding: DevicesStyles.titleContainerPadding,
-                    margin: DevicesStyles.titleContainerMargin,
-                    alignment: DevicesStyles.titleAlign,
-                    child: const Text(
-                      'Manage Devices',
-                      textAlign: TextAlign.left,
-                      style: DevicesStyles.subTitle,
-                    ),
-                  ),
-                  //* Add device button
-                  IconButton(
-                    onPressed: onPressedDeleteMode,
-                    icon: isDeleteModeOn
-                        ? Icon(
-                            Icons.delete_forever_rounded,
-                            color: Colors.red[200],
-                            size: 35,
-                          )
-                        : Icon(
-                            Icons.delete_rounded,
-                            color: Colors.red[200],
-                            size: 35,
-                          ),
-                  ),
-                ],
-              ),
-              //* Alert
-              isDeleteModeOn
-                  ? Container(
-                      margin: EdgeInsets.only(bottom: 10),
-                      width: double.maxFinite,
-                      child: Card(
-                        color: Colors.red,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Text(
-                            'Delete Mode enabled!',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
+    return StreamBuilder<List<Device>>(
+        stream: devicesDBList,
+        builder: (context, snapshot) {
+          return snapshot.connectionState == ConnectionState.waiting ? Center(child: CircularProgressIndicator()) :
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        //* Sub title
+                        Container(
+                          padding: DevicesStyles.titleContainerPadding,
+                          margin: DevicesStyles.titleContainerMargin,
+                          alignment: DevicesStyles.titleAlign,
+                          child: const Text(
+                            'Manage Devices',
+                            textAlign: TextAlign.left,
+                            style: DevicesStyles.subTitle,
                           ),
                         ),
-                      ),
-                    )
-                  : Container(),
-              //* Devices Box
-              Container(
-                height: 550, // 214,
-                // margin: EdgeInsets.only(bottom: 50),
-                decoration: BoxDecoration(
-                  color: Color(DevicesStyles.devicesBoxColor),
-                  borderRadius: BorderRadius.circular(11),
-                ),
-                child: Expanded(
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      crossAxisSpacing: 5, //5
-                      mainAxisSpacing: 8, //4
-                      childAspectRatio: 0.8,
+                        //* Add device button
+                        IconButton(
+                          onPressed: onPressedDeleteMode,
+                          icon: isDeleteModeOn
+                              ? Icon(
+                                  Icons.delete_forever_rounded,
+                                  color: Colors.red[200],
+                                  size: 35,
+                                )
+                              : Icon(
+                                  Icons.delete_rounded,
+                                  color: Colors.red[200],
+                                  size: 35,
+                                ),
+                        ),
+                      ],
                     ),
-                    physics: AlwaysScrollableScrollPhysics(),
-                    primary: false,
-                    padding: const EdgeInsets.all(10),
-                    itemBuilder: (context, index) {
-                      Device currentDevice = devicesDBList[index];
-                      String deviceId = currentDevice.id.toString();
-                      String deviceName = currentDevice.device_name.toString();
-                      String deviceLocationId =
-                          currentDevice.device_location_id.toString();
-                      String deviceLocation = deviceLocationsDB
-                          .getDeviceLocationById(
-                            deviceLocationId: deviceLocationId,
+                    //* Alert
+                    isDeleteModeOn
+                        ? Container(
+                            margin: EdgeInsets.only(bottom: 10),
+                            width: double.maxFinite,
+                            child: Card(
+                              color: Colors.red,
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Text(
+                                  'Delete Mode enabled!',
+                                  style: TextStyle(color: Colors.white),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
                           )
-                          .device_location_name
-                          .toString();
-                      String deviceHouseholdId =
-                          GlobalConstants.temp_householdID;
-                      String deviceSerialNumber =
-                          currentDevice.device_serialnumber.toString();
-                      return DeviceButton(
-                        deviceNameText: deviceName,
-                        deviceLocationText: deviceLocation,
-                        backgroundColorIcon:
-                            isDeleteModeOn ? Colors.red[200] : Colors.grey,
-                        onTap: () {
-                          isDeleteModeOn
-                              //* Show delete modal
-                              ? showDialog<String>(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      DeleteDeviceModal(
-                                        deviceId: deviceId,
-                                      ))
-                              : //* Show edit modal
-                              showDialog<String>(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      EditDeviceModal(
-                                    deviceId: deviceId,
-                                    deviceName: deviceName,
-                                    deviceHouseholdId: deviceHouseholdId,
-                                    deviceSerialNumber: deviceSerialNumber,
-                                    deviceLocationId: deviceLocationId,
-                                    dropdownLocationOptions:
-                                        dropdownLocationOptions,
-                                  ),
-                                );
-                        },
-                      );
-                    },
-                    itemCount: devicesDBList.length,
-                  ),
+                        : Container(),
+                    //* Devices Box
+                    Container(
+                      height: 550, // 214,
+                      // margin: EdgeInsets.only(bottom: 50),
+                      decoration: BoxDecoration(
+                        color: Color(DevicesStyles.devicesBoxColor),
+                        borderRadius: BorderRadius.circular(11),
+                      ),
+                      child: Expanded(
+                        child: GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4,
+                            crossAxisSpacing: 5, //5
+                            mainAxisSpacing: 8, //4
+                            childAspectRatio: 0.8,
+                          ),
+                          physics: AlwaysScrollableScrollPhysics(),
+                          primary: false,
+                          padding: const EdgeInsets.all(10),
+                          itemBuilder: (context, index) {
+                            Device currentDevice = snapshot.data![index];
+                            String deviceId = currentDevice.id.toString();
+                            String deviceName =
+                                currentDevice.device_name.toString();
+                            String deviceLocationId =
+                                currentDevice.device_location_id.toString();
+                            String deviceLocation = deviceLocationsDB
+                                .getDeviceLocationById(
+                                  deviceLocationId: deviceLocationId,
+                                )
+                                .device_location_name
+                                .toString();
+                            String deviceHouseholdId =
+                                GlobalConstants.temp_householdID;
+                            String deviceSerialNumber =
+                                currentDevice.device_serialnumber.toString();
+                            return DeviceButton(
+                              deviceNameText: deviceName,
+                              deviceLocationText: deviceLocation,
+                              backgroundColorIcon: isDeleteModeOn
+                                  ? Colors.red[200]
+                                  : Colors.grey,
+                              onTap: () {
+                                isDeleteModeOn
+                                    //* Show delete modal
+                                    ? showDialog<String>(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            DeleteDeviceModal(
+                                              deviceId: deviceId,
+                                            ))
+                                    : //* Show edit modal
+                                    showDialog<String>(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            EditDeviceModal(
+                                          deviceId: deviceId,
+                                          deviceName: deviceName,
+                                          deviceHouseholdId: deviceHouseholdId,
+                                          deviceSerialNumber:
+                                              deviceSerialNumber,
+                                          deviceLocationId: deviceLocationId,
+                                          dropdownLocationOptions:
+                                              dropdownLocationOptions,
+                                        ),
+                                      );
+                              },
+                            );
+                          },
+                          itemCount: snapshot.data!.length,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
+        });
   }
 }

@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/providers/users_db.dart';
 import 'package:hydrosense_mobile_app/src/screens/ForgetPassword/view/forget_password_style.dart';
 import 'package:hydrosense_mobile_app/src/screens/Shared/widgets/shared_widgets.dart';
+import 'package:hydrosense_mobile_app/src/services/firebase_auth/auth_service.dart';
 import 'package:provider/provider.dart';
+
+AuthService authService = new AuthService();
 
 class ChangePasswordView extends StatelessWidget {
   const ChangePasswordView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final _changePasswordFormKey = GlobalKey<FormState>();
     String password = '';
     String confirmpassword = '';
     UsersDB usersDBList = Provider.of<UsersDB>(context);
@@ -31,8 +35,20 @@ class ChangePasswordView extends StatelessWidget {
     };
 
     void changePasswordHandler() {
-      //! Change the below method to check user exist then send email to reset password.
-      // usersDBList.updateUserByEmail('defaultUsername', emailaddress, '12345678');
+      if (_changePasswordFormKey.currentState!.validate()) {
+        authService
+            .changePassword(password: password)
+            .then((value) {
+              ScaffoldMessenger.of(context).showSnackBar(
+              StatusSnackbar.snackbarStatus(
+                  textMessage: 'Successfully Updated Password!'));
+            })
+            .catchError((error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+              StatusSnackbar.snackbarStatus(
+                  textMessage: error.toString()));
+            });
+      }
     }
 
     return SafeArea(
@@ -40,6 +56,7 @@ class ChangePasswordView extends StatelessWidget {
         padding: const EdgeInsets.only(left: 20, right: 20),
         child: Center(
           child: Form(
+            key: _changePasswordFormKey,
             autovalidateMode: AutovalidateMode.always,
             child: Column(
               children: [

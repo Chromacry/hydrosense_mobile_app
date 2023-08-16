@@ -1,3 +1,5 @@
+import 'package:hydrosense_mobile_app/src/utils/DateTimeUtil.dart';
+
 class User {
   String? id;
   String? username;
@@ -36,4 +38,18 @@ class User {
     this.updated_by,
     this.deleted_by,
   });
+
+  User.fromMap(Map<String, dynamic> snapshot, String id): 
+  id = snapshot['id'] ?? '',
+  username = snapshot['username'] ?? '',
+  email_address = snapshot['email_address'] ?? '',
+  phone_number = snapshot['phone_number'].toString(),
+  role_id = snapshot['role_id'].toString(),
+  household_id = snapshot['household_id'].toString(),
+  profile_banner = snapshot['profile_banner'].toString(),
+  profile_photo = snapshot['profile_photo'].toString(),
+  last_login = snapshot['last_login'].toString(),
+  user_status = snapshot['user_status'].toString(),
+  created_at =
+      (snapshot['created_at'] ?? DateTimeUtil.getCurrentDateTime());
 }

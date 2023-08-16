@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:hydrosense_mobile_app/src/constants/design_constants.dart';
+import 'package:hydrosense_mobile_app/src/models/WaterLog.dart';
+import 'package:hydrosense_mobile_app/src/utils/DateTimeUtil.dart';
+import 'package:hydrosense_mobile_app/src/utils/WaterUsageUtil.dart';
+import 'dart:math';
 
 class WaterUsageBarChart extends StatefulWidget {
-  WaterUsageBarChart({super.key});
+  final List<WaterLog> waterloglist;
+  WaterUsageBarChart({
+    Key? key,
+    required this.waterloglist,
+  }) : super(key: key);
 
   final Color? leftBarColor = Colors.yellow[200];
   final Color? rightBarColor = Colors.red[200];
@@ -13,41 +22,46 @@ class WaterUsageBarChart extends StatefulWidget {
 }
 
 class _WaterUsageBarChartState extends State<WaterUsageBarChart> {
-  final double width = 7;
+  final double width = 10; //7
 
   late List<BarChartGroupData> rawBarGroups;
   late List<BarChartGroupData> showingBarGroups;
+  late List<String> titles = <String>[
+    '12am',
+  ];
+  double highestWaterUsageValue = 0;
 
   int touchedGroupIndex = -1;
+  List<double> waterUsageList = [];
 
   @override
   void initState() {
     super.initState();
-    //* Amount of bar in chart
-    //* makeGroupData(Grouping, Bar1, Bar2)
-    final barGroup1 = makeGroupData(0, 0, 2);
-    final barGroup2 = makeGroupData(1, 300, 20);
-    final barGroup3 = makeGroupData(2, 256, 400);
-    final barGroup4 = makeGroupData(3, 500, 16);
-    final barGroup5 = makeGroupData(4, 80, 6);
-    final barGroup6 = makeGroupData(5, 100, 500);
-    final barGroup7 = makeGroupData(6, 10, 1.5);
-
-    final items = [
-      barGroup1,
-      barGroup2,
-      barGroup3,
-      barGroup4,
-      barGroup5,
-      barGroup6,
-      barGroup7,
-    ];
-    rawBarGroups = items;
-    showingBarGroups = rawBarGroups;
   }
-
+  
   @override
   Widget build(BuildContext context) {
+    List<BarChartGroupData> items = [];
+    List<String> itemsTitle = [];
+    //* Amount of bar in chart
+    //* makeGroupData(Grouping, Bar1)
+    //* Add default value when there's no value from today's data
+    widget.waterloglist.asMap().forEach((index, waterlog) {
+      double waterUsage = WaterUsageUtil.getWaterUsage(
+            flowRate: waterlog.flow_rate.toString(),
+            timeUsed: waterlog.time_used.toString(),
+          ) /
+          1000;
+      waterUsageList.add(waterUsage);
+      items.add(makeGroupData(index, waterUsage));
+      itemsTitle.add(DateTimeUtil.convertToHumanReadable24HrTime(
+          waterlog.created_at.toString()));
+    });
+    if (widget.waterloglist.length >= 1)
+      highestWaterUsageValue = waterUsageList.reduce(max).ceilToDouble();
+    rawBarGroups = items;
+    showingBarGroups = rawBarGroups;
+    titles = itemsTitle;
     return Container(
       width: double.infinity,
       height: 300,
@@ -72,7 +86,7 @@ class _WaterUsageBarChartState extends State<WaterUsageBarChart> {
                     width: 8,
                   ),
                   Text(
-                    'per month',
+                    'last 6 hours',
                     style: TextStyle(
                       color: Color(0xff77839a),
                       fontSize: 16,
@@ -85,94 +99,108 @@ class _WaterUsageBarChartState extends State<WaterUsageBarChart> {
           const SizedBox(
             height: 38,
           ),
-          Expanded(
-            child: Container(
-              child: BarChart(
-                BarChartData(
-                  maxY: 500,
-                  barTouchData: BarTouchData(
-                    touchTooltipData: BarTouchTooltipData(
-                      tooltipBgColor: Colors.grey,
-                      getTooltipItem: (a, b, c, d) => null,
-                    ),
-                    touchCallback: (FlTouchEvent event, response) {
-                      if (response == null || response.spot == null) {
-                        setState(() {
-                          touchedGroupIndex = -1;
-                          showingBarGroups = List.of(rawBarGroups);
-                        });
-                        return;
-                      }
+          waterUsageList.length > 0
+              ? Expanded(
+                  child: Container(
+                    child: BarChart(
+                      BarChartData(
+                        maxY: highestWaterUsageValue,
+                        barTouchData: BarTouchData(
+                          touchTooltipData: BarTouchTooltipData(
+                            tooltipBgColor: Colors.grey,
+                            getTooltipItem: (a, b, c, d) => null,
+                          ),
+                          touchCallback: (FlTouchEvent event, response) {
+                            if (response == null || response.spot == null) {
+                              setState(() {
+                                touchedGroupIndex = -1;
+                                showingBarGroups = List.of(rawBarGroups);
+                              });
+                              return;
+                            }
 
-                      touchedGroupIndex = response.spot!.touchedBarGroupIndex;
+                            touchedGroupIndex =
+                                response.spot!.touchedBarGroupIndex;
 
-                      setState(() {
-                        if (!event.isInterestedForInteractions) {
-                          touchedGroupIndex = -1;
-                          showingBarGroups = List.of(rawBarGroups);
-                          return;
-                        }
-                        showingBarGroups = List.of(rawBarGroups);
-                        if (touchedGroupIndex != -1) {
-                          var sum = 0.0;
-                          for (final rod
-                              in showingBarGroups[touchedGroupIndex].barRods) {
-                            sum += rod.toY;
-                          }
-                          final avg = sum /
-                              showingBarGroups[touchedGroupIndex]
-                                  .barRods
-                                  .length;
+                            setState(() {
+                              if (!event.isInterestedForInteractions) {
+                                touchedGroupIndex = -1;
+                                showingBarGroups = List.of(rawBarGroups);
+                                return;
+                              }
+                              showingBarGroups = List.of(rawBarGroups);
+                              if (touchedGroupIndex != -1) {
+                                var sum = 0.0;
+                                for (final rod
+                                    in showingBarGroups[touchedGroupIndex]
+                                        .barRods) {
+                                  sum += rod.toY;
+                                }
+                                final avg = sum /
+                                    showingBarGroups[touchedGroupIndex]
+                                        .barRods
+                                        .length;
 
-                          showingBarGroups[touchedGroupIndex] =
-                              showingBarGroups[touchedGroupIndex].copyWith(
-                            barRods: showingBarGroups[touchedGroupIndex]
-                                .barRods
-                                .map((rod) {
-                              return rod.copyWith(
-                                  toY: avg, color: widget.avgColor);
-                            }).toList(),
-                          );
-                        }
-                      });
-                    },
-                  ),
-                  titlesData: FlTitlesData(
-                    show: true,
-                    rightTitles: AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
-                    topTitles: AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
-                    bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: bottomTitles,
-                        reservedSize: 42,
+                                showingBarGroups[touchedGroupIndex] =
+                                    showingBarGroups[touchedGroupIndex]
+                                        .copyWith(
+                                  barRods: showingBarGroups[touchedGroupIndex]
+                                      .barRods
+                                      .map((rod) {
+                                    return rod.copyWith(
+                                        toY: avg, color: widget.avgColor);
+                                  }).toList(),
+                                );
+                              }
+                            });
+                          },
+                        ),
+                        titlesData: FlTitlesData(
+                          show: true,
+                          rightTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          topTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: bottomTitles,
+                              reservedSize: 42, //* Size of the text below
+                            ),
+                          ),
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 30, //28
+                              interval: 1,
+                              getTitlesWidget: leftTitles,
+                            ),
+                          ),
+                        ),
+                        borderData: FlBorderData(
+                          show: false,
+                        ),
+                        barGroups: showingBarGroups,
+                        gridData: FlGridData(show: false),
                       ),
                     ),
-                    leftTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 30, //28
-                        interval: 1,
-                        getTitlesWidget: leftTitles,
-                      ),
+                  ),
+                )
+              : Center(
+                  child: Text(
+                    'No data for today!',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                  borderData: FlBorderData(
-                    show: false,
-                  ),
-                  barGroups: showingBarGroups,
-                  gridData: FlGridData(show: false),
                 ),
-              ),
-            ),
+          const SizedBox(
+            height: 12,
           ),
-          // const SizedBox(
-          //   height: 12,
-          // ),
         ],
       ),
     );
@@ -187,11 +215,11 @@ class _WaterUsageBarChartState extends State<WaterUsageBarChart> {
     );
     String text;
     if (value == 0) {
-      text = '1K';
-    } else if (value == 250) {
-      text = '2.5K';
-    } else if (value == 500) {
-      text = '5K';
+      text = '0';
+    } else if (value == 1.5) {
+      text = '1.5';
+    } else if (value == highestWaterUsageValue) {
+      text = '${highestWaterUsageValue} m3';
     } else {
       return Container();
     }
@@ -204,17 +232,6 @@ class _WaterUsageBarChartState extends State<WaterUsageBarChart> {
 
   //* By number of bars created
   Widget bottomTitles(double value, TitleMeta meta) {
-    //TODO Dynamically create titles from data
-    final titles = <String>[
-      '22 Feb',
-      '23 Feb',
-      '24 Feb',
-      '25 Feb',
-      '26 Feb',
-      '27 Feb',
-      '28 Feb'
-    ];
-
     final intIndex = value.isFinite ? value.toInt() : 0;
     final title =
         intIndex >= 0 && intIndex < titles.length ? titles[intIndex] : '';
@@ -236,19 +253,14 @@ class _WaterUsageBarChartState extends State<WaterUsageBarChart> {
     );
   }
 
-  BarChartGroupData makeGroupData(int x, double y1, double y2) {
+  BarChartGroupData makeGroupData(int x, double y1) {
     return BarChartGroupData(
-      barsSpace: 4, //4
+      barsSpace: 1, //4
       x: x,
       barRods: [
         BarChartRodData(
           toY: y1,
           color: widget.leftBarColor,
-          width: width,
-        ),
-        BarChartRodData(
-          toY: y2,
-          color: widget.rightBarColor,
           width: width,
         ),
       ],

@@ -5,16 +5,21 @@ import 'package:hydrosense_mobile_app/src/screens/Layout/layout.dart';
 import 'package:hydrosense_mobile_app/src/screens/Login/view/login_style.dart';
 import 'package:hydrosense_mobile_app/src/screens/Login/widgets/login_widgets.dart';
 import 'package:hydrosense_mobile_app/src/screens/Shared/widgets/shared_widgets.dart';
+import 'package:hydrosense_mobile_app/src/services/firebase_auth/auth_service.dart';
+import 'package:hydrosense_mobile_app/src/services/firebase_auth/google_auth_service.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:provider/provider.dart';
 
 class LoginView extends StatelessWidget {
   LoginView({super.key});
 
   final _loginFormKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
+    GoogleAuthService googleAuthService =
+        Provider.of<GoogleAuthService>(context);
     String emailaddress = '';
+    String password = '';
 
     String? emailValidator(value) {
       if (value == null || value.isEmpty) {
@@ -42,17 +47,25 @@ class LoginView extends StatelessWidget {
       if (_loginFormKey.currentState!.validate()) {
         // If the form is valid, display a snackbar. In the real world,
         // you'd often call a server or save the information in a database.
-        ScaffoldMessenger.of(context).showSnackBar(
-            StatusSnackbar.snackbarStatus(
-                textMessage: GlobalConstants
-                    .CLIENT_STATUS_MSGS['SUCCESSFUL_LOGIN']
-                    .toString()));
-        PersistentNavBarNavigator.pushNewScreen(
-          context,
-          screen: Layout(),
-          withNavBar: false,
-          pageTransitionAnimation: PageTransitionAnimation.slideUp,
-        );
+        AuthService()
+            .login(email: emailaddress, password: password)
+            .then((value) {
+          debugPrint('HAHAHAHA ' + value.toString());
+          ScaffoldMessenger.of(context).showSnackBar(
+              StatusSnackbar.snackbarStatus(
+                  textMessage: GlobalConstants
+                      .CLIENT_STATUS_MSGS['SUCCESSFUL_LOGIN']
+                      .toString()));
+          PersistentNavBarNavigator.pushNewScreen(
+            context,
+            screen: Layout(),
+            withNavBar: false,
+            pageTransitionAnimation: PageTransitionAnimation.slideUp,
+          );
+        }).catchError((error) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              StatusSnackbar.snackbarStatus(textMessage: error.toString()));
+        });
       }
     }
 
@@ -97,7 +110,7 @@ class LoginView extends StatelessWidget {
               Container(
                 child: InputTextBox(
                   inputTextLabelValue: 'Password',
-                  onChanged: (text) => debugPrint(text),
+                  onChanged: (text) => password = text,
                   validator: passwordValidator,
                   obscureTextEnabled: true,
                 ),
@@ -160,20 +173,22 @@ class LoginView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   InkWell(
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Image.asset(
+                          'assets/images/google-icon.png',
+                          height: 40,
+                          width: 40,
+                        ),
                       ),
-                      child: Image.asset(
-                        'assets/images/google-icon.png',
-                        height: 40,
-                        width: 40,
-                      ),
-                    ),
-                    onTap: () => debugPrint('Redirecting to google auth'),
-                  ),
+                      onTap: () {
+                        debugPrint('Redirecting to google auth');
+                        googleAuthService.googleLogin();
+                      }),
                   const SizedBox(
                     width: 25,
                   ),

@@ -18,146 +18,175 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     WaterLogsDB waterLogsDB = Provider.of<WaterLogsDB>(context);
-    List<WaterLog> waterlogsList = waterLogsDB.getAllWaterUsageDataByDateRange(
-      from: DateTimeUtil.getCurrentDate(),
-      to: DateTimeUtil.getCurrentDate(),
+    Stream<List<WaterLog>> waterlogsList =
+        waterLogsDB.getAllWaterUsageDataByDateRange(
+      from: DateTimeUtil.getCurrentDate() + ' 00:00:00',
+      to: DateTimeUtil.getCurrentDate() + ' 23:59:00',
     );
-    WaterUsageLog overallData = waterLogsDB.getOverallDashboardData(
+    // debugPrint(DateTimeUtil.getCurrentDate() + ' 00:00:00');
+    Stream<WaterUsageLog> overallData = waterLogsDB.getOverallDashboardData(
       from: DateTimeUtil.getCurrentDate(),
       to: DateTimeUtil.getCurrentDate(),
       tariffRate: '4.5',
     );
-    debugPrint('dwa' + waterlogsList.length.toString());
+    // debugPrint('dashboardLogLength' + waterlogsList.length.toString());
     waterLogsDB.addListener(() {
       setState(() {});
     });
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20),
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Container(
-                padding: DashboardStyles.titleContainerPadding,
-                margin: DashboardStyles.titleContainerMargin,
-                alignment: DashboardStyles.titleAlign,
-                child: const Text(
-                  'Dashboard',
-                  textAlign: TextAlign.left,
-                  style: DashboardStyles.title,
-                ),
-              ),
-              //* Today's Overall Text
-              Container(
-                alignment: Alignment.topLeft,
-                margin: DashboardStyles.overallContainerPadding,
-                child: const Text(
-                  "Today's Overall",
-                  textAlign: TextAlign.left,
-                  style: DashboardStyles.overallText,
-                ),
-              ),
-              //* Overall Data Boxes
-              SizedBox(
-                width: double.infinity,
+    return StreamBuilder<List<WaterLog>>(
+        stream: waterlogsList,
+        builder: (context, snapshot) {
+          return SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    //* Water Used
                     Container(
-                      margin: DashboardStyles.cardMargin,
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                        color: DashboardStyles.cardColor,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(11),
-                        ),
-                      ),
-                      child: Container(
-                        padding: DashboardStyles.cardPadding,
-                        child: Column(
-                          children: <Widget>[
-                            Text(
-                                '${overallData.total_water_usage?.toStringAsFixed(2)} m3',
-                                style: DashboardStyles.cardTextValue),
-                            Text('Water used',
-                                style: DashboardStyles.cardTextTitle)
-                          ],
-                        ),
+                      padding: DashboardStyles.titleContainerPadding,
+                      margin: DashboardStyles.titleContainerMargin,
+                      alignment: DashboardStyles.titleAlign,
+                      child: const Text(
+                        'Dashboard',
+                        textAlign: TextAlign.left,
+                        style: DashboardStyles.title,
                       ),
                     ),
-                    //* Time Spent
+                    //* Today's Overall Text
                     Container(
-                      margin: DashboardStyles.cardMargin,
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                        color: DashboardStyles.cardColor,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(11),
-                        ),
-                      ),
-                      child: Container(
-                        padding: DashboardStyles.cardPadding,
-                        child: Column(
-                          children: [
-                            Text(
-                                '${overallData.total_time_spent?.toStringAsFixed(2)} hr',
-                                style: DashboardStyles.cardTextValue),
-                            Text('Time Spent',
-                                style: DashboardStyles.cardTextTitle)
-                          ],
-                        ),
+                      alignment: Alignment.topLeft,
+                      margin: DashboardStyles.overallContainerPadding,
+                      child: const Text(
+                        "Today's Overall",
+                        textAlign: TextAlign.left,
+                        style: DashboardStyles.overallText,
                       ),
                     ),
-                    //* Estimated Cost
-                    Container(
-                      margin: DashboardStyles.cardMargin,
-                      decoration: const BoxDecoration(
-                        color: DashboardStyles.cardColor,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(11),
-                        ),
-                      ),
+                    //* Overall Data Boxes
+                    SizedBox(
                       width: double.infinity,
-                      child: Container(
-                        padding: DashboardStyles.cardPadding,
-                        child: Column(
-                          children: [
-                            Text(
-                                '\$ ${overallData.total_estimated_cost?.toStringAsFixed(2)}',
-                                style: DashboardStyles.cardTextValue),
-                            Text('Estimated Cost',
-                                style: DashboardStyles.cardTextTitle)
-                          ],
-                        ),
+                      child: StreamBuilder<WaterUsageLog>(
+                          stream: overallData,
+                          builder: (context, snapshot) {
+                            // if (!snapshot.hasData)
+                            //   return Center(
+                            //     child: CircularProgressIndicator(),
+                            //   );
+                            WaterUsageLog overallData = snapshot.data!;
+                            return snapshot.connectionState ==
+                                    ConnectionState.waiting
+                                ? Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : Column(
+                                    children: <Widget>[
+                                      //* Water Used
+                                      Container(
+                                        margin: DashboardStyles.cardMargin,
+                                        width: double.infinity,
+                                        decoration: const BoxDecoration(
+                                          color: DashboardStyles.cardColor,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(11),
+                                          ),
+                                        ),
+                                        child: Container(
+                                          padding: DashboardStyles.cardPadding,
+                                          child: Column(
+                                            children: <Widget>[
+                                              Text(
+                                                  '${overallData.total_water_usage?.toStringAsFixed(2)} m3',
+                                                  style: DashboardStyles
+                                                      .cardTextValue),
+                                              Text('Water used',
+                                                  style: DashboardStyles
+                                                      .cardTextTitle)
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      //* Time Spent
+                                      Container(
+                                        margin: DashboardStyles.cardMargin,
+                                        width: double.infinity,
+                                        decoration: const BoxDecoration(
+                                          color: DashboardStyles.cardColor,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(11),
+                                          ),
+                                        ),
+                                        child: Container(
+                                          padding: DashboardStyles.cardPadding,
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                  '${overallData.total_time_spent?.toStringAsFixed(2)} hr',
+                                                  style: DashboardStyles
+                                                      .cardTextValue),
+                                              Text('Time Spent',
+                                                  style: DashboardStyles
+                                                      .cardTextTitle)
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      //* Estimated Cost
+                                      Container(
+                                        margin: DashboardStyles.cardMargin,
+                                        decoration: const BoxDecoration(
+                                          color: DashboardStyles.cardColor,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(11),
+                                          ),
+                                        ),
+                                        width: double.infinity,
+                                        child: Container(
+                                          padding: DashboardStyles.cardPadding,
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                  '\$ ${overallData.total_estimated_cost?.toStringAsFixed(2)}',
+                                                  style: DashboardStyles
+                                                      .cardTextValue),
+                                              Text('Estimated Cost',
+                                                  style: DashboardStyles
+                                                      .cardTextTitle)
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 50),
+                                    ],
+                                  );
+                          }),
+                    ),
+                    //* Chart for average water usage
+                    WaterUsageBarChart(waterloglist: snapshot.data!),
+                    const SizedBox(height: 50),
+                    //* Estimated Cost of water usage Text
+                    Container(
+                      alignment: Alignment.center,
+                      padding: DashboardStyles.overallContainerPadding,
+                      child: const Text(
+                        "Estimated Cost of water usage",
+                        textAlign: TextAlign.center,
+                        style: DashboardStyles.costUsageTitle,
                       ),
                     ),
                     const SizedBox(height: 50),
+                    //* Chart for estimated cost for water usage
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: CostUsageLineChart(waterloglist: snapshot.data!),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
                   ],
                 ),
               ),
-              //* Chart for average water usage
-              WaterUsageBarChart(waterloglist: waterlogsList),
-              const SizedBox(height: 50),
-              //* Estimated Cost of water usage Text
-              Container(
-                alignment: Alignment.center,
-                padding: DashboardStyles.overallContainerPadding,
-                child: const Text(
-                  "Estimated Cost of water usage",
-                  textAlign: TextAlign.center,
-                  style: DashboardStyles.costUsageTitle,
-                ),
-              ),
-              const SizedBox(height: 50),
-              //* Chart for estimated cost for water usage
-              Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: CostUsageLineChart(),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
+        });
   }
 }

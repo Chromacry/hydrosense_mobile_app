@@ -4,6 +4,7 @@ import 'package:hydrosense_mobile_app/src/screens/Alerts/view/alerts_style.dart'
 import 'package:hydrosense_mobile_app/src/screens/Alerts/widgets/alert_widgets.dart';
 
 import 'package:hydrosense_mobile_app/src/screens/WaterUsage/view/water_usage_style.dart';
+import 'package:hydrosense_mobile_app/src/services/firebase_auth/auth_service.dart';
 
 class AlertsView extends StatelessWidget {
   const AlertsView({super.key});
@@ -11,6 +12,8 @@ class AlertsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = List<String>.generate(20, (i) => 'Item ${i + 1}');
+    final user = AuthService().getAuthUser();
+    debugPrint('HEHEHE' + user.toString());
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20),

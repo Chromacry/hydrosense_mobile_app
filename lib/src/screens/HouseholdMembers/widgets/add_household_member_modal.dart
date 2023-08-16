@@ -28,14 +28,14 @@ class AddHouseholdMemberModal extends StatelessWidget {
       if (_addHouseholdMemberFormKey.currentState!.validate()) {
         usersDB.addUser(
             userName: userName,
+            passWord: password,
             emailAddress: emailAddress,
             phoneNo: phoneNumber,
             householdId: GlobalConstants.temp_householdID,
             roleId: 'Household User',
             createdBy: 'Patricia Chew');
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Successfully added member!')),
-        );
+            const SnackBar(content: Text('Successfully added member!')));
         Navigator.pop(context);
       }
     }
@@ -72,11 +72,17 @@ class AddHouseholdMemberModal extends StatelessWidget {
       if (value == null || value.isEmpty) {
         return 'Password is empty!';
       }
+      if (value != password) {
+        return 'Passwords do not match!';
+      }
       return null;
     };
     dynamic confirmPasswordValidator = (value) {
       if (value == null || value.isEmpty) {
         return 'Confirm Password is empty!';
+      }
+      if (value != password) {
+        return 'Passwords do not match!';
       }
       return null;
     };

@@ -5,6 +5,8 @@ import 'package:hydrosense_mobile_app/src/models/device.dart';
 import 'package:uuid/uuid.dart';
 
 Uuid uuid = Uuid();
+final CollectionReference<Map<String, dynamic>> firestoreDB =
+    FirebaseFirestore.instance.collection('devices');
 
 class DevicesDB with ChangeNotifier {
   //* Data list
@@ -20,24 +22,22 @@ class DevicesDB with ChangeNotifier {
     ),
   ];
 
-  List<Device> getAllDevices() {
-    // Future<DocumentReference<Map<String, dynamic>>> getAllDevices() {
-    return devices;
-    // return FirebaseFirestore.instance.collection('devices').add({
-    //   'id': purpose,
-    //   'mode': mode,
-    //   'cost': cost,
-    //   'travelDate': travelDate,
-    // });
+  Stream<List<Device>> getAllDevices() {
+    return firestoreDB.snapshots().map((snapshot) => snapshot.docs
+        .map<Device>((doc) => Device.fromMap(doc.data(), doc.id))
+        .toList());
   }
 
-  List<Device> getAllDevicesByHouseholdId({householdId}) {
-    List<Device> householdDevices = [];
-    for (Device currentDevice in devices) {
-      if (currentDevice.device_household_id == householdId &&
-          currentDevice.deleted_at == null) householdDevices.add(currentDevice);
-    }
-    return householdDevices;
+  Stream<List<Device>> getAllDevicesByHouseholdId({householdId}) {
+    Stream<List<Device>> allDevicesStream = getAllDevices();
+    //* Check for household id
+    Stream<List<Device>> filteredDevicesStream = allDevicesStream.map(
+      (allDevices) => allDevices
+          .where((currentDevice) =>
+              currentDevice.device_household_id == householdId)
+          .toList(),
+    );
+    return filteredDevicesStream;
   }
 
   //*Check if the device is tagged to location
@@ -50,14 +50,15 @@ class DevicesDB with ChangeNotifier {
     return false;
   }
 
-  Device getDeviceById({deviceId}) {
-    Device deviceData = Device(id: deviceId);
-    for (Device currentDevice in devices) {
-      if (currentDevice.id == deviceId) deviceData = currentDevice;
-    }
-    return deviceData;
-  }
-  
+  // Stream<Device> getDeviceById({deviceId}) {
+  //   // Device deviceData = Device(id: deviceId);
+  //   // for (Device currentDevice in devices) {
+  //   //   if (currentDevice.id == deviceId) deviceData = currentDevice;
+  //   // }
+  //   // return deviceData;
+  //   return firestoreDB.where("id", isEqualTo: deviceId).get();
+  // }
+
   Future<DocumentReference<Map<String, dynamic>>> addDevice(
       {deviceId,
       deviceName,
@@ -75,9 +76,7 @@ class DevicesDB with ChangeNotifier {
       created_at: createdAt,
       created_by: createdBy ?? 'system',
     );
-    // devices.add(deviceData);
-    // notifyListeners();
-    return FirebaseFirestore.instance.collection('devices').add({
+    return firestoreDB.add({
       'id': deviceData.id,
       'device_name': deviceData.device_name,
       'device_serialnumber': deviceData.device_serialnumber,
@@ -88,7 +87,7 @@ class DevicesDB with ChangeNotifier {
     });
   }
 
-  void updateDeviceById({
+  Future<void> updateDeviceById({
     deviceId,
     deviceName,
     deviceSerialNumber,
@@ -97,31 +96,33 @@ class DevicesDB with ChangeNotifier {
     updatedBy,
     updatedAt,
   }) {
-    int deviceIndex = devices.indexWhere((element) => element.id == deviceId);
-    if (deviceIndex != -1) {
-      Device currentDevice = devices[deviceIndex];
-      currentDevice.device_name = deviceName;
-      currentDevice.device_serialnumber = deviceSerialNumber;
-      currentDevice.device_household_id = householdId;
-      currentDevice.device_location_id = deviceLocationId;
-      currentDevice.updated_by = updatedBy;
-      currentDevice.updated_at = updatedAt;
-      notifyListeners();
-    }
+    // int deviceIndex = devices.indexWhere((element) => element.id == deviceId);
+    // if (deviceIndex != -1) {
+    //   Device currentDevice = devices[deviceIndex];
+    //   currentDevice.device_name = deviceName;
+    //   currentDevice.device_serialnumber = deviceSerialNumber;
+    //   currentDevice.device_household_id = householdId;
+    //   currentDevice.device_location_id = deviceLocationId;
+    //   currentDevice.updated_by = updatedBy;
+    //   currentDevice.updated_at = updatedAt;
+    //   notifyListeners();
+    // }
+    return firestoreDB.doc(deviceId).update({
+      'device_name': deviceName,
+      'device_serialnumber': deviceSerialNumber,
+      'device_household_id': householdId,
+      'device_location_id': deviceLocationId,
+      'updated_at': updatedAt,
+      'updated_by': updatedBy,
+    });
   }
 
-  void deleteDeviceById({
+  Future<void> deleteDeviceById({
     deviceId,
     deletedBy,
     deletedAt,
   }) {
-    int deviceIndex = devices.indexWhere((element) => element.id == deviceId);
-    if (deviceIndex != -1) {
-      Device currentDevice = devices[deviceIndex];
-      currentDevice.deleted_by = deletedBy;
-      currentDevice.deleted_at = deletedAt;
-      notifyListeners();
-    }
+    return firestoreDB.doc(deviceId).delete();
   }
 
   void removeDeviceById(deviceId) {

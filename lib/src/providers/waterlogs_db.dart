@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/constants/global_constants.dart';
 import 'package:hydrosense_mobile_app/src/models/WaterLog.dart';
@@ -7,6 +8,8 @@ import 'package:hydrosense_mobile_app/src/utils/WaterUsageUtil.dart';
 import 'package:uuid/uuid.dart';
 
 Uuid uuid = Uuid();
+final CollectionReference<Map<String, dynamic>> firestoreDB =
+    FirebaseFirestore.instance.collection('waterlogs');
 
 class WaterLogsDB with ChangeNotifier {
   //* Data list
@@ -16,102 +19,114 @@ class WaterLogsDB with ChangeNotifier {
       device_id: 'deviceabc12321UUID',
       time_used: '22', //* in mins
       flow_rate: '7',
-      created_at: '2023-07-03 05:30:00',
+      created_at: '2023-08-15 05:30:00',
     ),
     WaterLog(
       id: uuid.v4(),
       device_id: 'deviceabc12321UUID',
       time_used: '60', //* in mins
       flow_rate: '7',
-      created_at: '2023-07-03 08:30:50',
+      created_at: '2023-08-15 08:30:50',
     ),
     WaterLog(
       id: uuid.v4(),
       device_id: 'deviceabc12321UUID',
       time_used: '422.5', //* in mins
       flow_rate: '7',
-      created_at: '2023-07-03 08:30:00',
+      created_at: '2023-08-15 08:30:00',
     ),
     WaterLog(
       id: uuid.v4(),
       device_id: 'deviceabc12321UUID',
       time_used: '12', //* in mins
       flow_rate: '7',
-      created_at: '2023-07-03 10:30:00',
+      created_at: '2023-08-15 10:30:00',
     ),
     WaterLog(
       id: uuid.v4(),
       device_id: 'deviceabc12321UUID',
       time_used: '60', //* in mins
       flow_rate: '7',
-      created_at: '2023-07-03 09:30:50',
+      created_at: '2023-08-15 09:30:50',
     ),
     WaterLog(
       id: uuid.v4(),
       device_id: 'deviceabc12321UUID',
       time_used: '422.5', //* in mins
       flow_rate: '7',
-      created_at: '2023-07-03 13:30:00',
-    ),
-    WaterLog(
-      id: uuid.v4(),
-      device_id: 'deviceabc12321UUID',
-      time_used: '12', //* in mins
-      flow_rate: '7',
-      created_at: '2023-07-03 15:30:00',
+      created_at: '2023-08-15 13:30:00',
     ),
   ];
 
-  List<WaterLog> getAllWaterLogs() {
-    return waterlogs;
+  Stream<List<WaterLog>> getAllWaterLogs() {
+    return firestoreDB.snapshots().map((snapshot) => snapshot.docs
+        .map<WaterLog>((doc) => WaterLog.fromMap(doc.data(), doc.id))
+        .toList());
   }
 
-  List<WaterLog> getAllWaterUsageDataByDateRange({
+  Stream<List<WaterLog>> getAllWaterUsageDataByDateRange({
     required String from,
     required String to,
   }) {
     DateTime fromCreatedAt = DateTime.parse(from);
     DateTime toCreatedAt = DateTime.parse(to);
+    // List<WaterLog> waterLogsByDateRange = [];
+    Stream<List<WaterLog>> waterlogsStream = getAllWaterLogs();
+    Stream<List<WaterLog>> filteredWaterLogsStream = waterlogsStream.map(
+      (allDevices) => allDevices.where((currentWaterLog) {
+        DateTime currentLogDate =
+            DateTime.parse(currentWaterLog.created_at.toString());
 
-    List<WaterLog> waterLogsByDateRange = [];
+        DateTime toDateOnly =
+            DateTimeUtil.convertToDateOnly(toCreatedAt.toString());
 
-    for (WaterLog currentWaterLog in waterlogs) {
-      DateTime currentLogDate =
-          DateTimeUtil.convertToDateOnly(currentWaterLog.created_at.toString());
-      if (currentLogDate.compareTo(
-                  DateTimeUtil.convertToDateOnly(toCreatedAt.toString())) ==
-              0 ||
-          currentLogDate.isAfter(
-                  DateTimeUtil.convertToDateOnly(toCreatedAt.toString())) &&
-              currentLogDate.isBefore(
-                  DateTimeUtil.convertToDateOnly(fromCreatedAt.toString()))) {
-        waterLogsByDateRange.add(currentWaterLog);
-      }
-    }
-    return waterLogsByDateRange;
+        bool isSameDate = currentLogDate.year == toDateOnly.year &&
+            currentLogDate.month == toDateOnly.month &&
+            currentLogDate.day == toDateOnly.day;
+
+        return isSameDate &&
+            (currentLogDate.isAfter(fromCreatedAt) &&
+                currentLogDate.isBefore(toCreatedAt));
+      }).toList(),
+    );
+    return filteredWaterLogsStream;
   }
 
-  WaterUsageLog getOverallDashboardData({
+  //* Dashboard Overall
+  Stream<WaterUsageLog> getOverallDashboardData({
     required String from,
     required String to,
     required String tariffRate,
-  }) {
+  }) async* {
     DateTime fromCreatedAt = DateTime.parse(from);
     DateTime toCreatedAt = DateTime.parse(to);
 
     double totalWaterUsagePerHour = 0;
     double totalTimeUsedPerHour = 0;
-    for (WaterLog currentWaterLog in waterlogs) {
-      DateTime currentLogDate =
-          DateTimeUtil.convertToDateOnly(currentWaterLog.created_at.toString());
+    double totalEstimatedCost = 0;
 
-      if (currentLogDate.compareTo(
-                  DateTimeUtil.convertToDateOnly(toCreatedAt.toString())) ==
-              0 ||
-          currentLogDate.isAfter(
-                  DateTimeUtil.convertToDateOnly(toCreatedAt.toString())) &&
-              currentLogDate.isBefore(
-                  DateTimeUtil.convertToDateOnly(fromCreatedAt.toString()))) {
+    Stream<List<WaterLog>> waterlogsStream = getAllWaterLogs();
+    Stream<List<WaterLog>> filteredWaterLogsStream = waterlogsStream.map(
+      (allDevices) => allDevices.where((currentWaterLog) {
+        DateTime currentLogDate =
+            DateTime.parse(currentWaterLog.created_at.toString());
+
+        DateTime toDateOnly =
+            DateTimeUtil.convertToDateOnly(toCreatedAt.toString());
+
+        bool isSameDate = currentLogDate.year == toDateOnly.year &&
+            currentLogDate.month == toDateOnly.month &&
+            currentLogDate.day == toDateOnly.day;
+
+        return isSameDate ||
+            (currentLogDate.isAfter(fromCreatedAt) &&
+                currentLogDate.isBefore(toCreatedAt));
+      }).toList(),
+    );
+
+    //* Calculations
+    await for (var filteredLogs in filteredWaterLogsStream) {
+      for (WaterLog currentWaterLog in filteredLogs) {
         //* Add total time used
         totalTimeUsedPerHour +=
             double.parse(currentWaterLog.time_used.toString()) / 60;
@@ -121,19 +136,22 @@ class WaterLogsDB with ChangeNotifier {
           timeUsed: currentWaterLog.time_used.toString(),
         );
       }
-    }
+      //* calculate cost of water usage
+      totalEstimatedCost = WaterUsageUtil.getEstimatedCost(
+        tariffRate: tariffRate,
+        waterUsage: totalWaterUsagePerHour,
+      );
 
-    //* calculate cost of water usage
-    double totalEstimatedCost = WaterUsageUtil.getEstimatedCost(
-      tariffRate: tariffRate,
-      waterUsage: totalWaterUsagePerHour,
-    );
-    //* return total data
-    return WaterUsageLog(
-      total_time_spent: totalTimeUsedPerHour,
-      total_water_usage: totalWaterUsagePerHour /
-          1000, //*divided by 1000 to change litres to cubic metres
-      total_estimated_cost: totalEstimatedCost,
-    );
+      yield WaterUsageLog(
+        total_time_spent: totalTimeUsedPerHour,
+        total_water_usage: totalWaterUsagePerHour / 1000,
+        total_estimated_cost: totalEstimatedCost,
+      );
+
+      //* Reset variables for next iteration
+      totalWaterUsagePerHour = 0;
+      totalTimeUsedPerHour = 0;
+      totalEstimatedCost = 0;
+    }
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hydrosense_mobile_app/src/constants/design_constants.dart';
 import 'package:hydrosense_mobile_app/src/constants/global_constants.dart';
 import 'package:hydrosense_mobile_app/src/providers/devices_db.dart';
+import 'package:hydrosense_mobile_app/src/providers/users_db.dart';
 import 'package:hydrosense_mobile_app/src/screens/Shared/widgets/shared_widgets.dart';
 import 'package:hydrosense_mobile_app/src/utils/DateTimeUtil.dart';
 import 'package:provider/provider.dart';
@@ -52,8 +53,7 @@ class _EditDeviceModalState extends State<EditDeviceModal> {
     DevicesDB devicesDB = Provider.of<DevicesDB>(context);
     String deviceHouseholdIdValue = GlobalConstants
         .temp_householdID; //! need to get household ID from current user
-    String updatedBy =
-        'Patrica Chew'; //! need to get created by from current user
+    String updatedBy = authService.getCurrentUser()!.email.toString();
 
     dynamic onChangeDeviceId = (value) => deviceIdValue = value;
     dynamic onChangeDeviceName = (value) => deviceNameValue = value;
